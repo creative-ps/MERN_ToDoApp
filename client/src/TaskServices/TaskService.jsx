@@ -108,11 +108,28 @@
         }
     }
 
-    export const login = async (formData) => {
-        Promise.resolve('login...');
+    export const signUp = async (formData) => {
+        try{
+            const response = await fetch(`${API_URL}/api/auth/signup`,{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify(formData)
+            })
+            const data = await response.json();
+            if(!response.ok){
+                const error = new Error(data.message || 'invalid user name or password')
+            }
+        }catch(error){
+            if(error.message == 'Failed to fetch'){
+                throw new Error ('Network error: Unable to reach the server.');
+            }
+            throw error;
+        }
     }
 
-    export const signUp = async (formData) => {
+    export const logIn = async (formData) => {
         Promise.resolve('signUp...');
     }
     

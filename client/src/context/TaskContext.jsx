@@ -1,14 +1,18 @@
 import React,{createContext, useState, useEffect} from "react";
-import { fetchTasks,createTask,deleteTask,updateTaskStatus, updateTask, login, signUp} from "../TaskServices/TaskService";
+import { fetchTasks,createTask,deleteTask,updateTaskStatus, updateTask, logIn, signUp} from "../TaskServices/TaskService";
 export const TaskContext = createContext();
 
 export const TaskProvider = ({children})=>{
     useEffect(()=>{
-        loadTask();
-    },[])
+        if(isAuthenticated){
+            loadTask();
+        }
+    },[isAuthenticated])
     const [tasks, setTasks] = useState([]);
     const [errors, setErrors] = useState(null);
     const [success,setSuccess] = useState(null);
+    const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
+    const [user, setUser] = useState(null);
 
     const loadTask = async ()=>{
         setErrors(null);
@@ -60,24 +64,39 @@ export const TaskProvider = ({children})=>{
         }
    }
 
-   const handleSignIn = async (formData) => {
+   const handleSignUp = async (formData) => {
         try{
-            const data = await login(formData);
+            const {user, token} = await signUp(formData);
+            localStorage.setItem('token',token);
+            setIsAuthenticated(true);
+            setUser(user);
+            setSuccess('Signed up successfully.')
         }catch(err){
             setErrors(err.message)
         }
    }
 
-   const handleSignUp = async (formData) => {
+   const handleSignIn = async (formData) => {
         try{
-            const data = await signUp(formData);
+            const {user, token} = await logIn(formData);
+            localStorage.getItem('token',token);
+            setIsAuthenticated(true);
+            setUser(user);
+            setSuccess('Logged in successfully.')
         }catch(err){
             setErrors(err.message)
         }
+   }
+
+   const handleLogout = ()=>{
+            localStorage.removeItem('token');
+            setIsAuthenticated(false);
+            setUser(null);
+            setSuccess('Logged out successfully.')
    }
 
     return <TaskContext.Provider value = {{tasks,success,setSuccess, errors, setErrors, loadTask, 
-    addTask, removeTask, toggleTaskStatus,updateTitleDescription,handleSignIn,handleSignUp}}>
+    addTask, removeTask, toggleTaskStatus,updateTitleDescription,handleSignIn,handleSignUp, handleLogout}}>
             {children}
            </TaskContext.Provider>
 }
