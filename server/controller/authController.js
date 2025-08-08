@@ -6,34 +6,38 @@ class AuthController {
         const {email,password} = req.body;
         if(!email || !password){
             const error = new Error('email or password is required.');
+            error.statusCode = 400;
             throw error
         }
 
-        const emailExist = User.findOne({email});
+        const emailExist = await User.findOne({email});
         if(emailExist){
             const error = new Error('email already exists.');
+            error.statusCode = 400;
             throw error;
         }
 
-        const User = new User({
+        const user = new User({
             email,password
         })
-        await User.save()
-
-        const jwt = jwt.sign({userId:User._id},process.env.JWT_SECRET,{expiresIn:'1d'})
-        return {user:{id:User._id, email:User.email},token}
+        await user.save()
+        const token = jwt.sign({userId:user._id},process.env.JWT_SECRET,{expiresIn:'1d'})
+        return {user:{id:user._id, email:User.email},token}
     }
 
-    async login(req,res){
+    async logIn(req,res){
         const {email,password} = req.body;
         if(!email || !password){
             const error = new Error('email or password is required.');
+            error.statusCode = 400;
             throw error
         }
 
         const user = await User.findOne({email});
         if(!user || (await !user.comparePassword(password))){
             const error = new Error('email already exists.')
+            error.statusCode = 400;
+            throw error;
         }
 
         const token = jwt.sign({userId:user._id},process.env.JWT_SECRET,{expiresIn:'1d'});

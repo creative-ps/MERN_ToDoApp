@@ -7,13 +7,17 @@ export const AuthForm = () => {
     const [isSignUp,setIsSignUp] = useState(false);
     const {handleSignIn, handleSignUp} = useContext(TaskContext);
     const handleSubmit = async (e)=>{
+        e.preventDefault();
         if(isSignUp){
+            console.log('signup')
             await handleSignUp(formData);
         }else{
+            console.log('login')
             await handleSignIn(formData);
         }
     }
-    return <form onSubmit={handleSubmit}>
+    return <>
+            <form onSubmit={handleSubmit}>
                 <h3>{isSignUp?'Sign Up':'Log In'}</h3>
                 <div>
                     <input 
@@ -30,7 +34,7 @@ export const AuthForm = () => {
                 </div>
                 <div>
                     <input
-                    type="text"
+                    type="password"
                     value={formData.password}
                     onChange={(e)=>{
                         setFormData({
@@ -38,13 +42,18 @@ export const AuthForm = () => {
                             password:e.target.value
                         })
                     }}
+                    placeholder="Enter password"
                     />
                 </div>
                 <div>
-                    <Button type={submit} content={isSignUp?'Sign Up':'Log In'}/>
+                    <Button type={'submit'} content={isSignUp?'Sign Up':'Log In'}/>
                 </div>
-                    <button onClick={()=>{setIsSignUp(!isSignUp)}}>
-                        {isSignUp?'Switch to Sign Up':'Switch to Log In'}
-                    </button>
            </form>
+           <button onClick={()=>{
+            setIsSignUp(!isSignUp)
+            setFormData({email:'',password:''})
+            }}>
+                {isSignUp?'Switch to Log In':'Switch to Sign Up'}
+            </button>
+          </>
 }

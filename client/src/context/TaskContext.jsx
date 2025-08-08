@@ -3,17 +3,18 @@ import { fetchTasks,createTask,deleteTask,updateTaskStatus, updateTask, logIn, s
 export const TaskContext = createContext();
 
 export const TaskProvider = ({children})=>{
-    useEffect(()=>{
-        if(isAuthenticated){
-            loadTask();
-        }
-    },[isAuthenticated])
     const [tasks, setTasks] = useState([]);
     const [errors, setErrors] = useState(null);
     const [success,setSuccess] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
     const [user, setUser] = useState(null);
 
+    useEffect(()=>{
+            if(isAuthenticated){
+                loadTask();
+            }
+        },[isAuthenticated]);
+        
     const loadTask = async ()=>{
         setErrors(null);
         try{
@@ -67,6 +68,7 @@ export const TaskProvider = ({children})=>{
    const handleSignUp = async (formData) => {
         try{
             const {user, token} = await signUp(formData);
+            console.log('handleSignUp',user,token,formData);
             localStorage.setItem('token',token);
             setIsAuthenticated(true);
             setUser(user);

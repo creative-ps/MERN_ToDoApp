@@ -3,14 +3,20 @@ import { TaskContext } from "../context/TaskContext";
 import { useContext,useEffect,useState } from "react";
 import { Button } from "./Button";
 import { useNavigate } from "react-router-dom";
+import {AuthForm} from './AuthForm'
 export default function TaskList(){
-    const {tasks, setErrors, removeTask, success, setSuccess, toggleTaskStatus,updateTitleDescription} = useContext(TaskContext);
+    const {tasks, setErrors, removeTask, success, setSuccess, toggleTaskStatus,updateTitleDescription, isAuthenticated} = useContext(TaskContext);
     useEffect(()=>{
         setErrors(null)
         setSuccess(null)
     },[])
     const [editTaskId, setEditTaskId] = useState(null);
     const [editForm, setEditForm] = useState({title:'',description:''});
+
+    if(!isAuthenticated){
+        return <AuthForm/>;
+    }
+
     const handleTaskDetails = (task)=>{
         setEditTaskId(task.id);
         setEditForm({title:task.title,description:task.description})
@@ -24,6 +30,7 @@ export default function TaskList(){
         setEditTaskId(null);
         setEditForm({title:'',description:''});
     }
+
     return <>
             {success}
             {tasks.length == 0 ? 'Tasks list is empty' : 

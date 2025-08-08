@@ -68,8 +68,8 @@ server.use(express.json());
 //     res.send('Welcome to home page.')
 // })
 
-server.use('api/tasks',taskRouter)
-server.use('api/auth', authRouter)
+server.use('/api/tasks',taskRouter)
+server.use('/api/auth', authRouter)
 // server.get('/',(req,res)=>{
 //     res.json({"user":"hello"})
 // })

@@ -4,20 +4,21 @@ const AuthController = require('../controller/authController');
 
 router.post('/signup', async (req,res)=>{
     try{
-        const data = AuthController.signUp(req, res);
-        res.json(data);
+        const {user,token} = await AuthController.signUp(req, res);
+
+        res.status(201).json({user, token, message:'User created successfully.'});
     }catch(error){
-        res.json(error.message);
+        res.status(error.statusCode || 500).json({error:error.message || 'Failed to sign up.'});
     }
 
 })
 
-router.post('/signin', async(req,res)=>{
+router.post('/login', async (req,res)=>{
     try{
-        const data = AuthController.login(req, res);
-        res.json(data);
+        const {user,token} = await AuthController.logIn(req, res);
+        res.status(201).json({user, token, message:'Login Successful.'});
     }catch(error){
-        res.json(error.message);
+        res.status(error.statusCode || 500).json({error:error.message || 'Failed to log in.'});
     }
 })
 

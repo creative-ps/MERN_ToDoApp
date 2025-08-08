@@ -110,7 +110,7 @@
 
     export const signUp = async (formData) => {
         try{
-            const response = await fetch(`${API_URL}/api/auth/signup`,{
+            const response = await fetch(`${API_URL}/auth/signup`,{
                 method:'POST',
                 headers:{
                     'Content-Type':'application/json'
@@ -119,8 +119,10 @@
             })
             const data = await response.json();
             if(!response.ok){
-                const error = new Error(data.message || 'invalid user name or password')
+                const error = new Error(data.error || 'invalid user name or password');
+                throw error;
             }
+            return data;
         }catch(error){
             if(error.message == 'Failed to fetch'){
                 throw new Error ('Network error: Unable to reach the server.');
