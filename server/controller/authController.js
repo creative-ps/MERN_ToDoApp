@@ -22,7 +22,7 @@ class AuthController {
         })
         await user.save()
         const token = jwt.sign({userId:user._id},process.env.JWT_SECRET,{expiresIn:'1d'})
-        return {user:{id:user._id, email:User.email},token}
+        return {user:{id:user._id, email:user.email},token}
     }
 
     async logIn(req,res){
@@ -42,6 +42,17 @@ class AuthController {
 
         const token = jwt.sign({userId:user._id},process.env.JWT_SECRET,{expiresIn:'1d'});
         return {user:{id:user._id,email:user.email},token}
+    }
+
+    async getUser(req,res){
+        const userId = req.userId;
+        const user = await User.findById(userId);
+        if(!user){
+            const error = new Error('Did not find any user in database.');
+            error.statusCode = 404;
+            throw error;
+        }
+        return user;
     }
 }
 

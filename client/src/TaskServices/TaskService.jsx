@@ -1,5 +1,10 @@
     const API_URL = import.meta.env.VITE_API_URL
 
+    const getAuthHeader = ()=>{
+        const token = localStorage.getItem('token');
+        return (token) ? {Authorization : `Bearer ${token}`} : {};
+    }
+
      export const fetchTasks = async ()=>{
         try{
             const response = await fetch(`${API_URL}/tasks`)
@@ -25,6 +30,7 @@
                 method:'POST',
                 headers:{
                 'Content-Type':'application/json',
+                ...getAuthHeader(),
                 },
                 body:JSON.stringify(taskData)
             });
@@ -133,5 +139,25 @@
 
     export const logIn = async (formData) => {
         Promise.resolve('signUp...');
+    }
+
+    export const fetchUser = async ()=>{
+        // const token = localStorage.getItem('token');
+        // if(!token){
+        //     throw new Error('no token found.');
+        // }
+
+        const response = await fetch(`${API_URL}/user`,{
+            headers:{
+                ...getAuthHeader(),
+            },
+        });
+        const data = await response.json()
+        console.log('fetchUser...',data);
+        if(!response.ok){
+            throw new Error (data.error || 'failed to fetch user data.')
+        }
+
+        return data;
     }
     

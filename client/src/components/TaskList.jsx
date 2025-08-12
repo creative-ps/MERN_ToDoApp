@@ -5,14 +5,15 @@ import { Button } from "./Button";
 import { useNavigate } from "react-router-dom";
 import {AuthForm} from './AuthForm'
 export default function TaskList(){
-    const {tasks, setErrors, removeTask, success, setSuccess, toggleTaskStatus,updateTitleDescription, isAuthenticated} = useContext(TaskContext);
+    const {tasks, setErrors, removeTask, success, setSuccess, toggleTaskStatus,updateTitleDescription, isAuthenticated,handleLogout,user} = useContext(TaskContext);
     useEffect(()=>{
         setErrors(null)
         setSuccess(null)
     },[])
     const [editTaskId, setEditTaskId] = useState(null);
     const [editForm, setEditForm] = useState({title:'',description:''});
-
+    
+// console.log('TaskList.....',isAuthenticated);
     if(!isAuthenticated){
         return <AuthForm/>;
     }
@@ -30,8 +31,13 @@ export default function TaskList(){
         setEditTaskId(null);
         setEditForm({title:'',description:''});
     }
-
+   
+    
     return <>
+            <div>
+                <p>Logged in as: {user?user.email:''}</p>
+                <Button type={'button'} handleClick={handleLogout} content={'Logout'}/>
+            </div>
             {success}
             {tasks.length == 0 ? 'Tasks list is empty' : 
             <ul>

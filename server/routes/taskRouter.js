@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const TaskController = require('../controller/taskController');
 const TaskPresenter = require('../presenters/taskPresenter');
+const authMiddleware = require('../authMiddleware');
 
 router.get('/', async (req, res) => {
     try{
