@@ -4,7 +4,7 @@ const TaskController = require('../controller/taskController');
 const TaskPresenter = require('../presenters/taskPresenter');
 const authMiddleware = require('../authMiddleware');
 
-router.get('/', async (req, res) => {
+router.get('/', authMiddleware, async (req, res) => {
     try{
         const allTasks = await TaskController.getAllTasks(req, res);
         const formatedTasks = TaskPresenter.formatTasks(allTasks);
@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
     }
 })
 
-router.post('/', async (req, res) => {
+router.post('/', authMiddleware, async (req, res) => {
     try{
         const task = await TaskController.createTask(req, res);
         const formatedTask = TaskPresenter.formatTask(task);
@@ -24,7 +24,7 @@ router.post('/', async (req, res) => {
     }
 })
 
-router.delete('/:id', async (req, res)=>{
+router.delete('/:id',authMiddleware, async (req, res)=>{
     try{
         const data = await TaskController.deleteTask(req,res);
         const formatedTask = TaskPresenter.formatTask(data);
@@ -34,7 +34,7 @@ router.delete('/:id', async (req, res)=>{
     }
 })+
 
-router.patch('/:id', async (req, res)=>{
+router.patch('/:id',authMiddleware, async (req, res)=>{
     const {completed,title,description} = req.body;
     try{
         if(completed !== undefined){

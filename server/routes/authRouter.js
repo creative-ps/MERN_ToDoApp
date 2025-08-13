@@ -23,8 +23,7 @@ router.post('/login', async (req,res)=>{
     }
 })
 
-router.get('/', authMiddleware, async (req,res)=>{
-    console.log("user");
+router.get('/',authMiddleware, async (req,res)=>{
     try{
         const user = await AuthController.getUser(req,res);
         res.status(200).json(user);

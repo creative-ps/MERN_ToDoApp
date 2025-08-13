@@ -4,14 +4,20 @@
         const token = localStorage.getItem('token');
         return (token) ? {Authorization : `Bearer ${token}`} : {};
     }
-
+    
      export const fetchTasks = async ()=>{
         try{
-            const response = await fetch(`${API_URL}/tasks`)
+            const response = await fetch(`${API_URL}/tasks`,{
+                method:'GET',
+                headers:{
+                    ...getAuthHeader(),
+                    'Content-Type': 'application/json',
+                }
+            })
             const data = await response.json()
             if(!response.ok){
                 // Handle HTTP Errors (e.g., 400,500,503)
-                throw newError(data.message ||'unable to fetch tasks.'); 
+                throw new Error(data.message ||'unable to fetch tasks.'); 
             }
             return data.data;
         }catch(error){
@@ -55,6 +61,7 @@
                 method: 'DELETE',
                 headers:{
                     'Content-Type':'application/json',
+                    ...getAuthHeader()
                 },
             });
             const data = await response.json();
@@ -75,7 +82,8 @@
             const response = await fetch(`${API_URL}/tasks/${taskId}`,{
                 method:'PATCH',
                 headers:{
-                    'Content-Type':'application/json'
+                    'Content-Type':'application/json',
+                    ...getAuthHeader()
                 },
                 body:JSON.stringify({completed})
             });
@@ -97,7 +105,8 @@
             const response = await fetch(`${API_URL}/tasks/${taskId}`,{
                 method:'PATCH',
                 headers:{
-                    'Content-Type':'application/json'
+                    'Content-Type':'application/json',
+                    ...getAuthHeader(),
                 },
                 body:JSON.stringify(updatedContent)
             })
@@ -142,18 +151,14 @@
     }
 
     export const fetchUser = async ()=>{
-        // const token = localStorage.getItem('token');
-        // if(!token){
-        //     throw new Error('no token found.');
-        // }
-
         const response = await fetch(`${API_URL}/user`,{
+            method:'GET',
             headers:{
                 ...getAuthHeader(),
+                'Content-Type': 'application/json',
             },
         });
         const data = await response.json()
-        console.log('fetchUser...',data);
         if(!response.ok){
             throw new Error (data.error || 'failed to fetch user data.')
         }

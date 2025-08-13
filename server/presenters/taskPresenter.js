@@ -6,6 +6,7 @@ class TaskPresenter{
             description:task.description,
             completed:task.completed,
             createdAt:task.createdAt,
+            userId:task.userId
         }
     }
 

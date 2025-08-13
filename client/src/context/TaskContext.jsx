@@ -1,5 +1,6 @@
 import React,{createContext, useState, useEffect} from "react";
 import { fetchTasks,createTask,deleteTask,updateTaskStatus, updateTask, logIn, signUp, fetchUser} from "../TaskServices/TaskService";
+import {AuthForm} from '../components/AuthForm';
 export const TaskContext = createContext();
 
 export const TaskProvider = ({children})=>{
@@ -8,22 +9,21 @@ export const TaskProvider = ({children})=>{
     const [success,setSuccess] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
     const [user, setUser] = useState(null);
-// console.log(isAuthenticated,"taskContext", localStorage.getItem('token'),user);
     useEffect(()=>{
             if(isAuthenticated){
                 const loadData = async ()=>{
                     try{  
-                        console.log("loadData...");
                         const user = await fetchUser();
                         setUser(user);
-                    }catch(error){
+                    }catch(error){ 
                         setErrors(error.message);
-                        handleLogout()
+                        // handleLogout()
                     }
                     try{
                         const data = await fetchTasks();
                         setTasks(data);
                     }catch(error){
+                       
                         setErrors(error.message);
                     }
                 };
@@ -114,6 +114,10 @@ export const TaskProvider = ({children})=>{
             setUser(null);
             setSuccess('Logged out successfully.')
    }
+
+    if(!isAuthenticated){
+        return <AuthForm handleSignIn={handleSignIn} handleSignUp={handleSignUp}/>;
+    }
 
     return <TaskContext.Provider value = {{tasks,success,setSuccess, errors, setErrors, loadTask, isAuthenticated, setIsAuthenticated,
     addTask, removeTask, toggleTaskStatus,updateTitleDescription,handleSignIn,handleSignUp, handleLogout, user, setUser}}>

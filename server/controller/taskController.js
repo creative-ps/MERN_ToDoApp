@@ -1,23 +1,26 @@
 const mongoose = require('mongoose');
-const taskModel = require('../model/taskModel')
+const {Types} = require('mongoose');
+const taskModel = require('../model/taskModel');
 
 class TaskController{
     async createTask(req,res){
             const {title,description} = req.body;
+            const userId = new Types.ObjectId(req.userId);
             if(!title || !description){
                 const error = new Error('Title and Description are required');
                 error.statusCode = 400;
                 throw error
             }
-            const titleExist = await taskModel.findOne({title:{$regex: new RegExp(`^${title}$`,'i')}});
-            if(titleExist){
-                const error = new Error("Task with this title already exist.");
+            const titleExist = await taskModel.findOne({title:{$regex: new RegExp(`^${title}$`,'i')},userId:userId});
+            const descriptionExist = await taskModel.findOne({description:{$regex: new RegExp(`^${description}$`, 'i')},userId:userId})
+            if(titleExist || descriptionExist){
+                const error = new Error("Task with this Title or Description is already exist.");
                 error.statusCode = 400;
                 throw error;
             }
            
                 const parsedDate = new Date();
-                let taskData = {title, description, parsedDate};
+                let taskData = {title, description, createdAt:parsedDate, completed:false, userId};
                 const task = new taskModel(taskData)
                 await task.save();
                 return task;
@@ -25,7 +28,10 @@ class TaskController{
 
     async getAllTasks(req,res){
         try{
-            const allTasks = await taskModel.find();
+            const userId = new Types.ObjectId(req.userId);
+           
+            const allTasks = await taskModel.find({userId});
+            console.log(userId);
             return allTasks;
         }catch(err){
             const error = new Error('Database error while fetching tasks');
@@ -36,13 +42,14 @@ class TaskController{
 
      async deleteTask(req,res){
             const {id} = req.params;
+            const userId = new Types.ObjectId(req.userId);
             if(!mongoose.Types.ObjectId.isValid(id)){
                 const error = new Error('invalid task Id');
                 error.statusCode = 400;
                 throw error;
             }
 
-            const deleteTask = await taskModel.findByIdAndDelete(id);
+            const deleteTask = await taskModel.findOneAndDelete({_id:id, userId:userId});
             if(!deleteTask){
                 const error = new Error('Task not found');
                 error.statusCode = 404;
@@ -54,6 +61,7 @@ class TaskController{
     async updateTaskStatus(req, res){
         const {id} = req.params;
         const {completed} = req.body;
+        const userId =  new Types.ObjectId(req.userId);
         if(!mongoose.Types.ObjectId.isValid(id)){
             const error = new Error('invalid task Id.');
             error.statusCode = 400;
@@ -64,7 +72,7 @@ class TaskController{
             error.statusCode = 400;
             throw error;
         }
-        const task = await taskModel.findById(id);
+        const task = await taskModel.findOne({_id:id, userId:userId});
         if (!task) {
             const error = new Error('Task not found');
             error.statusCode = 404;
@@ -78,6 +86,7 @@ class TaskController{
     async updateTask(req, res){
         const {id} = req.params;
         const {title,description} = req.body;
+        const userId = new Types.ObjectId(req.userId);
          if(!mongoose.Types.ObjectId.isValid(id)){
             const error = new Error('invalid task Id.');
             error.statusCode = 400;
@@ -88,7 +97,7 @@ class TaskController{
             error.statusCode = 400;
             throw error
         }
-        const task = await taskModel.findById(id);
+        const task = await taskModel.findOne({_id:id, userId:userId});
         if(!task){
             const error = new Error('Task not found');
             error.statusCode = 404;

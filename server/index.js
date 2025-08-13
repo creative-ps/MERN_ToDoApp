@@ -21,9 +21,15 @@ async function main() {
 
 main();
 
+const corsOptions = {
+    origin: 'http://localhost:3000', // Replace with your frontend URL
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true, // If you need to send cookies or other credentials
+};
 
 const server = express();
-server.use(cors())
+server.use(cors(corsOptions))
 server.use(express.static('public'))
 server.use(express.json());
 
@@ -34,7 +40,7 @@ server.use('/api/user', authRouter)
 
 // Global error handling middleware
 server.use((err, req, res, next)=>{
-    res.status(err.statusCode || 500).json({error:err.message || 'Something went wrong.'})
+    res.status(err.statusCode || 500).json({message:err.message || 'Something went wrong.'})
 })
 
 

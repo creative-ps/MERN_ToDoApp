@@ -11,8 +11,8 @@ export default function App (){
                 <BrowserRouter>
                   <h1>This is a todo Task Application.</h1>
                   <nav>
-                     <Link to='/'>All Tasks</Link> |
-                     <Link to='/create'>Create Task</Link>
+                    <Link to='/'>All Tasks</Link> |
+                    <Link to='/create'>Create Task</Link>
                   </nav>
                   <AppErrors/>
                   <Routes>
