@@ -86,7 +86,6 @@ export const TaskProvider = ({children})=>{
    const handleSignUp = async (formData) => {
         try{
             const {user, token} = await signUp(formData);
-            console.log('handleSignUp',user,token,formData);
             localStorage.setItem('token',token);
             setIsAuthenticated(true);
             setUser(user);

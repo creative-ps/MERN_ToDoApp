@@ -31,7 +31,6 @@ class TaskController{
             const userId = new Types.ObjectId(req.userId);
            
             const allTasks = await taskModel.find({userId});
-            console.log(userId);
             return allTasks;
         }catch(err){
             const error = new Error('Database error while fetching tasks');
