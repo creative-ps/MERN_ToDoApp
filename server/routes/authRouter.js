@@ -9,7 +9,7 @@ router.post('/signup', async (req,res)=>{
 
         res.status(201).json({user, token, message:'User created successfully.'});
     }catch(error){
-        res.status(error.statusCode || 500).json({error:error.message || 'Failed to sign up.'});
+        res.status(error.statusCode || 500).json({message:error.message || 'Failed to sign up.'});
     }
 
 })
@@ -19,7 +19,7 @@ router.post('/login', async (req,res)=>{
         const {user,token} = await AuthController.logIn(req, res);
         res.status(201).json({user, token, message:'Login Successful.'});
     }catch(error){
-        res.status(error.statusCode || 500).json({error:error.message || 'Failed to log in.'});
+        res.status(error.statusCode || 500).json({message:error.message || 'Failed to log in.'});
     }
 })
 
@@ -28,7 +28,7 @@ router.get('/',authMiddleware, async (req,res)=>{
         const user = await AuthController.getUser(req,res);
         res.status(200).json(user);
     }catch(error){
-        res.status(error.statusCode || 500).json({error:error.message || 'Failed to get user.'})
+        res.status(error.statusCode || 500).json({message:error.message || 'Failed to get user.'})
     }
 })
 

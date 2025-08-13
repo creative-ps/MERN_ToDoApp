@@ -7,10 +7,8 @@ export const AuthForm = ({handleSignIn, handleSignUp}) => {
     const handleSubmit = async (e)=>{
         e.preventDefault();
         if(isSignUp){
-       
             await handleSignUp(formData);
-        }else{
-           
+        }else{  
             await handleSignIn(formData);
         }
     }

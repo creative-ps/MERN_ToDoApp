@@ -19,17 +19,16 @@ class TaskController{
                 throw error;
             }
            
-                const parsedDate = new Date();
-                let taskData = {title, description, createdAt:parsedDate, completed:false, userId};
-                const task = new taskModel(taskData)
-                await task.save();
-                return task;
+            const parsedDate = new Date();
+            let taskData = {title, description, createdAt:parsedDate, completed:false, userId};
+            const task = new taskModel(taskData)
+            await task.save();
+            return task;
     }
 
     async getAllTasks(req,res){
         try{
             const userId = new Types.ObjectId(req.userId);
-           
             const allTasks = await taskModel.find({userId});
             return allTasks;
         }catch(err){

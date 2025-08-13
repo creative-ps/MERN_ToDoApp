@@ -134,7 +134,7 @@
             })
             const data = await response.json();
             if(!response.ok){
-                const error = new Error(data.error || 'invalid user name or password');
+                const error = new Error(data.message || 'invalid user name or password');
                 throw error;
             }
             return data;
@@ -160,7 +160,7 @@
         });
         const data = await response.json()
         if(!response.ok){
-            throw new Error (data.error || 'failed to fetch user data.')
+            throw new Error (data.message || 'failed to fetch user data.')
         }
 
         return data;
