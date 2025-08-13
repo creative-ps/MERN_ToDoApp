@@ -6,10 +6,11 @@ import {toast} from 'react-toastify';
 export const TaskForm = ()=>{
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-    const {addTask, errors, setErrors} = useContext(TaskContext);
+    const {addTask, errors, setErrors, setSuccess} = useContext(TaskContext);
 
     useEffect(()=>{
-        setErrors('');
+        setErrors(null);
+        setSuccess(null);
     },[]);
 
     const handleSubmit = async (e)=>{

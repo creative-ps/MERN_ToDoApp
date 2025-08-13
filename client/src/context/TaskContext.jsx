@@ -47,6 +47,7 @@ export const TaskProvider = ({children})=>{
         try{
              const newTasks = await createTask(taskData);
              setTasks([...tasks, newTasks]);
+             setSuccess('Task created successfully.')
         }catch(err){
              setErrors(err.message)
         }
