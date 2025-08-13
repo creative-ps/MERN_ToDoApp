@@ -17,7 +17,7 @@ export const TaskProvider = ({children})=>{
                         setUser(user);
                     }catch(error){ 
                         setErrors(error.message);
-                        // handleLogout()
+                        handleLogout()
                     }
                     try{
                         const data = await fetchTasks();
@@ -69,6 +69,7 @@ export const TaskProvider = ({children})=>{
         try{
             const data = await updateTaskStatus(taskId, !completed);
             setTasks(tasks.map((task)=>task.id == data.id?{...task,completed:data.completed}:task));
+            setSuccess('Task status updated successfully.')
         }catch(err){
             setErrors(err.message);
         }
@@ -79,6 +80,7 @@ export const TaskProvider = ({children})=>{
             const data = await updateTask(taskId, updatedContent);
             const updatedTask = data.data;
             setTasks(tasks.map((task)=>(task.id == updatedTask.id)?{...task,title:updatedTask.title,description:updatedTask.description}:task));
+            setSuccess(data.message)
         }catch(err){
             setErrors(err.message);
         }
