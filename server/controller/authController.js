@@ -10,9 +10,10 @@ class AuthController {
             error.statusCode = 400;
             throw error
         }
-
+        console.log('sign up');
         const emailExist = await User.findOne({email});
         if(emailExist){
+            console.log('user already exist.');
             const error = new Error('email already exists.');
             error.statusCode = 400;
             throw error;
@@ -36,13 +37,20 @@ class AuthController {
         }
 
         const user = await User.findOne({email});
-        if(!user || (await !user.comparePassword(password))){
-            const error = new Error('email already exists.')
+        if(!user){
+            const error = new Error('invalid email or password.')
             error.statusCode = 400;
             throw error;
         }
 
-        const token = jwt.sign({userId:user._id},process.env.JWT_SECRET,{expiresIn:'2d'});
+        const isMatch = await user.comparePassword(password);
+        if (!isMatch) {
+            const error = new Error('Invalid email or password.');
+            error.statusCode = 401;
+            throw error;
+        }
+
+        const token = jwt.sign({userId:user._id},process.env.JWT_SECRET,{expiresIn:'1d'});
         return {user:{id:user._id,email:user.email},token}
     }
 

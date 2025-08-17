@@ -5,7 +5,12 @@ import { Button } from "./Button";
 import { useNavigate } from "react-router-dom";
 import {AuthForm} from './AuthForm'
 export default function TaskList(){
-    const {tasks, setErrors, removeTask, setSuccess, toggleTaskStatus,updateTitleDescription} = useContext(TaskContext);
+    const {tasks, setErrors, removeTask, setSuccess, toggleTaskStatus,updateTitleDescription,isAuthenticated} = useContext(TaskContext);
+    
+    if(!isAuthenticated){
+        return
+    }
+    
     useEffect(()=>{
         setErrors(null)
         setSuccess(null)

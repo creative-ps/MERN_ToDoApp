@@ -1,9 +1,12 @@
 import React,{useState} from "react";
 import {Button} from './Button'
+import { useContext } from "react";
+import { TaskContext } from "../context/TaskContext";
 
-export const AuthForm = ({handleSignIn, handleSignUp}) => {
+export const AuthForm = () => {
     const [formData,setFormData] = useState({email:'',password:''});
     const [isSignUp,setIsSignUp] = useState(false);
+    const {handleSignIn, handleSignUp} = useContext(TaskContext);
     const handleSubmit = async (e)=>{
         e.preventDefault();
         if(isSignUp){

@@ -2,9 +2,13 @@ import { Link } from "react-router-dom"
 import { Button } from "./Button"
 import { TaskContext } from "../context/TaskContext"
 import { useContext } from "react"
+import { AuthForm } from "./AuthForm"
 
 export const Header = () => {
-    const {handleLogout, user} = useContext(TaskContext);
+    const {handleLogout, user, isAuthenticated} = useContext(TaskContext);
+    if(!isAuthenticated){
+       return <AuthForm/>
+    }
     return  <nav>
                 <div>
                     <p>Logged in as: {user?user.email:''}</p>

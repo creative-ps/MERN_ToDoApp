@@ -1,5 +1,5 @@
 import React from "react";
-import {BrowserRouter, Routes, Route, Link} from 'react-router-dom'
+import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import TaskList from "./components/TaskList";
 import { TaskForm } from "./components/TaskForm";
 import { TaskProvider } from "./context/TaskContext";
@@ -11,8 +11,8 @@ export default function App (){
               <TaskProvider>
                 <BrowserRouter>
                   <h1>This is a todo Task Application.</h1>
-                  <Header/>
                   <AppErrors/>
+                  <Header/>
                   <Routes>
                     <Route path="/" element={<TaskList/>}/>
                     <Route path="/create" element={<TaskForm/>}/>

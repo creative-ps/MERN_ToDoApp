@@ -2,6 +2,7 @@ import React,{createContext, useState, useEffect} from "react";
 import { fetchTasks,createTask,deleteTask,updateTaskStatus, updateTask, logIn, signUp, fetchUser} from "../TaskServices/TaskService";
 import {AuthForm} from '../components/AuthForm';
 export const TaskContext = createContext();
+import { AppErrors } from "../GlobalErrorsAndSuccess";
 
 export const TaskProvider = ({children})=>{
     const [tasks, setTasks] = useState([]);
@@ -95,6 +96,7 @@ export const TaskProvider = ({children})=>{
             setSuccess('Signed up successfully.')
         }catch(err){
             setErrors(err.message)
+            console.log(err.message,'err');
         }
    }
 
@@ -117,9 +119,12 @@ export const TaskProvider = ({children})=>{
             setSuccess('Logged out successfully.')
    }
 
-    if(!isAuthenticated){
-        return <AuthForm handleSignIn={handleSignIn} handleSignUp={handleSignUp}/>;
-    }
+    // if(!isAuthenticated){
+    //     return  <>
+    //                 <AppErrors errors={errors} success={success}/>
+    //                 <AuthForm handleSignIn={handleSignIn} handleSignUp={handleSignUp}/>
+    //             </>;
+    // }
 
     return <TaskContext.Provider value = {{tasks,success,setSuccess, errors, setErrors, loadTask, isAuthenticated, setIsAuthenticated,
     addTask, removeTask, toggleTaskStatus,updateTitleDescription,handleSignIn,handleSignUp, handleLogout, user, setUser}}>

@@ -147,7 +147,26 @@
     }
 
     export const logIn = async (formData) => {
-        Promise.resolve('signUp...');
+        try{
+            const response = await fetch(`${API_URL}/auth/login`,{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify(formData)
+            });
+            const data = await response.json();
+            if(!response.ok){
+                const error = new Error(data.message || 'invalid user name or password');
+                throw error;
+            }
+            return data;
+        }catch(error){
+            if(error.message == 'Failed to fetch'){
+                throw new Error ('Network error: Unable to reach the server.');
+            }
+            throw error;
+        }
     }
 
     export const fetchUser = async ()=>{

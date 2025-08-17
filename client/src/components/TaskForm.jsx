@@ -6,13 +6,17 @@ import {toast} from 'react-toastify';
 export const TaskForm = ()=>{
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-    const {addTask, errors, setErrors, setSuccess} = useContext(TaskContext);
-
+    const {addTask, isAuthenticated, setErrors, setSuccess} = useContext(TaskContext);
+    
+    if(!isAuthenticated){
+        return
+    }
+    
     useEffect(()=>{
         setErrors(null);
         setSuccess(null);
     },[]);
-
+   
     const handleSubmit = async (e)=>{
         e.preventDefault();
         if(title === '' && description === ''){
