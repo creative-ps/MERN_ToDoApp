@@ -5,19 +5,6 @@ const {Types} = require('mongoose');
 class AuthController {
     async signUp(req,res){
         const {email,password} = req.body;
-        if(!email || !password){
-            const error = new Error('email or password is required.');
-            error.statusCode = 400;
-            throw error
-        }
-        console.log('sign up');
-        const emailExist = await User.findOne({email});
-        if(emailExist){
-            console.log('user already exist.');
-            const error = new Error('email already exists.');
-            error.statusCode = 400;
-            throw error;
-        }
 
         const user = new User({
             email,password
@@ -34,6 +21,19 @@ class AuthController {
             const error = new Error('email or password is required.');
             error.statusCode = 400;
             throw error
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            const error = new Error('Please provide a valid email address.');
+            error.statusCode = 400;
+            throw error;
+        }
+
+        if(password.length<6){
+            const error = new Error('Password must be at least 6 characters.');
+            error.statusCode = 400;
+            throw error;
         }
 
         const user = await User.findOne({email});
