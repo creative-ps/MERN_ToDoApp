@@ -7,12 +7,15 @@ class AuthController {
         const {email,password} = req.body;
 
         const user = new User({
-            email,password
+            email,
+            password,
+            role:'user',
+            permissions:[]
         })
         await user.save()
 
         const token = jwt.sign({userId:user._id},process.env.JWT_SECRET,{expiresIn:'1d'})
-        return {user:{id:user._id, email:user.email},token}
+        return {user:{id:user._id, email:user.email, role:user.role, permissions:user.permissions},token}
     }
 
     async logIn(req,res){
@@ -51,7 +54,7 @@ class AuthController {
         }
 
         const token = jwt.sign({userId:user._id},process.env.JWT_SECRET,{expiresIn:'1d'});
-        return {user:{id:user._id,email:user.email},token}
+        return {user:{id:user._id,email:user.email, role:user.role, permissions:user.permissions},token}
     }
 
     async getUser(req,res){

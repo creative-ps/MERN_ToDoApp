@@ -12,6 +12,19 @@ const userSchema = new mongoose.Schema({
         type:String, 
         required:[true,'Password is required.'],
         minlength:[6, 'Password must be at least 6 characters']
+    },
+    role:{
+        type:String,
+        enum:['admin','moderator','user'],
+        default:'user'
+    },
+    permissions:{
+        type:[String],
+        default:[]
+    },
+    createdAt:{
+        type:Date,
+        default:Date.now
     }
 });
 
@@ -24,8 +37,11 @@ userSchema.pre('save', async function(next){
 })
 
 userSchema.methods.comparePassword = async function (password){
-    console.log(password,this.password);
     return await bcrypt.compare(password, this.password);
+}
+
+userSchema.methods.hasPermission = function(permission){
+    return this.role === 'admin' || this.permissions.includes(permission);
 }
 
 module.exports = mongoose.model('User', userSchema);

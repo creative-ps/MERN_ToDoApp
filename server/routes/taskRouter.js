@@ -3,6 +3,7 @@ const router = express.Router();
 const TaskController = require('../controller/taskController');
 const TaskPresenter = require('../presenters/taskPresenter');
 const authMiddleware = require('../authMiddleware');
+const permissionMiddleware = require('../middleware/permissionMiddleware');
 
 router.get('/', authMiddleware, async (req, res) => {
     try{
@@ -14,7 +15,7 @@ router.get('/', authMiddleware, async (req, res) => {
     }
 })
 
-router.post('/', authMiddleware, async (req, res) => {
+router.post('/', authMiddleware, permissionMiddleware('create'), async (req, res) => {
     try{
         const task = await TaskController.createTask(req, res);
         const formatedTask = TaskPresenter.formatTask(task);
