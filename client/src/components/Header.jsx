@@ -15,6 +15,7 @@ export const Header = () => {
                     <Button type={'button'} handleClick={handleLogout} content={'Logout'}/>
                 </div>
                 <Link to='/'>All Tasks</Link> |
-                <Link to='/create'>Create Task</Link>
+                <Link to='/create'>Create Task</Link> | 
+                <Link to='/admin'>Admin panel</Link>
             </nav>
 }

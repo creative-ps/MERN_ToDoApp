@@ -14,6 +14,21 @@ class TaskPresenter{
         return tasks.map(task=>this.formatTask(task))
     }
 
+    formatUser(user){
+        return {
+            id:user._id,
+            email:user.email,
+            password:user.password,
+            role:user.role,
+            permissions:user.permissions,
+            createdAt:user.createdAt
+        }
+    }
+
+    formatUsers(users){
+        return users.map((user)=>this.formatUser(user));
+    }
+
     success(data, message='success'){
         return {
             status:'success',

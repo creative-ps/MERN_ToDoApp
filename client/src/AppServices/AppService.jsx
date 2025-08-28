@@ -185,3 +185,37 @@
         return data;
     }
     
+    export const fetchAllUsers = async ()=>{
+            const response = await fetch(`${API_URL}/admin/users`,{
+                method:'GET',
+                headers:{
+                    ...getAuthHeader(),
+                    'Content-Type':'application/json'
+                }
+            });
+            const data = await response.json();
+            if(!response.ok){
+                throw new Error (data.message || 'failed to fetch users data.')
+            }
+            return data;
+    }
+
+    export const handleSavePermissions = async (userId, getPermissions)=>{
+        const allowedPermissions = Object.keys(getPermissions?getPermissions:{});
+        if(allowedPermissions.length>0){
+            console.log(userId, getPermissions);
+            const response = await fetch(`${API_URL}/${userId}/permissions`,{
+                method:'POST',
+                headers:{
+                    ...getAuthHeader(),
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify(allowedPermissions)
+            });
+            const data = await response.json();
+            if(!response.ok){
+                throw new Error (data.message || 'failed to save permissions data.')
+            }
+            return data;
+        }
+    }

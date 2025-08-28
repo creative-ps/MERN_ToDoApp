@@ -1,8 +1,9 @@
 import React,{createContext, useState, useEffect} from "react";
-import { fetchTasks,createTask,deleteTask,updateTaskStatus, updateTask, logIn, signUp, fetchUser} from "../TaskServices/TaskService";
-import {AuthForm} from '../components/AuthForm';
+import { fetchTasks,createTask,deleteTask,updateTaskStatus, updateTask, logIn, signUp, fetchUser, fetchAllUsers} from "../AppServices/AppService";
+// import {AuthForm} from '../components/AuthForm';
 export const TaskContext = createContext();
-import { AppErrors } from "../GlobalErrorsAndSuccess";
+// import { AppErrors } from "../GlobalErrorsAndSuccess";
+import { handleSavePermissions } from '../AppServices/AppService';
 
 export const TaskProvider = ({children})=>{
     const [tasks, setTasks] = useState([]);
@@ -10,6 +11,8 @@ export const TaskProvider = ({children})=>{
     const [success,setSuccess] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
     const [user, setUser] = useState(null);
+    const [allUsers, setAllUsers] = useState([]);
+    const [permissions, setPermissions] = useState({});
     useEffect(()=>{
             if(isAuthenticated){
                 const loadData = async ()=>{
@@ -34,15 +37,15 @@ export const TaskProvider = ({children})=>{
         
 
 
-    const loadTask = async ()=>{
-        setErrors(null);
-        try{
-            const data = await fetchTasks();
-            setTasks(data)
-        }catch(err){
-            setErrors(err.message)
-        }
-    }
+    // const loadTask = async ()=>{
+    //     setErrors(null);
+    //     try{
+    //         const data = await fetchTasks();
+    //         setTasks(data)
+    //     }catch(err){
+    //         setErrors(err.message)
+    //     }
+    // }
 
     const addTask = async (taskData)=>{
         try{
@@ -119,6 +122,24 @@ export const TaskProvider = ({children})=>{
             setSuccess('Logged out successfully.')
    }
 
+   const fetchUsers = async ()=>{
+        try{
+            const allUsers = await fetchAllUsers();
+            setAllUsers(allUsers);
+        }catch(err){
+            setErrors(err.message);
+        }
+   }
+
+   const permissionsAllowed = async (userId,permissions)=>{
+        try{
+            await handleSavePermissions(userId,permissions);
+            fetchUsers();
+        }catch(err){
+            setErrors(err.message);
+        }
+   }
+
     // if(!isAuthenticated){
     //     return  <>
     //                 <AppErrors errors={errors} success={success}/>
@@ -126,8 +147,8 @@ export const TaskProvider = ({children})=>{
     //             </>;
     // }
 
-    return <TaskContext.Provider value = {{tasks,success,setSuccess, errors, setErrors, loadTask, isAuthenticated, setIsAuthenticated,
-    addTask, removeTask, toggleTaskStatus,updateTitleDescription,handleSignIn,handleSignUp, handleLogout, user, setUser}}>
+    return <TaskContext.Provider value = {{tasks,success,setSuccess, errors, setErrors, isAuthenticated, setIsAuthenticated,
+    addTask, removeTask, toggleTaskStatus,updateTitleDescription,handleSignIn,handleSignUp, handleLogout, user, setUser, allUsers,fetchUsers, permissions, setPermissions, permissionsAllowed}}>
             {children}
            </TaskContext.Provider>
 }

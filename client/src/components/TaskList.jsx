@@ -53,7 +53,7 @@ export default function TaskList(){
                         {task.description}
                         <Button type="button" className="deleteBtn" handleClick={()=>{removeTask(task.id)}} content="Delete"/>
                         <Button type="button" className="toggleBtn" handleClick={()=>{toggleTaskStatus(task.id,task.completed)}} content={task.completed?'Completed':'Pending'}/>
-                        <Button type="button" className="updateButton" handleClick={()=>{handleTaskDetails(task)}}  content="Update"/>
+                        <Button type="button" className="updateButton" handleClick={()=>{handleTaskDetails(task)}}  content="Edit"/>
                     </>
                     )}
                     </li>
