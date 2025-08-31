@@ -5,16 +5,18 @@ import { Button } from "./Button";
 import { useNavigate } from "react-router-dom";
 import {AuthForm} from './AuthForm'
 export default function TaskList(){
-    const {tasks, setErrors, removeTask, setSuccess, toggleTaskStatus,updateTitleDescription,isAuthenticated} = useContext(TaskContext);
     
-    if(!isAuthenticated){
-        return
-    }
+    const {tasks, setErrors, removeTask, setSuccess, toggleTaskStatus,updateTitleDescription,isAuthenticated} = useContext(TaskContext);
     
     useEffect(()=>{
         setErrors(null)
         setSuccess(null)
     },[])
+
+    if(!isAuthenticated){
+        return
+    }
+    
     const [editTaskId, setEditTaskId] = useState(null);
     const [editForm, setEditForm] = useState({title:'',description:''});
     

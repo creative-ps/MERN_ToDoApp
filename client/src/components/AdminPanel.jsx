@@ -21,12 +21,11 @@ export const AdminPanel = ()=>{
                     ...prev[userId],
                     [perm]:checked
                 }
-
             }
         });
     }
 
-
+console.log(permissions,'permissions');
         
     return  <div>
                 <h3>Admin panel</h3>

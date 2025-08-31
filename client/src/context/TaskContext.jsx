@@ -125,7 +125,17 @@ export const TaskProvider = ({children})=>{
    const fetchUsers = async ()=>{
         try{
             const allUsers = await fetchAllUsers();
+            const initialPermissions = {};
+            allUsers.forEach((user)=>{
+                initialPermissions[user.id] = {
+                    create:user.permissions.includes('create'),
+                    edit:user.permissions.includes('edit'),
+                    delete:user.permissions.includes('delete'),
+                    update:user.permissions.includes('update')
+                }
+            })
             setAllUsers(allUsers);
+            setPermissions(initialPermissions);
         }catch(err){
             setErrors(err.message);
         }

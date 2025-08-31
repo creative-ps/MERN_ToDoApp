@@ -15,4 +15,9 @@ router.get('/users', authMiddleware, adminMiddleware, async (req, res)=>{
     }
 })
 
+router.patch('/:userId/permissions', async (req, res)=>{
+    console.log('patch route..');
+    await adminController.saveValidPermissions(req, res);
+})
+
 module.exports = router;

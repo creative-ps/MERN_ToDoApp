@@ -17,6 +17,20 @@ class adminController {
         }
     }
 
+    async saveValidPermissions(req, res){
+
+        const {userId} =  req.params;
+        const permissions = req.body;
+        console.log(permissions);
+
+        const user = await User.findById(userId);
+        const validPermissions = [...new Set(permissions)];
+        console.log(permissions);
+        user.permissions = validPermissions;
+        await user.save();
+        console.log(user);
+    }
+
 }
 
 module.exports = new adminController()

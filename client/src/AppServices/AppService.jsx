@@ -200,17 +200,21 @@
             return data;
     }
 
+    export const validPermissions = (allPermissions, getPermissions)=>{
+        return allPermissions.filter((p)=>getPermissions[p]);
+    }
+
     export const handleSavePermissions = async (userId, getPermissions)=>{
-        const allowedPermissions = Object.keys(getPermissions?getPermissions:{});
-        if(allowedPermissions.length>0){
-            console.log(userId, getPermissions);
-            const response = await fetch(`${API_URL}/${userId}/permissions`,{
-                method:'POST',
+        const allPermissions = Object.keys(getPermissions?getPermissions:{});
+        if(allPermissions.length>0){
+            const permissionsAllowed = validPermissions(allPermissions,getPermissions);
+            const response = await fetch(`${API_URL}/admin/${userId}/permissions`,{
+                method:'PATCH',
                 headers:{
-                    ...getAuthHeader(),
+                    // ...getAuthHeader(),
                     'Content-Type':'application/json'
                 },
-                body:JSON.stringify(allowedPermissions)
+                body:JSON.stringify(permissionsAllowed)
             });
             const data = await response.json();
             if(!response.ok){
