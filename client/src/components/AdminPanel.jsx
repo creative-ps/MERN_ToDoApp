@@ -24,8 +24,6 @@ export const AdminPanel = ()=>{
             }
         });
     }
-
-console.log(permissions,'permissions');
         
     return  <div>
                 <h3>Admin panel</h3>

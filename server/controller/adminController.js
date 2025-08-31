@@ -3,7 +3,7 @@ const User = require('../model/userModel');
 class adminController {
     async getAllUsers(req, res){
         try{
-            const allUsers = await User.find();
+            const allUsers = await User.find().limit(15);
             if(!allUsers){
                 const err = new Error('no user found.');
                 err.statusCode = 404;
@@ -18,17 +18,13 @@ class adminController {
     }
 
     async saveValidPermissions(req, res){
-
         const {userId} =  req.params;
         const permissions = req.body;
-        console.log(permissions);
-
+        // console.log(permissions);
         const user = await User.findById(userId);
         const validPermissions = [...new Set(permissions)];
-        console.log(permissions);
         user.permissions = validPermissions;
         await user.save();
-        console.log(user);
     }
 
 }
