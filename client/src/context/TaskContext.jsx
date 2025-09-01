@@ -13,6 +13,7 @@ export const TaskProvider = ({children})=>{
     const [user, setUser] = useState(null);
     const [allUsers, setAllUsers] = useState([]);
     const [permissions, setPermissions] = useState({});
+    const [totalPages, setTotalPages] = useState(1);
     useEffect(()=>{
             if(isAuthenticated){
                 const loadData = async ()=>{
@@ -122,9 +123,10 @@ export const TaskProvider = ({children})=>{
             setSuccess('Logged out successfully.')
    }
 
-   const fetchUsers = async ()=>{
+   const fetchUsers = async (page,limit)=>{
         try{
-            const allUsers = await fetchAllUsers();
+            const data = await fetchAllUsers(page,limit);
+            const allUsers = data.allUsers;
             const initialPermissions = {};
             allUsers.forEach((user)=>{
                 initialPermissions[user.id] = {
@@ -135,6 +137,7 @@ export const TaskProvider = ({children})=>{
                 }
             })
             setAllUsers(allUsers);
+            setTotalPages(data.totalPages)
             setPermissions(initialPermissions);
         }catch(err){
             setErrors(err.message);
@@ -158,7 +161,7 @@ export const TaskProvider = ({children})=>{
     // }
 
     return <TaskContext.Provider value = {{tasks,success,setSuccess, errors, setErrors, isAuthenticated, setIsAuthenticated,
-    addTask, removeTask, toggleTaskStatus,updateTitleDescription,handleSignIn,handleSignUp, handleLogout, user, setUser, allUsers,fetchUsers, permissions, setPermissions, permissionsAllowed}}>
+    addTask, removeTask, toggleTaskStatus,updateTitleDescription,handleSignIn,handleSignUp, handleLogout, user, setUser, allUsers,fetchUsers, permissions, setPermissions, permissionsAllowed,totalPages}}>
             {children}
            </TaskContext.Provider>
 }

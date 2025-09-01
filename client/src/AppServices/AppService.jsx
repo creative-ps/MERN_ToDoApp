@@ -185,8 +185,8 @@
         return data;
     }
     
-    export const fetchAllUsers = async ()=>{
-            const response = await fetch(`${API_URL}/admin/users`,{
+    export const fetchAllUsers = async (page,limit)=>{
+            const response = await fetch(`${API_URL}/admin/users?page=${page}&limit=${limit}`,{
                 method:'GET',
                 headers:{
                     ...getAuthHeader(),
@@ -211,7 +211,7 @@
             const response = await fetch(`${API_URL}/admin/${userId}/permissions`,{
                 method:'PATCH',
                 headers:{
-                    // ...getAuthHeader(),
+                    ...getAuthHeader(),
                     'Content-Type':'application/json'
                 },
                 body:JSON.stringify(permissionsAllowed)

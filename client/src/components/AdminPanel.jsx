@@ -1,17 +1,18 @@
-import React,{ useContext, useEffect } from 'react';
+import React,{ useContext, useEffect, useState } from 'react';
 import { TaskContext } from '../context/TaskContext';
 
 
 export const AdminPanel = ()=>{
-    const {allUsers, fetchUsers, isAuthenticated, permissions, setPermissions, permissionsAllowed} = useContext(TaskContext);
+    const {allUsers, fetchUsers, isAuthenticated, permissions, setPermissions, permissionsAllowed, totalPages} = useContext(TaskContext);
+    const [page,setPage] = useState(1);
 
     if(!isAuthenticated){
         return;
     }
 
     useEffect(()=>{
-        fetchUsers();
-    },[]);
+        fetchUsers(page,15);
+    },[page]);
 
     const handlePermissionsChange = (checked, userId, perm)=>{
         setPermissions((prev)=>{
@@ -63,5 +64,19 @@ export const AdminPanel = ()=>{
                     }
                     </tbody>
                 </table>
+                <div>
+                    {page} of {totalPages} pages
+                </div>
+                <div>
+                    <button onClick={()=>{
+                        setPage((prev)=>Math.min(prev+1,totalPages));
+                    }}>Next</button>
+                    <button 
+                        onClick={()=>{
+                        setPage((prev)=>Math.max(prev-1,1));}}
+                        disabled={page === 1}
+                    >
+                    Previous</button>
+                </div>
             </div>
 }

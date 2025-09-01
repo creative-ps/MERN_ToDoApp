@@ -13,14 +13,14 @@ export default function TaskList(){
         setSuccess(null)
     },[])
 
-    if(!isAuthenticated){
-        return
-    }
+  
     
     const [editTaskId, setEditTaskId] = useState(null);
     const [editForm, setEditForm] = useState({title:'',description:''});
     
-    
+      if(!isAuthenticated){
+        return
+    }
 
     const handleTaskDetails = (task)=>{
         setEditTaskId(task.id);

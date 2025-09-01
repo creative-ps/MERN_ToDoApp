@@ -7,9 +7,9 @@ const codePresenter = require('../presenters/codePresenter');
 
 router.get('/users', authMiddleware, adminMiddleware, async (req, res)=>{
     try{
-        const allUsers = await adminController.getAllUsers(req, res);
-        const formatedUsers = codePresenter.formatUsers(allUsers);
-        res.status(200).json(formatedUsers);
+        const allData = await adminController.getAllUsers(req, res);
+        // const formatedUsers = codePresenter.formatUsers(allUsers);
+        res.status(200).json(allData);
     }catch(error){
         res.status(error.statusCode || 500).json(codePresenter.error(error.message||'failed to get users.'));
     }
