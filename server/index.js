@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const taskRouter = require('./routes/taskRouter');
 const authRouter = require('./routes/authRouter');
 const adminRouter = require('./routes/adminRoute');
+const categoryRouter = require('./routes/categoryRoute')
 const cors = require('cors');
 
 
@@ -39,6 +40,7 @@ server.use('/api/tasks',taskRouter)
 server.use('/api/auth', authRouter)
 server.use('/api/user', authRouter)
 server.use('/api/admin', adminRouter)
+server.use('/api', categoryRouter);
 
 // Global error handling middleware
 server.use((err, req, res, next)=>{

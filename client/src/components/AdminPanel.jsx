@@ -41,7 +41,7 @@ export const AdminPanel = ()=>{
                     <tbody>
                     {
                       allUsers.map((user)=>
-                        <tr key={user.id}>
+                        <tr key={user._id}>
                             <td></td>
                             <td>{user.email}</td>
                             <td>{user.role}</td>
@@ -51,26 +51,28 @@ export const AdminPanel = ()=>{
                                         <label key={perm}>
                                             <span>{perm}</span>
                                             <input type="checkbox"
-                                            checked = {permissions[user.id]?.[perm] ?? user.permissions.includes(perm)}
-                                            onChange={(e)=>{handlePermissionsChange(e.target.checked, user.id, perm)}}
+                                            checked = {permissions[user._id]?.[perm] ?? user.permissions.includes(perm)}
+                                            onChange={(e)=>{handlePermissionsChange(e.target.checked, user._id, perm)}}
                                             />
                                         </label>
                                     )
                                 }
                             </td>
-                            <td>{<button onClick={()=>{permissionsAllowed(user.id,permissions[user.id])}}>Save</button>}</td>
+                            <td>{<button onClick={()=>{permissionsAllowed(user._id,permissions[user._id])}}>Save</button>}</td>
                         </tr>
                       )  
                     }
                     </tbody>
                 </table>
                 <div>
-                    {page} of {totalPages} pages
+                    {page} of {totalPages} pages.
                 </div>
                 <div>
                     <button onClick={()=>{
                         setPage((prev)=>Math.min(prev+1,totalPages));
-                    }}>Next</button>
+                    }}
+                    disabled={page === totalPages}
+                    >Next</button>
                     <button 
                         onClick={()=>{
                         setPage((prev)=>Math.max(prev-1,1));}}

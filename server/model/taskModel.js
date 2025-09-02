@@ -5,7 +5,7 @@ const taskSchema = new mongoose.Schema({
     description:{type:String, required:true, trim:true},
     createdAt:{type:Date, default:Date.now},
     completed:{type:Boolean, default:false},
-    userId: {type:mongoose.Schema.Types.ObjectId, ref:'User', required:true}
+    catId: {type:mongoose.Schema.Types.ObjectId, ref:'Category', required:true}
 })
 
 module.exports = mongoose.model('Task',taskSchema)

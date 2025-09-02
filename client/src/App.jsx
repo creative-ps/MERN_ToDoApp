@@ -6,6 +6,7 @@ import { TaskProvider } from "./context/TaskContext";
 import { AppErrors } from "./GlobalErrorsAndSuccess";
 import { Header } from "./components/Header";
 import { AdminPanel } from "./components/AdminPanel";
+import { Category } from "./components/Category";
 
 export default function App (){
     return <>
@@ -18,6 +19,7 @@ export default function App (){
                     <Route path="/" element={<TaskList/>}/>
                     <Route path="/create" element={<TaskForm/>}/>
                     <Route path="/admin" element={<AdminPanel/>}/>
+                    <Route path="/category" element={<Category/>}/>
                   </Routes>
                 </BrowserRouter>
               </TaskProvider>

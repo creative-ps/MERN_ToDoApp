@@ -1,5 +1,5 @@
 import React,{createContext, useState, useEffect} from "react";
-import { fetchTasks,createTask,deleteTask,updateTaskStatus, updateTask, logIn, signUp, fetchUser, fetchAllUsers} from "../AppServices/AppService";
+import { fetchTasks,createTask,deleteTask,updateTaskStatus, updateTask, logIn, signUp, fetchUser, fetchAllUsers, handleAddCategory, getAllCategories} from "../AppServices/AppService";
 // import {AuthForm} from '../components/AuthForm';
 export const TaskContext = createContext();
 // import { AppErrors } from "../GlobalErrorsAndSuccess";
@@ -14,6 +14,7 @@ export const TaskProvider = ({children})=>{
     const [allUsers, setAllUsers] = useState([]);
     const [permissions, setPermissions] = useState({});
     const [totalPages, setTotalPages] = useState(1);
+    const [category, setCategory] = useState('');
     useEffect(()=>{
             if(isAuthenticated){
                 const loadData = async ()=>{
@@ -129,7 +130,7 @@ export const TaskProvider = ({children})=>{
             const allUsers = data.allUsers;
             const initialPermissions = {};
             allUsers.forEach((user)=>{
-                initialPermissions[user.id] = {
+                initialPermissions[user._id] = {
                     create:user.permissions.includes('create'),
                     edit:user.permissions.includes('edit'),
                     delete:user.permissions.includes('delete'),
@@ -153,6 +154,24 @@ export const TaskProvider = ({children})=>{
         }
    }
 
+   const addCategory = async (category)=>{
+        try{
+           const data = await handleAddCategory(category);
+            setSuccess('Category added successfully.')
+        }catch(err){
+            setErrors(err.message);
+        }
+   }
+
+   const getCategories = async () => {
+        try{
+            const data = await getAllCategories();
+            setCategory(data);
+        }catch(err){
+            setErrors(err.message);
+        }
+   }
+
     // if(!isAuthenticated){
     //     return  <>
     //                 <AppErrors errors={errors} success={success}/>
@@ -161,7 +180,7 @@ export const TaskProvider = ({children})=>{
     // }
 
     return <TaskContext.Provider value = {{tasks,success,setSuccess, errors, setErrors, isAuthenticated, setIsAuthenticated,
-    addTask, removeTask, toggleTaskStatus,updateTitleDescription,handleSignIn,handleSignUp, handleLogout, user, setUser, allUsers,fetchUsers, permissions, setPermissions, permissionsAllowed,totalPages}}>
+    addTask, removeTask, toggleTaskStatus,updateTitleDescription,handleSignIn,handleSignUp, handleLogout, user, setUser, allUsers,fetchUsers, permissions, setPermissions, permissionsAllowed,totalPages, addCategory, category, setCategory, getCategories}}>
             {children}
            </TaskContext.Provider>
 }

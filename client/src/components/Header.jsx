@@ -16,6 +16,7 @@ export const Header = () => {
                 </div>
                 <Link to='/'>All Tasks</Link> |
                 <Link to='/create'>Create Task</Link> | 
-                <Link to='/admin'>Admin panel</Link>
+                <Link to='/admin'>Admin panel</Link> | 
+                <Link to='/category'>Add Category</Link>
             </nav>
 }

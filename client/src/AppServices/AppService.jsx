@@ -223,3 +223,34 @@
             return data;
         }
     }
+
+    export const handleAddCategory = async (category) => {
+        const response = await fetch(`${API_URL}/category`,{
+            method:'POST',
+            headers:{
+                    ...getAuthHeader(),
+                    'Content-Type':'application/json'
+                },
+            body:JSON.stringify({name:category})
+        });
+        const data = await response.json();
+        if(!response.ok){
+            throw new Error (data.message || 'failed to save permissions data.')
+        }
+        return data;
+    }
+
+    export const getAllCategories = async () => {
+        const response = await fetch(`${API_URL}/categories`,{
+            method:'GET',
+            headers:{
+                    ...getAuthHeader(),
+                    'Content-Type':'application/json'
+                }
+        });
+        const data = await response.json();
+        if(!response.ok){
+            throw new Error (data.message || 'failed to fetch categories.')
+        }
+        return data;
+    }
