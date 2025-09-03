@@ -14,7 +14,7 @@ export const TaskProvider = ({children})=>{
     const [allUsers, setAllUsers] = useState([]);
     const [permissions, setPermissions] = useState({});
     const [totalPages, setTotalPages] = useState(1);
-    const [category, setCategory] = useState('');
+    const [categories, setCategories] = useState([]);
     useEffect(()=>{
             if(isAuthenticated){
                 const loadData = async ()=>{
@@ -166,7 +166,8 @@ export const TaskProvider = ({children})=>{
    const getCategories = async () => {
         try{
             const data = await getAllCategories();
-            setCategory(data);
+            console.log(data, 'Task Context');
+            setCategories(data);
         }catch(err){
             setErrors(err.message);
         }
@@ -180,7 +181,7 @@ export const TaskProvider = ({children})=>{
     // }
 
     return <TaskContext.Provider value = {{tasks,success,setSuccess, errors, setErrors, isAuthenticated, setIsAuthenticated,
-    addTask, removeTask, toggleTaskStatus,updateTitleDescription,handleSignIn,handleSignUp, handleLogout, user, setUser, allUsers,fetchUsers, permissions, setPermissions, permissionsAllowed,totalPages, addCategory, category, setCategory, getCategories}}>
+    addTask, removeTask, toggleTaskStatus,updateTitleDescription,handleSignIn,handleSignUp, handleLogout, user, setUser, allUsers,fetchUsers, permissions, setPermissions, permissionsAllowed,totalPages, addCategory, categories, setCategories, getCategories}}>
             {children}
            </TaskContext.Provider>
 }

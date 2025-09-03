@@ -18,6 +18,7 @@ export default function App (){
                   <Routes>
                     <Route path="/" element={<TaskList/>}/>
                     <Route path="/create" element={<TaskForm/>}/>
+                    <Route path="/create/:cat" element={<TaskForm/>}/>
                     <Route path="/admin" element={<AdminPanel/>}/>
                     <Route path="/category" element={<Category/>}/>
                   </Routes>

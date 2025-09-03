@@ -19,6 +19,7 @@ class CategoryController{
     }
 
     async getAllCategories(req, res){
+        const userId = req.userId;
         const categories = await categoryModel.find({userId:userId});
         return categories;
     }

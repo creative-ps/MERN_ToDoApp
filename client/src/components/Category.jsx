@@ -6,6 +6,7 @@ export const Category = ()=>{
     const [cat, setCat] = useState('');
     const {addCategory, setErrors, setSuccess} = useContext(TaskContext);
     const navigate = useNavigate();
+    
    
     return <div>
                 <form>
@@ -28,9 +29,8 @@ export const Category = ()=>{
                                         return;
                                     }
                                     addCategory(cat);
-                                    setTimeout(()=>{
-                                        navigate(`/create?cat=${cat}`);
-                                    },1000);
+                                    localStorage.setItem('_cat',cat);
+                                    navigate(`/create/${cat}`);
                                     }
                             }>
                             Submit
