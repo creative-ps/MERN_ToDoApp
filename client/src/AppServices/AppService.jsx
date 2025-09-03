@@ -5,9 +5,9 @@
         return (token) ? {Authorization : `Bearer ${token}`} : {};
     }
     
-     export const fetchTasks = async ()=>{
+     export const fetchTasks = async (catId)=>{
         try{
-            const response = await fetch(`${API_URL}/tasks`,{
+            const response = await fetch(`${API_URL}/tasks/${catId}`,{
                 method:'GET',
                 headers:{
                     ...getAuthHeader(),

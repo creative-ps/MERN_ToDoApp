@@ -5,7 +5,7 @@ const CodePresenter = require('../presenters/codePresenter');
 const authMiddleware = require('../middleware/authMiddleware');
 const permissionMiddleware = require('../middleware/permissionMiddleware');
 
-router.get('/', authMiddleware, async (req, res) => {
+router.get('/:id', authMiddleware, async (req, res) => {
     try{
         const allTasks = await TaskController.getAllTasks(req, res);
         const formatedTasks = CodePresenter.formatTasks(allTasks);

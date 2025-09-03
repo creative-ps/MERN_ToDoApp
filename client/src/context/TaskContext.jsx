@@ -25,29 +25,30 @@ export const TaskProvider = ({children})=>{
                         setErrors(error.message);
                         handleLogout()
                     }
-                    try{
-                        const data = await fetchTasks();
-                        setTasks(data);
-                    }catch(error){
+                    // try{
+                    //     const data = await fetchTasks();
+                    //     setTasks(data);
+                    // }catch(error){
                        
-                        setErrors(error.message);
-                    }
+                    //     setErrors(error.message);
+                    // }
                 };
                 loadData();
+                getCategories();
             }
         },[isAuthenticated]);
         
 
 
-    // const loadTask = async ()=>{
-    //     setErrors(null);
-    //     try{
-    //         const data = await fetchTasks();
-    //         setTasks(data)
-    //     }catch(err){
-    //         setErrors(err.message)
-    //     }
-    // }
+    const loadTask = async (catId)=>{
+        setErrors(null);
+        try{
+            const data = await fetchTasks(catId);
+            setTasks(data)
+        }catch(err){
+            setErrors(err.message)
+        }
+    }
 
     const addTask = async (taskData)=>{
         try{
@@ -101,7 +102,6 @@ export const TaskProvider = ({children})=>{
             setSuccess('Signed up successfully.')
         }catch(err){
             setErrors(err.message)
-            console.log(err.message,'err');
         }
    }
 
@@ -166,7 +166,6 @@ export const TaskProvider = ({children})=>{
    const getCategories = async () => {
         try{
             const data = await getAllCategories();
-            console.log(data, 'Task Context');
             setCategories(data);
         }catch(err){
             setErrors(err.message);
@@ -181,7 +180,7 @@ export const TaskProvider = ({children})=>{
     // }
 
     return <TaskContext.Provider value = {{tasks,success,setSuccess, errors, setErrors, isAuthenticated, setIsAuthenticated,
-    addTask, removeTask, toggleTaskStatus,updateTitleDescription,handleSignIn,handleSignUp, handleLogout, user, setUser, allUsers,fetchUsers, permissions, setPermissions, permissionsAllowed,totalPages, addCategory, categories, setCategories, getCategories}}>
+    addTask, removeTask, toggleTaskStatus,updateTitleDescription,handleSignIn,handleSignUp, handleLogout, user, setUser, allUsers,fetchUsers, permissions, setPermissions, permissionsAllowed,totalPages, addCategory, categories, setCategories, getCategories,loadTask}}>
             {children}
            </TaskContext.Provider>
 }

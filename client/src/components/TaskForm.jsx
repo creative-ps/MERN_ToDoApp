@@ -5,8 +5,7 @@ import {toast} from 'react-toastify';
 import { useParams } from "react-router-dom";
 
 export const TaskForm = ()=>{
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
+    const [task, setTask] = useState("");
     const [selectVal, setSelectVal] = useState('')
     const {addTask, isAuthenticated, setErrors, setSuccess, categories, getCategories} = useContext(TaskContext);
     const {cat} = useParams();
@@ -17,32 +16,22 @@ export const TaskForm = ()=>{
     useEffect(()=>{
         setErrors(null);
         setSuccess(null);
-        getCategories();
+        // getCategories();
         setSelectVal(cat);
     },[]);
-    // console.log(cat,"query");
-
-    console.log(categories,"create category");
+   
    
     const handleSubmit = async (e)=>{
         e.preventDefault();
-        if(title === '' && description === ''){
-            setErrors('Title and Description are required.')
-            return;
-        }
-        if(title === ''){
-            setErrors('Title is required.')
-            return;
-        }
-        if(description === ''){
-            setErrors('Description is required.')
+        if(task === ''){
+            setErrors('Task is required.')
             return;
         }
         
         
-            await addTask({title,description});
-            setTitle('');
-            setDescription('');
+        await addTask({selectVal,task});
+        setTask('');
+        
     }
 
     const handleInputChange = (setter)=>(event)=>{
@@ -50,11 +39,14 @@ export const TaskForm = ()=>{
         setErrors('')
     }
 
-    const _category = localStorage.getItem('_cat') || 'default';
+    if(cat){
+        const _category = localStorage.getItem('_cat') || 'default';
         if(_category !== cat){
             setErrors('Invalid category selection');
             return;
         }
+    }
+
 
 
     return <>
@@ -71,9 +63,9 @@ export const TaskForm = ()=>{
 
                     <h3>Add Task in {selectVal} {!selectVal?categories[0]?.name:''}  category.</h3>
                     <input type="text"
-                    value={description}
-                    onChange={handleInputChange(setDescription)}
-                    placeholder="Enter Description"
+                    value={task}
+                    onChange={handleInputChange(setTask)}
+                    placeholder="Enter Task"
                     />
                     <div>
                         <button type="submit">Add Task</button>

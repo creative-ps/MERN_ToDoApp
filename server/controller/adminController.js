@@ -34,7 +34,6 @@ class adminController {
     async saveValidPermissions(req, res){
         const {userId} =  req.params;
         const permissions = req.body;
-        // console.log(permissions);
         const user = await User.findById(userId);
         const validPermissions = [...new Set(permissions)];
         user.permissions = validPermissions;

@@ -1,35 +1,38 @@
 const mongoose = require('mongoose');
 const {Types} = require('mongoose');
 const taskModel = require('../model/taskModel');
+const categoryModel = require('../model/categoryModel');
 
 class TaskController{
     async createTask(req,res){
-            const {title,description} = req.body;
+            const {selectVal,task} = req.body;
             const userId = new Types.ObjectId(req.userId);
-            if(!title || !description){
-                const error = new Error('Title and Description are required');
+            if(!selectVal || !task){
+                const error = new Error('category and task are required');
                 error.statusCode = 400;
                 throw error
             }
-            const titleExist = await taskModel.findOne({title:{$regex: new RegExp(`^${title}$`,'i')},userId:userId});
-            const descriptionExist = await taskModel.findOne({description:{$regex: new RegExp(`^${description}$`, 'i')},userId:userId})
-            if(titleExist || descriptionExist){
-                const error = new Error("Task with this Title or Description is already exist.");
+            const category = await categoryModel.findOne({name:selectVal});
+            const taskExist = await taskModel.findOne({title:{$regex: new RegExp(`^${task}$`,'i')},catId:category._id});
+            // const descriptionExist = await taskModel.findOne({description:{$regex: new RegExp(`^${description}$`, 'i')},userId:userId})
+            if(taskExist){
+                const error = new Error("Task is already exist.");
                 error.statusCode = 400;
                 throw error;
             }
            
             const parsedDate = new Date();
-            let taskData = {title, description, createdAt:parsedDate, completed:false, userId};
-            const task = new taskModel(taskData)
-            await task.save();
-            return task;
+            let taskData = {title:task, createdAt:parsedDate, completed:false, catId:category._id};
+            const addtask = new taskModel(taskData)
+            await addtask.save();
+            return addtask;
     }
 
     async getAllTasks(req,res){
+        const {id} = req.params;
         try{
             const userId = new Types.ObjectId(req.userId);
-            const allTasks = await taskModel.find({userId});
+            const allTasks = await taskModel.find({catId:id});
             return allTasks;
         }catch(err){
             const error = new Error('Database error while fetching tasks');
