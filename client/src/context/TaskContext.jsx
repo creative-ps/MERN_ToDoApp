@@ -1,5 +1,5 @@
 import React,{createContext, useState, useEffect} from "react";
-import { fetchTasks,createTask,deleteTask,updateTaskStatus, updateTask, logIn, signUp, fetchUser, fetchAllUsers, handleAddCategory, getAllCategories} from "../AppServices/AppService";
+import { fetchTasks,createTask,deleteTask,updateTaskStatus, updateTaskContent, logIn, signUp, fetchUser, fetchAllUsers, handleAddCategory, getAllCategories} from "../AppServices/AppService";
 // import {AuthForm} from '../components/AuthForm';
 export const TaskContext = createContext();
 // import { AppErrors } from "../GlobalErrorsAndSuccess";
@@ -39,7 +39,6 @@ export const TaskProvider = ({children})=>{
         },[isAuthenticated]);
         
 
-
     const loadTask = async (catId)=>{
         setErrors(null);
         try{
@@ -61,32 +60,32 @@ export const TaskProvider = ({children})=>{
 
     }
 
-    const removeTask = async (taskId)=>{
+    const removeTask = async (catId)=>{
         try{
-            const data = await deleteTask(taskId);
-            const deletedTaskId = data.data.id;
+            const data = await deleteTask(catId);
+            const deletedTaskId = data.data.catId;
             setSuccess(data.message);
-            setTasks(tasks.filter((task)=>task.id !== deletedTaskId))
+            setTasks(tasks.filter((task)=>task.catId !== deletedTaskId))
         }catch(err){
             setErrors(err.message);
         }
     }
 
-   const toggleTaskStatus = async (taskId, completed)=>{
+   const toggleTaskStatus = async (catId, completed)=>{
         try{
-            const data = await updateTaskStatus(taskId, !completed);
-            setTasks(tasks.map((task)=>task.id == data.id?{...task,completed:data.completed}:task));
+            const data = await updateTaskStatus(catId, !completed);
+            setTasks(tasks.map((task)=>task.catId == data.catId?{...task,completed:data.completed}:task));
             setSuccess('Task status updated successfully.')
         }catch(err){
             setErrors(err.message);
         }
    }
 
-   const updateTitleDescription = async (taskId, updatedContent)=>{
+   const updateTask = async (catId, updatedContent)=>{
         try{
-            const data = await updateTask(taskId, updatedContent);
+            const data = await updateTaskContent(catId, updatedContent);
             const updatedTask = data.data;
-            setTasks(tasks.map((task)=>(task.id == updatedTask.id)?{...task,title:updatedTask.title,description:updatedTask.description}:task));
+            setTasks(tasks.map((task)=>(task.catId == updatedTask.catId)?{...task,title:updatedTask.title}:task));
             setSuccess(data.message)
         }catch(err){
             setErrors(err.message);
@@ -180,7 +179,7 @@ export const TaskProvider = ({children})=>{
     // }
 
     return <TaskContext.Provider value = {{tasks,success,setSuccess, errors, setErrors, isAuthenticated, setIsAuthenticated,
-    addTask, removeTask, toggleTaskStatus,updateTitleDescription,handleSignIn,handleSignUp, handleLogout, user, setUser, allUsers,fetchUsers, permissions, setPermissions, permissionsAllowed,totalPages, addCategory, categories, setCategories, getCategories,loadTask}}>
+    addTask, removeTask, toggleTaskStatus,updateTask,handleSignIn,handleSignUp, handleLogout, user, setUser, allUsers,fetchUsers, permissions, setPermissions, permissionsAllowed,totalPages, addCategory, categories, setCategories, getCategories,loadTask}}>
             {children}
            </TaskContext.Provider>
 }

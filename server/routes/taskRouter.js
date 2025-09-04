@@ -36,14 +36,14 @@ router.delete('/:id',authMiddleware, async (req, res)=>{
 })+
 
 router.patch('/:id',authMiddleware, async (req, res)=>{
-    const {completed,title,description} = req.body;
+    const {completed,title} = req.body;
     try{
         if(completed !== undefined){
             const data = await TaskController.updateTaskStatus(req, res);
             const formatedTask = CodePresenter.formatTask(data);
             res.status(200).json(CodePresenter.success(formatedTask,"Task status updated successfully."))
         }
-        else if(title || description){
+        else if(title){
             const data = await TaskController.updateTask(req, res);
             const formatedTask = CodePresenter.formatTask(data);
             res.status(200).json(CodePresenter.success(formatedTask,"Task updated successfully."))    

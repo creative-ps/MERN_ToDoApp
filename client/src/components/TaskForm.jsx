@@ -16,10 +16,9 @@ export const TaskForm = ()=>{
     useEffect(()=>{
         setErrors(null);
         setSuccess(null);
-        // getCategories();
-        setSelectVal(cat);
+        getCategories();
+        {cat ? setSelectVal(cat):setSelectVal(categories[0]?.name)};
     },[]);
-   
    
     const handleSubmit = async (e)=>{
         e.preventDefault();
@@ -27,7 +26,6 @@ export const TaskForm = ()=>{
             setErrors('Task is required.')
             return;
         }
-        
         
         await addTask({selectVal,task});
         setTask('');
@@ -61,7 +59,7 @@ export const TaskForm = ()=>{
                         
                     </select>
 
-                    <h3>Add Task in {selectVal} {!selectVal?categories[0]?.name:''}  category.</h3>
+                    <h3>Add Task in {selectVal}  category.</h3>
                     <input type="text"
                     value={task}
                     onChange={handleInputChange(setTask)}

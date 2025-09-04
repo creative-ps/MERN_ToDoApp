@@ -6,17 +6,18 @@ import { useNavigate } from "react-router-dom";
 import {AuthForm} from './AuthForm'
 export default function TaskList(){
     
-    const {tasks, setErrors, removeTask, setSuccess, toggleTaskStatus,updateTitleDescription,isAuthenticated, categories,loadTask} = useContext(TaskContext);
+    const {tasks, setErrors, removeTask, setSuccess, toggleTaskStatus,updateTask,isAuthenticated, categories,loadTask} = useContext(TaskContext);
     
     useEffect(()=>{
         setErrors(null)
         setSuccess(null)
+        console.log('rendered...')
     },[])
 
   
     
     const [editTaskId, setEditTaskId] = useState(null);
-    const [editForm, setEditForm] = useState({title:'',description:''});
+    const [editForm, setEditForm] = useState({title:''});
     
       if(!isAuthenticated){
         return
@@ -24,16 +25,16 @@ export default function TaskList(){
 
     const handleTaskDetails = (task)=>{
         setEditTaskId(task.catId);
-        setEditForm({title:task.title,description:task.description})
+        setEditForm({title:task.title})
     }
     const handleSave = async ()=>{
-       await updateTitleDescription(editTaskId,editForm);
+       await updateTask(editTaskId,editForm);
        setEditTaskId(null);
-       setEditForm({title:'',description:''});
+       setEditForm({title:''});
     };
     const handleCancle = ()=>{
         setEditTaskId(null);
-        setEditForm({title:'',description:''});
+        setEditForm({title:''});
     }
 
     const handleFetchTask = (catId) => {
@@ -61,18 +62,17 @@ export default function TaskList(){
                                         //     return c;
                                         // }
                                             return <li 
-                                            key={task.catId}>
-                                            {editTaskId === task.id?(
+                                            key={task.title}>
+                                            {editTaskId === task.catId?(
                                                 <div>
                                                     <input type="text" value={editForm.title} onChange={(e)=>{setEditForm({...editForm, title:e.target.value})}}/>
-                                                    <input type="text" value={editForm.description} onChange={(e)=>{setEditForm({...editForm,description:e.target.value})}}/>
-                                                    <button type="button" onClick={()=>handleSave(task.id)}>Save</button><button type="button" onClick={handleCancle}>cancle</button>
+                                                    <button type="button" onClick={()=>handleSave(task.catId)}>Save</button><button type="button" onClick={handleCancle}>cancle</button>
                                                 </div>    
                                             ) : (
                                             <>
                                                 <span className="title">{task.title}</span>  
-                                                <Button type="button" className="deleteBtn" handleClick={()=>{removeTask(task.id)}} content="Delete"/>
-                                                <Button type="button" className="toggleBtn" handleClick={()=>{toggleTaskStatus(task.id,task.completed)}} content={task.completed?'Completed':'Pending'}/>
+                                                <Button type="button" className="deleteBtn" handleClick={()=>{removeTask(task.catId)}} content="Delete"/>
+                                                <Button type="button" className="toggleBtn" handleClick={()=>{toggleTaskStatus(task.catId,task.completed)}} content={task.completed?'Completed':'Pending'}/>
                                                 <Button type="button" className="updateButton" handleClick={()=>{handleTaskDetails(task)}}  content="Edit"/>
                                             </>
                                             )}

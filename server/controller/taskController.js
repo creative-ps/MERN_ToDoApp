@@ -45,12 +45,12 @@ class TaskController{
             const {id} = req.params;
             const userId = new Types.ObjectId(req.userId);
             if(!mongoose.Types.ObjectId.isValid(id)){
-                const error = new Error('invalid task Id');
+                const error = new Error('invalid category Id');
                 error.statusCode = 400;
                 throw error;
             }
 
-            const deleteTask = await taskModel.findOneAndDelete({_id:id, userId:userId});
+            const deleteTask = await taskModel.findOneAndDelete({catId:id});
             if(!deleteTask){
                 const error = new Error('Task not found');
                 error.statusCode = 404;
@@ -64,7 +64,7 @@ class TaskController{
         const {completed} = req.body;
         const userId =  new Types.ObjectId(req.userId);
         if(!mongoose.Types.ObjectId.isValid(id)){
-            const error = new Error('invalid task Id.');
+            const error = new Error('invalid category Id.');
             error.statusCode = 400;
             throw error;
         }
@@ -73,7 +73,7 @@ class TaskController{
             error.statusCode = 400;
             throw error;
         }
-        const task = await taskModel.findOne({_id:id, userId:userId});
+        const task = await taskModel.findOne({catId:id});
         if (!task) {
             const error = new Error('Task not found');
             error.statusCode = 404;
@@ -86,26 +86,25 @@ class TaskController{
 
     async updateTask(req, res){
         const {id} = req.params;
-        const {title,description} = req.body;
+        const {title} = req.body;
         const userId = new Types.ObjectId(req.userId);
          if(!mongoose.Types.ObjectId.isValid(id)){
-            const error = new Error('invalid task Id.');
+            const error = new Error('invalid category Id.');
             error.statusCode = 400;
             throw error;
         }
-        if(!title || !description){
-            const error = new Error('Title and Description are required');
+        if(!title){
+            const error = new Error('Task value is required');
             error.statusCode = 400;
             throw error
         }
-        const task = await taskModel.findOne({_id:id, userId:userId});
+        const task = await taskModel.findOne({catId:id});
         if(!task){
             const error = new Error('Task not found');
             error.statusCode = 404;
             throw error;  
         }
             task.title = title;
-            task.description = description;
         
         await task.save();
         return task;

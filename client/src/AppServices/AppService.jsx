@@ -55,9 +55,9 @@
         }
     }
 
-    export const deleteTask = async (taskId) => {
+    export const deleteTask = async (catId) => {
         try {
-            const response = await fetch(`${API_URL}/tasks/${taskId}`,{
+            const response = await fetch(`${API_URL}/tasks/${catId}`,{
                 method: 'DELETE',
                 headers:{
                     'Content-Type':'application/json',
@@ -77,9 +77,9 @@
         }
     }
 
-    export const updateTaskStatus = async (taskId, completed) => {
+    export const updateTaskStatus = async (catId, completed) => {
         try{
-            const response = await fetch(`${API_URL}/tasks/${taskId}`,{
+            const response = await fetch(`${API_URL}/tasks/${catId}`,{
                 method:'PATCH',
                 headers:{
                     'Content-Type':'application/json',
@@ -100,9 +100,9 @@
         }
     }
 
-    export const updateTask = async (taskId, updatedContent)=>{
+    export const updateTaskContent = async (catId, updatedContent)=>{
         try{
-            const response = await fetch(`${API_URL}/tasks/${taskId}`,{
+            const response = await fetch(`${API_URL}/tasks/${catId}`,{
                 method:'PATCH',
                 headers:{
                     'Content-Type':'application/json',
