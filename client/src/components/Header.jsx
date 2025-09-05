@@ -7,10 +7,11 @@ import { useNavigate } from "react-router-dom";
 
 export const Header = () => {
     const {handleLogout, user, isAuthenticated} = useContext(TaskContext);
+    const navigate = useNavigate()
+
     if(!isAuthenticated){
        return <AuthForm/>
     }
-    const navigate = useNavigate()
 
     return  <nav>
                 <div>

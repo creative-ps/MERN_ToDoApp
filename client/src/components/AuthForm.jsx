@@ -4,17 +4,36 @@ import { useContext } from "react";
 import { TaskContext } from "../context/TaskContext";
 
 export const AuthForm = () => {
-    const [formData,setFormData] = useState({email:'',password:''});
+    const [formData,setFormData] = useState({email:'',password:'',rePassword:''});
     const [isSignUp,setIsSignUp] = useState(false);
     const {handleSignIn, handleSignUp} = useContext(TaskContext);
     const handleSubmit = async (e)=>{
         e.preventDefault();
+
         if(isSignUp){
             await handleSignUp(formData);
         }else{  
             await handleSignIn(formData);
         }
     }
+    let rewritePassword = '';
+    if(isSignUp){
+        rewritePassword = <div>
+                        <input
+                        type="password"
+                        value={formData.rePassword}
+                        onChange={(e)=>{
+                            setFormData({
+                                ...formData,
+                                rePassword:e.target.value
+                            })
+                        }}
+                        placeholder="Re enter password"
+                        />
+                    </div>;
+    }
+    
+    
     return <>
             <form onSubmit={handleSubmit}>
                 <h3>{isSignUp?'Sign Up':'Log In'}</h3>
@@ -44,13 +63,15 @@ export const AuthForm = () => {
                     placeholder="Enter password"
                     />
                 </div>
+                {rewritePassword}
+               
                 <div>
                     <Button type={'submit'} content={isSignUp?'Sign Up':'Log In'}/>
                 </div>
            </form>
            <button onClick={()=>{
             setIsSignUp(!isSignUp)
-            setFormData({email:'',password:''})
+            setFormData({email:'',password:'',rePassword:''})
             }}>
                 {isSignUp?'Switch to Log In':'Switch to Sign Up'}
             </button>

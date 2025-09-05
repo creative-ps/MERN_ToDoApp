@@ -14,7 +14,7 @@ router.post('/category', authMiddleware, permissionMiddleware('create','edit','d
     }
 });
 
-router.get('/categories', authMiddleware, permissionMiddleware('create','edit','delete','update'), async (req, res)=>{
+router.get('/categories', authMiddleware, async (req, res)=>{
     try{
         const allCategories = await CategoryController.getAllCategories(req, res);
         res.status(200).json(allCategories);

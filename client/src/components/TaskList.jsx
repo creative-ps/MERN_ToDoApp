@@ -38,21 +38,22 @@ export default function TaskList(){
     const handleFetchTask = (catId) => {
         loadTask(catId);
     }
-    return <>
-                        <ul>
-                            {
-                                categories.map((c)=>
-                                    <li key={c._id} 
-                                    onClick={()=>{
-                                    handleFetchTask(c._id)
-                                    }}>
-                                        {c.name}
-                                    </li>
-                                    
-                                )
-                            }
-                        </ul>
-                        {tasks.length == 0 ? 'Tasks list is empty' : 
+    return <>           {categories.length == 0 ? <div>Categories list is empty</div> :
+                            <ul>
+                                {
+                                    categories.map((c)=>
+                                        <li key={c._id} 
+                                        onClick={()=>{
+                                        handleFetchTask(c._id)
+                                        }}>
+                                            {c.name}
+                                        </li>
+                                        
+                                    )
+                                }
+                            </ul>
+                        }
+                        {tasks.length == 0 ? <div>Tasks list is empty</div> : 
                             <ul>
                                 {
                                     tasks.map((task)=>{

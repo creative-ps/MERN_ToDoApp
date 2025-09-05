@@ -1,11 +1,17 @@
 const User = require('../model/userModel');
 const jwt = require('jsonwebtoken');
 const {Types} = require('mongoose');
+const bcrypt = require('bcrypt');
 
 class AuthController {
     async signUp(req,res){
-        const {email,password} = req.body;
-
+        const {email,password,rePassword} = req.body;
+        console.log(password, rePassword);
+        if(password !== rePassword){
+            const error = new Error('password and reenter password should be same.');
+            error.statusCode = 400;
+            throw error;
+        }
         const user = new User({
             email,
             password,

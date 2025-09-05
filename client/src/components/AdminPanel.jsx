@@ -3,19 +3,26 @@ import { TaskContext } from '../context/TaskContext';
 
 
 export const AdminPanel = ()=>{
-    const {user, allUsers, fetchUsers, isAuthenticated, permissions, setPermissions, permissionsAllowed, totalPages, setErrors} = useContext(TaskContext);
+    const {user, allUsers, fetchUsers, isAuthenticated, permissions, setPermissions, permissionsAllowed, totalPages, setErrors, setSuccess} = useContext(TaskContext);
     const [page,setPage] = useState(1);
     if(!isAuthenticated){
         return;
     }
+
+    useEffect(()=>{
+        setErrors('')
+        setSuccess('')
+        fetchUsers(page,15);
+    },[page]);
+
     if(user.role !== 'admin'){
-        setErrors('Only admin can access this route.');
+        displayError();
         return;
     }
 
-    useEffect(()=>{
-        fetchUsers(page,15);
-    },[page]);
+    function displayError(){
+        setErrors('Only admin can access this route.');
+    }
 
     const handlePermissionsChange = (checked, userId, perm)=>{
         setPermissions((prev)=>{
