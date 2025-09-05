@@ -26,8 +26,10 @@ export const TaskForm = ()=>{
             setErrors('Task is required.')
             return;
         }
+        const cat = categories.find((o)=>o.name === selectVal);
+        const catId = cat._id;
         
-        await addTask({selectVal,task});
+        await addTask(selectVal, task, catId);
         setTask('');
         
     }

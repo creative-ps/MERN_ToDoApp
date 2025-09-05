@@ -49,10 +49,10 @@ export const TaskProvider = ({children})=>{
         }
     }
 
-    const addTask = async (taskData)=>{
+    const addTask = async (selectVal, task, catId)=>{
         try{
-             const newTasks = await createTask(taskData);
-             setTasks([...tasks, newTasks]);
+             const newTasks = await createTask(selectVal, task, catId);
+             loadTask(catId);
              setSuccess('Task created successfully.')
         }catch(err){
              setErrors(err.message)
@@ -60,32 +60,32 @@ export const TaskProvider = ({children})=>{
 
     }
 
-    const removeTask = async (catId)=>{
+    const removeTask = async (taskId,catId)=>{
         try{
-            const data = await deleteTask(catId);
+            const data = await deleteTask(taskId);
             const deletedTaskId = data.data.catId;
             setSuccess(data.message);
-            setTasks(tasks.filter((task)=>task.catId !== deletedTaskId))
+            loadTask(catId);
         }catch(err){
             setErrors(err.message);
         }
     }
 
-   const toggleTaskStatus = async (catId, completed)=>{
+   const toggleTaskStatus = async (taskId, completed, catId)=>{
         try{
-            const data = await updateTaskStatus(catId, !completed);
-            setTasks(tasks.map((task)=>task.catId == data.catId?{...task,completed:data.completed}:task));
+            const data = await updateTaskStatus(taskId, !completed);
+            loadTask(catId);
             setSuccess('Task status updated successfully.')
         }catch(err){
             setErrors(err.message);
         }
    }
 
-   const updateTask = async (catId, updatedContent)=>{
+   const updateTask = async (taskId, updatedContent, catId)=>{
         try{
-            const data = await updateTaskContent(catId, updatedContent);
+            const data = await updateTaskContent(taskId, updatedContent);
             const updatedTask = data.data;
-            setTasks(tasks.map((task)=>(task.catId == updatedTask.catId)?{...task,title:updatedTask.title}:task));
+            loadTask(catId);
             setSuccess(data.message)
         }catch(err){
             setErrors(err.message);

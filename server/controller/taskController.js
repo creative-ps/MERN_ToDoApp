@@ -5,24 +5,24 @@ const categoryModel = require('../model/categoryModel');
 
 class TaskController{
     async createTask(req,res){
-            const {selectVal,task} = req.body;
+            const {selectVal, task, catId} = req.body;
             const userId = new Types.ObjectId(req.userId);
             if(!selectVal || !task){
                 const error = new Error('category and task are required');
                 error.statusCode = 400;
                 throw error
             }
-            const category = await categoryModel.findOne({name:selectVal});
-            const taskExist = await taskModel.findOne({title:{$regex: new RegExp(`^${task}$`,'i')},catId:category._id});
+            // const category = await categoryModel.findOne({name:selectVal});
+            const taskExist = await taskModel.findOne({title:{$regex: new RegExp(`^${task}$`,'i')},catId});
             // const descriptionExist = await taskModel.findOne({description:{$regex: new RegExp(`^${description}$`, 'i')},userId:userId})
             if(taskExist){
-                const error = new Error("Task is already exist.");
+                const error = new Error("Task or Category is already exist.");
                 error.statusCode = 400;
                 throw error;
             }
            
             const parsedDate = new Date();
-            let taskData = {title:task, createdAt:parsedDate, completed:false, catId:category._id};
+            let taskData = {title:task, createdAt:parsedDate, completed:false, catId};
             const addtask = new taskModel(taskData)
             await addtask.save();
             return addtask;
@@ -50,7 +50,7 @@ class TaskController{
                 throw error;
             }
 
-            const deleteTask = await taskModel.findOneAndDelete({catId:id});
+            const deleteTask = await taskModel.findByIdAndDelete({_id:id})
             if(!deleteTask){
                 const error = new Error('Task not found');
                 error.statusCode = 404;
@@ -73,7 +73,7 @@ class TaskController{
             error.statusCode = 400;
             throw error;
         }
-        const task = await taskModel.findOne({catId:id});
+        const task = await taskModel.findOne({_id:id});
         if (!task) {
             const error = new Error('Task not found');
             error.statusCode = 404;
@@ -98,7 +98,7 @@ class TaskController{
             error.statusCode = 400;
             throw error
         }
-        const task = await taskModel.findOne({catId:id});
+        const task = await taskModel.findOne({_id:id});
         if(!task){
             const error = new Error('Task not found');
             error.statusCode = 404;

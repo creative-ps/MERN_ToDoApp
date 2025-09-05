@@ -11,10 +11,9 @@ export default function TaskList(){
     useEffect(()=>{
         setErrors(null)
         setSuccess(null)
-        console.log('rendered...')
     },[])
 
-  
+  console.log(tasks,'tasks');
     
     const [editTaskId, setEditTaskId] = useState(null);
     const [editForm, setEditForm] = useState({title:''});
@@ -24,11 +23,11 @@ export default function TaskList(){
     }
 
     const handleTaskDetails = (task)=>{
-        setEditTaskId(task.catId);
+        setEditTaskId(task.id);
         setEditForm({title:task.title})
     }
-    const handleSave = async ()=>{
-       await updateTask(editTaskId,editForm);
+    const handleSave = async (catId)=>{
+       await updateTask(editTaskId,editForm,catId);
        setEditTaskId(null);
        setEditForm({title:''});
     };
@@ -41,19 +40,19 @@ export default function TaskList(){
         loadTask(catId);
     }
     return <>
-                <ul>
-                    {
-                        categories.map((c)=>
-                            <li key={c._id} 
-                            onClick={()=>{
-                            handleFetchTask(c._id)
-                            }}>
-                                {c.name}
-                            </li>
-                            
-                        )
-                    }
-                </ul>
+                        <ul>
+                            {
+                                categories.map((c)=>
+                                    <li key={c._id} 
+                                    onClick={()=>{
+                                    handleFetchTask(c._id)
+                                    }}>
+                                        {c.name}
+                                    </li>
+                                    
+                                )
+                            }
+                        </ul>
                         {tasks.length == 0 ? 'Tasks list is empty' : 
                             <ul>
                                 {
@@ -63,7 +62,7 @@ export default function TaskList(){
                                         // }
                                             return <li 
                                             key={task.title}>
-                                            {editTaskId === task.catId?(
+                                            {editTaskId === task.id?(
                                                 <div>
                                                     <input type="text" value={editForm.title} onChange={(e)=>{setEditForm({...editForm, title:e.target.value})}}/>
                                                     <button type="button" onClick={()=>handleSave(task.catId)}>Save</button><button type="button" onClick={handleCancle}>cancle</button>
@@ -71,8 +70,8 @@ export default function TaskList(){
                                             ) : (
                                             <>
                                                 <span className="title">{task.title}</span>  
-                                                <Button type="button" className="deleteBtn" handleClick={()=>{removeTask(task.catId)}} content="Delete"/>
-                                                <Button type="button" className="toggleBtn" handleClick={()=>{toggleTaskStatus(task.catId,task.completed)}} content={task.completed?'Completed':'Pending'}/>
+                                                <Button type="button" className="deleteBtn" handleClick={()=>{removeTask(task.id, task.catId)}} content="Delete"/>
+                                                <Button type="button" className="toggleBtn" handleClick={()=>{toggleTaskStatus(task.id,task.completed,task.catId)}} content={task.completed?'Completed':'Pending'}/>
                                                 <Button type="button" className="updateButton" handleClick={()=>{handleTaskDetails(task)}}  content="Edit"/>
                                             </>
                                             )}

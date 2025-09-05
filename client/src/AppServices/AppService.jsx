@@ -29,7 +29,7 @@
         }
     }
 
-    export const createTask = async (taskData) => {
+    export const createTask = async (selectVal, task, catId) => {
 
         try{
             const response = await fetch(`${API_URL}/tasks`,{
@@ -38,7 +38,7 @@
                 'Content-Type':'application/json',
                 ...getAuthHeader(),
                 },
-                body:JSON.stringify(taskData)
+                body:JSON.stringify({selectVal, task, catId})
             });
 
             const data = await response.json();
@@ -55,9 +55,9 @@
         }
     }
 
-    export const deleteTask = async (catId) => {
+    export const deleteTask = async (taskId) => {
         try {
-            const response = await fetch(`${API_URL}/tasks/${catId}`,{
+            const response = await fetch(`${API_URL}/tasks/${taskId}`,{
                 method: 'DELETE',
                 headers:{
                     'Content-Type':'application/json',
@@ -77,9 +77,9 @@
         }
     }
 
-    export const updateTaskStatus = async (catId, completed) => {
+    export const updateTaskStatus = async (taskId, completed) => {
         try{
-            const response = await fetch(`${API_URL}/tasks/${catId}`,{
+            const response = await fetch(`${API_URL}/tasks/${taskId}`,{
                 method:'PATCH',
                 headers:{
                     'Content-Type':'application/json',
@@ -100,9 +100,9 @@
         }
     }
 
-    export const updateTaskContent = async (catId, updatedContent)=>{
+    export const updateTaskContent = async (taskId, updatedContent)=>{
         try{
-            const response = await fetch(`${API_URL}/tasks/${catId}`,{
+            const response = await fetch(`${API_URL}/tasks/${taskId}`,{
                 method:'PATCH',
                 headers:{
                     'Content-Type':'application/json',

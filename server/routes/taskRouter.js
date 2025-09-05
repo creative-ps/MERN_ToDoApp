@@ -18,8 +18,8 @@ router.get('/:id', authMiddleware, async (req, res) => {
 router.post('/', authMiddleware, permissionMiddleware('create'), async (req, res) => {
     try{
         const task = await TaskController.createTask(req, res);
-        const formatedTask = CodePresenter.formatTask(task);
-        res.status(201).json(CodePresenter.success(formatedTask,'Task created successfully'));
+        // const formatedTask = CodePresenter.formatTask(task);
+        res.status(201).json(CodePresenter.success([],'Task created successfully'));
     }catch(error){
         res.status(error.statusCode || 500).json(CodePresenter.error(error.message || 'Failed to create task'))
     }
@@ -28,8 +28,8 @@ router.post('/', authMiddleware, permissionMiddleware('create'), async (req, res
 router.delete('/:id',authMiddleware, async (req, res)=>{
     try{
         const data = await TaskController.deleteTask(req,res);
-        const formatedTask = CodePresenter.formatTask(data);
-        res.status(200).json(CodePresenter.success(formatedTask,'Task deleted successfully.'));
+        // const formatedTask = CodePresenter.formatTask(data);
+        res.status(200).json(CodePresenter.success([],'Task deleted successfully.'));
     }catch(error){
         res.status(error.statusCode || 500).json(CodePresenter.error(error.message || 'Failed to delete task.'))
     }
@@ -40,19 +40,19 @@ router.patch('/:id',authMiddleware, async (req, res)=>{
     try{
         if(completed !== undefined){
             const data = await TaskController.updateTaskStatus(req, res);
-            const formatedTask = CodePresenter.formatTask(data);
-            res.status(200).json(CodePresenter.success(formatedTask,"Task status updated successfully."))
+            // const formatedTask = CodePresenter.formatTask(data);
+            res.status(200).json(CodePresenter.success([],"Task status updated successfully."))
         }
         else if(title){
             const data = await TaskController.updateTask(req, res);
-            const formatedTask = CodePresenter.formatTask(data);
-            res.status(200).json(CodePresenter.success(formatedTask,"Task updated successfully."))    
+            // const formatedTask = CodePresenter.formatTask(data);
+            res.status(200).json(CodePresenter.success([],"Task updated successfully."))    
         }
     }catch(error){
         if(completed){
             res.status(error.statusCode || 500).json(CodePresenter.error(error.message || 'Failed to update task status.'))
         }
-        else if(title || description){
+        else if(title){
             res.status(error.statusCode || 500).json(CodePresenter.error(error.message || 'Failed to update task.'))
         }
     }
