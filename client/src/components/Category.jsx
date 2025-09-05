@@ -1,4 +1,4 @@
-import React,{useState, useContext} from "react";
+import React,{useState, useContext, useEffect} from "react";
 import { TaskContext } from "../context/TaskContext";
 import { useNavigate } from "react-router-dom";
 
@@ -7,6 +7,10 @@ export const Category = ()=>{
     const {addCategory, setErrors, setSuccess} = useContext(TaskContext);
     const navigate = useNavigate();
     
+    useEffect(()=>{
+        setErrors(null);
+        setSuccess(null)
+    },[])
    
     return <div>
                 <form>

@@ -9,7 +9,10 @@ export const TaskForm = ()=>{
     const [selectVal, setSelectVal] = useState('')
     const {addTask, isAuthenticated, setErrors, setSuccess, categories, getCategories} = useContext(TaskContext);
     const {cat} = useParams();
-    if(!isAuthenticated){
+    if(categories.length === 0){
+        setErrors('First you need to add a Category.');
+    }
+    if(!isAuthenticated || categories.length === 0){
         return
     }
     

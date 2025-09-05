@@ -5,6 +5,7 @@ export const TaskContext = createContext();
 // import { AppErrors } from "../GlobalErrorsAndSuccess";
 import { handleSavePermissions } from '../AppServices/AppService';
 
+
 export const TaskProvider = ({children})=>{
     const [tasks, setTasks] = useState([]);
     const [errors, setErrors] = useState(null);
@@ -15,6 +16,7 @@ export const TaskProvider = ({children})=>{
     const [permissions, setPermissions] = useState({});
     const [totalPages, setTotalPages] = useState(1);
     const [categories, setCategories] = useState([]);
+    
     useEffect(()=>{
             if(isAuthenticated){
                 const loadData = async ()=>{
@@ -157,6 +159,7 @@ export const TaskProvider = ({children})=>{
         try{
            const data = await handleAddCategory(category);
             setSuccess('Category added successfully.')
+            getCategories();
         }catch(err){
             setErrors(err.message);
         }

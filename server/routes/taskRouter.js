@@ -25,7 +25,7 @@ router.post('/', authMiddleware, permissionMiddleware('create'), async (req, res
     }
 })
 
-router.delete('/:id',authMiddleware, async (req, res)=>{
+router.delete('/:id',authMiddleware, permissionMiddleware('delete'), async (req, res)=>{
     try{
         const data = await TaskController.deleteTask(req,res);
         // const formatedTask = CodePresenter.formatTask(data);
@@ -35,7 +35,7 @@ router.delete('/:id',authMiddleware, async (req, res)=>{
     }
 })+
 
-router.patch('/:id',authMiddleware, async (req, res)=>{
+router.patch('/:id',authMiddleware, permissionMiddleware('edit',), async (req, res)=>{
     const {completed,title} = req.body;
     try{
         if(completed !== undefined){

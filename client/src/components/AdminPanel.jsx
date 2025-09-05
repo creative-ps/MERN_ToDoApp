@@ -3,10 +3,13 @@ import { TaskContext } from '../context/TaskContext';
 
 
 export const AdminPanel = ()=>{
-    const {allUsers, fetchUsers, isAuthenticated, permissions, setPermissions, permissionsAllowed, totalPages} = useContext(TaskContext);
+    const {user, allUsers, fetchUsers, isAuthenticated, permissions, setPermissions, permissionsAllowed, totalPages, setErrors} = useContext(TaskContext);
     const [page,setPage] = useState(1);
-
     if(!isAuthenticated){
+        return;
+    }
+    if(user.role !== 'admin'){
+        setErrors('Only admin can access this route.');
         return;
     }
 

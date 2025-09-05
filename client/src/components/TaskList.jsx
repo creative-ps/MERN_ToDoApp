@@ -13,7 +13,6 @@ export default function TaskList(){
         setSuccess(null)
     },[])
 
-  console.log(tasks,'tasks');
     
     const [editTaskId, setEditTaskId] = useState(null);
     const [editForm, setEditForm] = useState({title:''});
