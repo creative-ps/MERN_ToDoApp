@@ -1,12 +1,22 @@
-import React,{useState} from "react";
+import React,{useState, useEffect} from "react";
 import {Button} from './Button'
 import { useContext } from "react";
 import { TaskContext } from "../context/TaskContext";
+import { useNavigate } from "react-router-dom";
 
 export const AuthForm = () => {
     const [formData,setFormData] = useState({email:'',password:'',rePassword:''});
     const [isSignUp,setIsSignUp] = useState(false);
-    const {handleSignIn, handleSignUp} = useContext(TaskContext);
+    const {handleSignIn, handleSignUp, isAuthenticated} = useContext(TaskContext);
+    const navigate = useNavigate();
+    useEffect(()=>{
+        if(isAuthenticated){
+            console.log('authform');
+            navigate('/tasklist');
+        }   
+    },[isAuthenticated]);
+
+
     const handleSubmit = async (e)=>{
         e.preventDefault();
 

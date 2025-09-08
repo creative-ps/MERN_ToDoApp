@@ -122,6 +122,12 @@ export const TaskProvider = ({children})=>{
             localStorage.removeItem('token');
             setIsAuthenticated(false);
             setUser(null);
+            setTasks([]);
+            setCategories([]);
+            setAllUsers([]);
+            setPermissions({});
+            setTotalPages(0);
+            setErrors(null);
             setSuccess('Logged out successfully.')
    }
 

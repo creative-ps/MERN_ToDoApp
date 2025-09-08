@@ -3,14 +3,14 @@ import { Button } from "./Button"
 import { TaskContext } from "../context/TaskContext"
 import { useContext } from "react"
 import { AuthForm } from "./AuthForm"
-import { useNavigate } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 
 export const Header = () => {
     const {handleLogout, user, isAuthenticated} = useContext(TaskContext);
     const navigate = useNavigate()
 
     if(!isAuthenticated){
-       return <AuthForm/>
+        return;
     }
 
     return  <nav>
@@ -21,7 +21,7 @@ export const Header = () => {
                     handleClick={()=>{handleLogout(); navigate('/');}} 
                     content={'Logout'}/>
                 </div>
-                <Link to='/'>All Tasks</Link> |
+                <Link to='/tasklist'>All Tasks</Link> |
                 <Link to='/create'>Create Task</Link> | 
                 <Link to='/admin'>Admin panel</Link> | 
                 <Link to='/category'>Add Category</Link>

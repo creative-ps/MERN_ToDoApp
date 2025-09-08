@@ -14,6 +14,7 @@ export const Category = ()=>{
    
     return <div>
                 <form>
+                    <h3>Create Category.</h3>
                     <div>
                         <input 
                         type="text" 

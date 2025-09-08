@@ -2,11 +2,10 @@ import React from "react";
 import { TaskContext } from "../context/TaskContext";
 import { useContext,useEffect,useState } from "react";
 import { Button } from "./Button";
-import { useNavigate } from "react-router-dom";
-import {AuthForm} from './AuthForm'
+
 export default function TaskList(){
     
-    const {tasks, setErrors, removeTask, setSuccess, toggleTaskStatus,updateTask,isAuthenticated, categories,loadTask} = useContext(TaskContext);
+    const {tasks, setErrors, removeTask, setSuccess, toggleTaskStatus,updateTask, categories,loadTask} = useContext(TaskContext);
     
     useEffect(()=>{
         setErrors(null)
@@ -17,9 +16,6 @@ export default function TaskList(){
     const [editTaskId, setEditTaskId] = useState(null);
     const [editForm, setEditForm] = useState({title:''});
     
-      if(!isAuthenticated){
-        return
-    }
 
     const handleTaskDetails = (task)=>{
         setEditTaskId(task.id);
@@ -57,9 +53,6 @@ export default function TaskList(){
                             <ul>
                                 {
                                     tasks.map((task)=>{
-                                        // if(task.catId === c._id){
-                                        //     return c;
-                                        // }
                                             return <li 
                                             key={task.title}>
                                             {editTaskId === task.id?(

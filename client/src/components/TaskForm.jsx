@@ -2,7 +2,7 @@ import React,{useState, useEffect} from "react";
 import { useContext } from "react";
 import { TaskContext } from "../context/TaskContext";
 import {toast} from 'react-toastify';
-import { useParams } from "react-router-dom";
+import { useParams, Navigate } from "react-router-dom";
 
 export const TaskForm = ()=>{
     const [task, setTask] = useState("");
@@ -10,14 +10,7 @@ export const TaskForm = ()=>{
     const {addTask, isAuthenticated, setErrors, setSuccess, categories, getCategories} = useContext(TaskContext);
     const {cat} = useParams();
 
-    if(categories.length === 0){
-        displayError()
-    }
 
-    function displayError(){
-        setErrors('First you need to add a Category.');
-    }
-   
     useEffect(()=>{
         setErrors(null);
         setSuccess(null);
@@ -25,8 +18,10 @@ export const TaskForm = ()=>{
         {cat ? setSelectVal(cat):setSelectVal(categories[0]?.name)};
     },[]);
 
-    if(!isAuthenticated || categories.length === 0){
-        return
+    
+
+    if(categories.length === 0){
+        return <Navigate to="/category"/>
     }
 
     const handleSubmit = async (e)=>{
