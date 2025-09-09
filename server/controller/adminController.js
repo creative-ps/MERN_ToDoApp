@@ -35,6 +35,11 @@ class adminController {
         const {userId} =  req.params;
         const permissions = req.body;
         const user = await User.findById(userId);
+        if(!user){
+            const err = new Error('no user found.');
+            err.statusCode = 404;
+            throw err;
+        }
         const validPermissions = [...new Set(permissions)];
         user.permissions = validPermissions;
         await user.save();

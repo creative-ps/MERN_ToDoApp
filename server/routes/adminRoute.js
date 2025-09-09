@@ -16,7 +16,12 @@ router.get('/users', authMiddleware, adminMiddleware, async (req, res)=>{
 })
 
 router.patch('/:userId/permissions', async (req, res)=>{
-    await adminController.saveValidPermissions(req, res);
+    try{
+        await adminController.saveValidPermissions(req, res);
+        res.status(200).json({message:'Permissions updated successfully.'});
+    }catch(error){
+        res.status(error.statusCode || 500).json({message:'error in updating Permissions.'})
+    }
 })
 
 module.exports = router;

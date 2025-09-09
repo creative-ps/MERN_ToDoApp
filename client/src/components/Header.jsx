@@ -2,16 +2,11 @@ import { Link } from "react-router-dom"
 import { Button } from "./Button"
 import { TaskContext } from "../context/TaskContext"
 import { useContext } from "react"
-import { AuthForm } from "./AuthForm"
 import { useNavigate} from "react-router-dom";
 
 export const Header = () => {
-    const {handleLogout, user, isAuthenticated} = useContext(TaskContext);
+    const {handleLogout, user} = useContext(TaskContext);
     const navigate = useNavigate()
-
-    if(!isAuthenticated){
-        return;
-    }
 
     return  <nav>
                 <div>

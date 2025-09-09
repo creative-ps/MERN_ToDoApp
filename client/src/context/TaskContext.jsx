@@ -1,8 +1,6 @@
 import React,{createContext, useState, useEffect} from "react";
 import { fetchTasks,createTask,deleteTask,updateTaskStatus, updateTaskContent, logIn, signUp, fetchUser, fetchAllUsers, handleAddCategory, getAllCategories} from "../AppServices/AppService";
-// import {AuthForm} from '../components/AuthForm';
 export const TaskContext = createContext();
-// import { AppErrors } from "../GlobalErrorsAndSuccess";
 import { handleSavePermissions } from '../AppServices/AppService';
 
 
@@ -154,8 +152,9 @@ export const TaskProvider = ({children})=>{
 
    const permissionsAllowed = async (userId,permissions)=>{
         try{
-            await handleSavePermissions(userId,permissions);
-            fetchUsers();
+            const data = await handleSavePermissions(userId,permissions);
+            // await fetchUsers();
+            setSuccess(data.message || 'Permission updated successfully.');
         }catch(err){
             setErrors(err.message);
         }
