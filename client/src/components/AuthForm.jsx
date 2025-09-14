@@ -1,46 +1,56 @@
 import React,{useState, useEffect} from "react";
-import {Button} from './Button'
+import { Button } from './Button'
 import { useContext } from "react";
 import { TaskContext } from "../context/TaskContext";
 import { useNavigate } from "react-router-dom";
+import { useFormValidation } from "./useFormValidation";
 
 export const AuthForm = () => {
-    const [formData,setFormData] = useState({email:'',password:'',rePassword:''});
     const [isSignUp,setIsSignUp] = useState(false);
     const {handleSignIn, handleSignUp, isAuthenticated} = useContext(TaskContext);
     const navigate = useNavigate();
+    
     useEffect(()=>{
         if(isAuthenticated){
             console.log('authform');
             navigate('/tasklist');
         }   
     },[isAuthenticated]);
-
+    let initialState = {email:'',password:'',rePassword:''}
+    const fieldRules = {
+        email:['required','email'],
+        password:['required','password',],
+        rePassword:['required','password','comparePasswords']
+    }
+    const {handleOnChange, formErrors, validateAllFields, formData, setFormData, setFormErrors} = useFormValidation(initialState,fieldRules);
 
     const handleSubmit = async (e)=>{
         e.preventDefault();
+        let isValid = validateAllFields();
+            console.log('isValid',isValid);
 
-        if(isSignUp){
-            await handleSignUp(formData);
-        }else{  
-            await handleSignIn(formData);
+        if(isValid){
+            if(isSignUp){
+                await handleSignUp(formData);
+            }else{  
+                await handleSignIn(formData);
+            }
         }
     }
+
     let rewritePassword = '';
+
     if(isSignUp){
         rewritePassword = <div>
-                        <input
-                        type="password"
-                        value={formData.rePassword}
-                        onChange={(e)=>{
-                            setFormData({
-                                ...formData,
-                                rePassword:e.target.value
-                            })
-                        }}
-                        placeholder="Re enter password"
-                        />
-                    </div>;
+                            <input
+                            type="password"
+                            name="rePassword"
+                            value={formData.rePassword}
+                            onChange= {handleOnChange}
+                            placeholder="Re enter password"
+                            />
+                            <div className="form-error">{formErrors['rePassword']?formErrors['rePassword']:''}</div>
+                         </div>;
     }
     
     
@@ -50,28 +60,22 @@ export const AuthForm = () => {
                 <div>
                     <input 
                     type="text"
+                    name="email"
                     value={formData.email}
-                    onChange={(e)=>{
-                        setFormData({
-                            ...formData,
-                            email:e.target.value,
-                        })
-                    }}
+                    onChange={handleOnChange}
                     placeholder="Enter email"
                     />
+                    <div className="form-error">{formErrors['email']?formErrors['email']:''}</div>
                 </div>
                 <div>
                     <input
                     type="password"
+                    name="password"
                     value={formData.password}
-                    onChange={(e)=>{
-                        setFormData({
-                            ...formData,
-                            password:e.target.value
-                        })
-                    }}
+                    onChange={handleOnChange}
                     placeholder="Enter password"
                     />
+                    <div className="form-error">{formErrors['password']?formErrors['password']:''}</div>
                 </div>
                 {rewritePassword}
                
@@ -82,6 +86,7 @@ export const AuthForm = () => {
            <button onClick={()=>{
             setIsSignUp(!isSignUp)
             setFormData({email:'',password:'',rePassword:''})
+            setFormErrors({})
             }}>
                 {isSignUp?'Switch to Log In':'Switch to Sign Up'}
             </button>
