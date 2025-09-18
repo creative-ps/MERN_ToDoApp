@@ -1,4 +1,5 @@
-import { useState } from "react"
+import { useState,useCallback } from "react";
+import debounce from "lodash.debounce";
 
 export const useFormValidation = (initialState,validateRules) => {
     const [formErrors, setFormErrors] = useState({});
@@ -12,27 +13,7 @@ export const useFormValidation = (initialState,validateRules) => {
         comparePasswords:(value1,value2)=>(value1 !== value2)?'password and reenter password should be same':''
     }
 
-    const handleOnChange = (e) => {
-        const {name, value} = e.target;
-        setFormData((prev) => {
-            const newFormData = { ...prev, [name]: value };
-            
-            // Validate current field with fresh value
-            validateField(name, value, newFormData);  // Pass newFormData for freshness (update validateField to accept it)
-            
-            // Proactive re-validation for dependent fields
-            if (name === 'password' && validateRules.rePassword) {  // Assuming rePassword has rules
-            const rePasswordValue = newFormData.rePassword || '';  // Fresh from snapshot
-            console.log(rePasswordValue,newFormData,'rePasswordValue');
-            validateField('rePassword', rePasswordValue, newFormData);
-            }
-            
-            return newFormData;
-        });
-    }
-
     const validateField = (name, value, currentFormData = formData) => {
-
         let error = '';
         const fieldRules = validateRules[name] || [];
         let result = '';
@@ -48,8 +29,30 @@ export const useFormValidation = (initialState,validateRules) => {
            if(error) break;
         }
         setFormErrors((prev)=>({...prev, [name]:error}))
-
     }
+
+    const handleOnChange = useCallback((e) => {
+        const {name, value} = e.target;
+        const debounceChange = debounce((name,value,newFormData)=>{
+                
+                // Validate current field with fresh value
+                validateField(name, value, newFormData);  // Pass newFormData for freshness (update validateField to accept it)
+                
+                // Proactive re-validation for dependent fields
+                if (name === 'password' && validateRules.rePassword) {  // Assuming rePassword has rules
+                validateField('rePassword', newFormData.rePassword, newFormData);
+                }
+               
+                },500, { leading: false, trailing: true });
+
+                setFormData((prev) => {
+                    const newFormData = { ...prev, [name]: value };
+                    debounceChange(name,value,newFormData);
+                    return newFormData;
+                });
+        },
+        [validateRules, validateField, setFormData]
+    )
 
     const validateAllFields = () => {
         let isValid = true;

@@ -13,7 +13,9 @@ export default function App (){
     return <>
               <TaskProvider>
                 <BrowserRouter>
-                  <h1>This is a todo Task Application.</h1>
+                  <div className="bg-blue-500 flex items-center justify-center">
+                    <h1 className="text-3xl font-bold text-white p-3">TodoHub.</h1>
+                  </div>
                   <AppMessage/>
                   <Routes>
                     <Route path="/" element={<AuthForm/>}/>
