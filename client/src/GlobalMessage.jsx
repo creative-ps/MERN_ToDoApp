@@ -13,9 +13,11 @@ export const AppMessage = ()=>{
         }
     },[success,errors,setErrors,setSuccess])
     return <>
-            <div>
-                <p>{errors?errors:''}</p>
-                <p>{success?success:''}</p>
-            </div>
+                {errors ? <div className="flex justify-center align-middle">
+                    <div className="bg-red-400 text-black font-normal text-center px-2 py-1 relative top-5">
+                        <p>{errors?errors:''}</p>
+                        <p>{success?success:''}</p>
+                    </div>
+                </div> : ''}
             </>
 }

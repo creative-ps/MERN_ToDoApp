@@ -15,8 +15,8 @@ export const useFormValidation = (initialState,validateRules) => {
 
     const validateField = (name, value, currentFormData = formData) => {
         let error = '';
-        const fieldRules = validateRules[name] || [];
         let result = '';
+        const fieldRules = validateRules[name] || [];
         for(const rule of fieldRules){
             if(rule === 'comparePasswords'){
                 const currentPassword = currentFormData.password || '';
@@ -24,6 +24,22 @@ export const useFormValidation = (initialState,validateRules) => {
                 result = validationRules[rule](currentPassword,currentRePassword);
             }else{
                 result = validationRules[rule](value);
+            }
+           error = result;
+           if(error) break;
+        }
+        setFormErrors((prev)=>({...prev, [name]:error}))
+    }
+
+     const validateComparePassword = (name, value, currentFormData = formData) => {
+        let error = '';
+        let result = '';
+        const fieldRules = validateRules[name] || [];
+        for(const rule of fieldRules){
+            if(rule === 'comparePasswords'){
+                const currentPassword = currentFormData.password || '';
+                const currentRePassword = currentFormData.rePassword || '';
+                result = validationRules[rule](currentPassword,currentRePassword);
             }
            error = result;
            if(error) break;
@@ -40,7 +56,7 @@ export const useFormValidation = (initialState,validateRules) => {
                 
                 // Proactive re-validation for dependent fields
                 if (name === 'password' && validateRules.rePassword) {  // Assuming rePassword has rules
-                validateField('rePassword', newFormData.rePassword, newFormData);
+                    validateComparePassword('rePassword', newFormData.rePassword, newFormData);
                 }
                
                 },500, { leading: false, trailing: true });
@@ -84,6 +100,7 @@ export const useFormValidation = (initialState,validateRules) => {
         }
         return isValid;
     }
+                console.log('FormError',formErrors)
 
     return {
         handleOnChange,

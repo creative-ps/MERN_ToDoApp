@@ -12,16 +12,23 @@ export const AuthForm = () => {
     
     useEffect(()=>{
         if(isAuthenticated){
-            console.log('authform');
             navigate('/tasklist');
         }   
     },[isAuthenticated]);
     let initialState = {email:'',password:'',rePassword:''}
-    const fieldRules = {
-        email:['required','email'],
-        password:['required','password',],
-        rePassword:['required','password','comparePasswords']
-    }
+    let fieldRules = '';
+    if(isSignUp){
+        fieldRules = {
+                email:['required','email'],
+                password:['required','password',],
+                rePassword:['required','password','comparePasswords']
+            }
+    }else{
+        fieldRules = {
+                email:['required','email'],
+                password:['required','password',],
+            }
+    } 
     const {handleOnChange, formErrors, validateAllFields, formData, setFormData, setFormErrors} = useFormValidation(initialState,fieldRules);
 
     const handleSubmit = async (e)=>{
@@ -50,6 +57,7 @@ export const AuthForm = () => {
                             value={formData.rePassword}
                             onChange= {handleOnChange}
                             placeholder="Re enter password"
+                            autoComplete="Reenter-password"
                             />
                             <div className="form-error text-xs text-red-500">{formErrors['rePassword']?formErrors['rePassword']:''}</div>
                          </div>;
@@ -69,6 +77,7 @@ export const AuthForm = () => {
                     value={formData.email}
                     onChange={handleOnChange}
                     placeholder="Enter email"
+                    autoComplete="email"
                     />
                     <div className="form-error text-xs text-red-500">{formErrors['email']?formErrors['email']:''}</div>
                 </div>
@@ -81,6 +90,7 @@ export const AuthForm = () => {
                     value={formData.password}
                     onChange={handleOnChange}
                     placeholder="Enter password"
+                    autoComplete="current-password"
                     />
                     <div className="form-error text-xs text-red-500">{formErrors['password']?formErrors['password']:''}</div>
                 </div>
@@ -91,7 +101,7 @@ export const AuthForm = () => {
                 </div>
                 <div className="text-right border-t-1 border-gray-400 pt-0 mt-2">
                     <span 
-                    className="text-xs inline-block :hover cursor-pointer"
+                    className="text-xs inline-block hover: cursor-pointer hover:text-blue-500"
                     onClick={()=>{
                         setIsSignUp(!isSignUp)
                         setFormData({email:'',password:'',rePassword:''})

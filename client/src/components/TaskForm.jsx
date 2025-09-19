@@ -54,9 +54,13 @@ export const TaskForm = ()=>{
 
 
     return <>
-                <form onSubmit={handleSubmit}>
-                    <h3>Categories</h3>
-                    <select value={selectVal} onChange={(e)=>setSelectVal(e.target.value)}>
+                <form onSubmit={handleSubmit} className="sm:mt-8 pl-3 sm:w-[455px] sm:max-w-[100%] sm:pl-[55px]">
+                    <h3 className="font-medium mt-3 mb-2 sm:mt-5">Categories</h3>
+                    <select 
+                    value={selectVal} 
+                    onChange={(e)=>setSelectVal(e.target.value)}
+                    className="border-1 mb-2 sm:mb-6 w-[400px]"
+                    >
                         {
                             categories?.map((c)=>
                                     <option key={c._id} value={c.name}>{c.name}</option>
@@ -65,14 +69,16 @@ export const TaskForm = ()=>{
                         
                     </select>
 
-                    <h3>Add Task in {selectVal}  category.</h3>
-                    <input type="text"
+                    <h3 className="mb-2">Add Task in <span className="font-medium">{selectVal}</span>  category.</h3>
+                    <input 
+                    type="text"
+                    className="text-white w-[400px] p-1 px-2 border-1 border-gray-300 bg-gray-700 border-solid rounded-sm placeholder:text-gray-300 text-sm"
                     value={task}
                     onChange={handleInputChange(setTask)}
                     placeholder="Enter Task"
                     />
-                    <div>
-                        <button type="submit">Add Task</button>
+                    <div className="text-right">
+                        <button type="submit" className="mt-3 border-1 rounded-md bg-green-600 text-white text-sm px-3 py-1 :hover cursor-pointer hover:text-gray-100">Add Task</button>
                     </div>
                 </form>
           </>
