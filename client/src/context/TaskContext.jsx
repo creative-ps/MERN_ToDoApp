@@ -43,6 +43,9 @@ export const TaskProvider = ({children})=>{
         setErrors(null);
         try{
             const data = await fetchTasks(catId);
+            if(data.length === 0){
+                setErrors('No tasks in this category.')
+            }
             setTasks(data)
         }catch(err){
             setErrors(err.message)
@@ -52,7 +55,7 @@ export const TaskProvider = ({children})=>{
     const addTask = async (selectVal, task, catId)=>{
         try{
              const newTasks = await createTask(selectVal, task, catId);
-             loadTask(catId);
+            //  loadTask(catId);
              setSuccess('Task created successfully.')
         }catch(err){
              setErrors(err.message)
@@ -186,7 +189,7 @@ export const TaskProvider = ({children})=>{
     //             </>;
     // }
 
-    return <TaskContext.Provider value = {{tasks,success,setSuccess, errors, setErrors, isAuthenticated, setIsAuthenticated,
+    return <TaskContext.Provider value = {{tasks,success,setSuccess, errors, setErrors, isAuthenticated, setIsAuthenticated, setTasks, 
     addTask, removeTask, toggleTaskStatus,updateTask,handleSignIn,handleSignUp, handleLogout, user, setUser, allUsers,fetchUsers, permissions, setPermissions, permissionsAllowed,totalPages, addCategory, categories, setCategories, getCategories,loadTask}}>
             {children}
            </TaskContext.Provider>

@@ -43,6 +43,7 @@ export const TaskForm = ()=>{
         setErrors('')
     }
 
+
     if(cat){
         const _category = localStorage.getItem('_cat') || 'default';
         if(_category !== cat){

@@ -6,13 +6,12 @@ import { NavLink } from "react-router-dom";
 
 export default function TaskList(){
     
-    const {tasks, setErrors, removeTask, setSuccess, toggleTaskStatus,updateTask, categories,loadTask} = useContext(TaskContext);
+    const {tasks, setErrors, setTasks, removeTask, setSuccess, toggleTaskStatus,updateTask, categories,loadTask} = useContext(TaskContext);
     
     useEffect(()=>{
+        setTasks([])
         setErrors(null)
         setSuccess(null)
-        // let cId = categories.pop();
-        // setActiveCategoryId(cId._id);
     },[])
 
     
@@ -38,7 +37,9 @@ export default function TaskList(){
     const handleFetchTask = (catId) => {
         loadTask(catId);
     }
-    return <>           {categories.length == 0 ? <div>Categories list is empty</div> :
+
+    
+    return <>           {categories.length == 0 ? <div className="pl-3 sm:pl-6">Categories list is empty</div> :
                             <ul className="flex flex-wrap pl-2 pr-2 sm:pl-4 sm:py-3 border-y sm:my-4">
                                 {
                                     categories.map((c)=>
@@ -54,7 +55,7 @@ export default function TaskList(){
                                 }
                             </ul>
                         }
-                        {tasks.length == 0 ? <div className="pl-3 sm:pl-6">Tasks list is empty</div> : 
+                        {tasks.length == 0 ? <div className="pl-3 sm:pl-6">Please select any task category.</div> : 
                             <ul className="pl-3 list-decimal sm:pl-[45px] sm:mt-5">
                                 {
                                     tasks.map((task)=>{
