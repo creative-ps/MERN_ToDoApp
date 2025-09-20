@@ -39,7 +39,7 @@ export default function TaskList(){
     }
 
     
-    return <>           {categories.length == 0 ? <div className="pl-3 sm:pl-6">Categories list is empty</div> :
+    return <>           {categories.length == 0 ? <div className="pl-3 sm:pl-6 sm:mt-5">Categories list is empty</div> :
                             <ul className="flex flex-wrap pl-2 pr-2 sm:pl-4 sm:py-3 border-y sm:my-4">
                                 {
                                     categories.map((c)=>
@@ -55,7 +55,7 @@ export default function TaskList(){
                                 }
                             </ul>
                         }
-                        {tasks.length == 0 ? <div className="pl-3 sm:pl-6">Please select any task category.</div> : 
+                        {tasks.length == 0 ? <div className="pl-3 sm:pl-6 sm:mt-2">Please select any task category.</div> : 
                             <ul className="pl-3 list-decimal sm:pl-[45px] sm:mt-5">
                                 {
                                     tasks.map((task)=>{
