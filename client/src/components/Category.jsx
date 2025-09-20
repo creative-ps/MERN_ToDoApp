@@ -12,13 +12,14 @@ export const Category = ()=>{
         setSuccess(null)
     },[])
    
-    return <div>
+    return <div className='mt-[15px] pl-[15px] sm:pl-[55px] sm:mt-[25px]'>
                 <form>
-                    <h3>Create Category.</h3>
+                    <h3 className='font-medium border-b-1 border-gray-500 text-lg pb-1 sm:mb-5 mb-2 sm:w-[465px] sm:max-w-[100%]'>Create Category.</h3>
                     <div>
                         <input 
                         type="text" 
                         value={cat}
+                        className="text-white w-[400px] p-1 px-2 border-1 border-gray-300 bg-gray-700 border-solid rounded-sm placeholder:text-gray-300 text-sm"
                         onChange={(e)=>{
                             setCat(e.target.value);
                             setErrors('');
@@ -26,7 +27,9 @@ export const Category = ()=>{
                         }}
                         />
                         <span>
-                            <button type="button" 
+                            <button 
+                            type="button" 
+                            className="border-1 rounded-md bg-blue-500 text-white text-sm px-3 py-1 :hover cursor-pointer hover:text-gray-100"
                             onClick={
                                 (e)=>{
                                     if(!cat){

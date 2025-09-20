@@ -54,8 +54,9 @@ export const TaskForm = ()=>{
 
 
     return <>
-                <form onSubmit={handleSubmit} className="sm:mt-8 pl-3 sm:w-[455px] sm:max-w-[100%] sm:pl-[55px]">
-                    <h3 className="font-medium mt-3 mb-2 sm:mt-5">Categories</h3>
+                <form onSubmit={handleSubmit} className="sm:mt-[25px] mt-[15px] pl-3 sm:w-[455px] sm:max-w-[100%] sm:pl-[55px]">
+                    <h3 className="font-medium border-b-1 border-gray-500 text-lg pb-1 mb-3 sm:w-[675px] sm:max-w-[100%]">Create Task.</h3>
+                    <h3 className="font-normal text-md mt-3 mb-2 sm:mt-5">Categories</h3>
                     <select 
                     value={selectVal} 
                     onChange={(e)=>setSelectVal(e.target.value)}

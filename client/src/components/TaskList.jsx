@@ -11,6 +11,8 @@ export default function TaskList(){
     useEffect(()=>{
         setErrors(null)
         setSuccess(null)
+        // let cId = categories.pop();
+        // setActiveCategoryId(cId._id);
     },[])
 
     
