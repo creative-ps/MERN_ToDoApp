@@ -68,7 +68,7 @@ export const TaskProvider = ({children})=>{
             const data = await deleteTask(taskId);
             const deletedTaskId = data.data.catId;
             setSuccess(data.message);
-            loadTask(catId);
+            await loadTask(catId);
         }catch(err){
             setErrors(err.message);
         }
@@ -77,7 +77,7 @@ export const TaskProvider = ({children})=>{
    const toggleTaskStatus = async (taskId, completed, catId)=>{
         try{
             const data = await updateTaskStatus(taskId, !completed);
-            loadTask(catId);
+            await loadTask(catId);
             setSuccess('Task status updated successfully.')
         }catch(err){
             setErrors(err.message);
@@ -88,7 +88,7 @@ export const TaskProvider = ({children})=>{
         try{
             const data = await updateTaskContent(taskId, updatedContent);
             const updatedTask = data.data;
-            loadTask(catId);
+            await loadTask(catId);
             setSuccess(data.message)
         }catch(err){
             setErrors(err.message);
@@ -99,6 +99,7 @@ export const TaskProvider = ({children})=>{
         try{
             const {user, token} = await signUp(formData);
             localStorage.setItem('token',token);
+            localStorage.setItem('signUpUser','signUpUser');
             setIsAuthenticated(true);
             setUser(user);
             setSuccess('Signed up successfully.')
@@ -167,7 +168,7 @@ export const TaskProvider = ({children})=>{
         try{
            const data = await handleAddCategory(category);
             setSuccess('Category added successfully.')
-            getCategories();
+            await getCategories();
         }catch(err){
             setErrors(err.message);
         }

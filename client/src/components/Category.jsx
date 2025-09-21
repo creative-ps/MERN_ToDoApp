@@ -31,12 +31,12 @@ export const Category = ()=>{
                             type="button" 
                             className="border-1 rounded-md bg-blue-500 text-white text-sm px-3 py-1 :hover cursor-pointer hover:text-gray-100"
                             onClick={
-                                (e)=>{
+                                async (e)=>{
                                     if(!cat){
                                         setErrors('Enter valid category.');
                                         return;
                                     }
-                                    addCategory(cat);
+                                    await addCategory(cat);
                                     localStorage.setItem('_cat',cat);
                                     navigate(`/create/${cat}`);
                                     }

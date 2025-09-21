@@ -7,22 +7,32 @@ import { useParams, Navigate } from "react-router-dom";
 export const TaskForm = ()=>{
     const [task, setTask] = useState("");
     const [selectVal, setSelectVal] = useState('')
-    const {addTask, isAuthenticated, setErrors, setSuccess, categories, getCategories} = useContext(TaskContext);
+    const {addTask, setErrors, setSuccess, categories, getCategories} = useContext(TaskContext);
     const {cat} = useParams();
 
 
     useEffect(()=>{
-        setErrors(null);
-        setSuccess(null);
-        getCategories();
-        {cat ? setSelectVal(cat):setSelectVal(categories[0]?.name)};
+       const fetchData = async () => {
+            setErrors(null);
+            setSuccess(null);
+            try{
+                await getCategories();
+                if(categories.length === 0){
+                    return <Navigate to="/category"/>
+                }
+            }catch(err){
+                setErrors(err.message);
+            }
+        }
+        fetchData();
     },[]);
 
-    
+    useEffect(()=>{
+       if (categories.length > 0) {
+            setSelectVal(cat || categories[0]?.name);
+        }
+    },[cat,categories]);
 
-    if(categories.length === 0){
-        return <Navigate to="/category"/>
-    }
 
     const handleSubmit = async (e)=>{
         e.preventDefault();

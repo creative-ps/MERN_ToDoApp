@@ -16,7 +16,7 @@ class AuthController {
             email,
             password,
             role:'user',
-            permissions:[]
+            permissions:['create','edit','update']
         })
         await user.save()
 

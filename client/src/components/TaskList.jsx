@@ -2,7 +2,6 @@ import React from "react";
 import { TaskContext } from "../context/TaskContext";
 import { useContext,useEffect,useState } from "react";
 import { Button } from "./Button";
-import { NavLink } from "react-router-dom";
 
 export default function TaskList(){
     
@@ -12,12 +11,22 @@ export default function TaskList(){
         setTasks([])
         setErrors(null)
         setSuccess(null)
+        if(localStorage.getItem('signUpUser')){
+            setNewUser(localStorage.getItem('signUpUser'));
+        }
+        return () => {
+            setNewUser(null);
+            if(localStorage.getItem('signUpUser')){
+                localStorage.removeItem('signUpUser')
+            }
+        }
     },[])
 
     
     const [editTaskId, setEditTaskId] = useState(null);
     const [editForm, setEditForm] = useState({title:''});
     const [activeCategoryId, setActiveCategoryId] = useState(null);
+    const [newUser, setNewUser] = useState(null);
     
 
     const handleTaskDetails = (task)=>{
@@ -39,7 +48,26 @@ export default function TaskList(){
     }
 
     
-    return <>           {categories.length == 0 ? <div className="pl-3 sm:pl-6 sm:mt-5">Categories list is empty</div> :
+    
+
+    return <>           {
+                         (newUser) ?   <div className="ml-auto sm:absolute sm:right-0 sm:bottom-[100px] sm:w-sm bg-blue-200 border-1 border-blue-600 p-2 rounded-md">
+                                         <span> You have been added as a new user. 
+                                          You can create task, edit task and update task status.
+                                          But you don't have Delete task permission.
+                                          </span>
+                                          <span 
+                                          className="ml-auto block bg-black text-white size-4 text-center leading-[11px] hover:cursor-pointer"
+                                          onClick={()=>{
+                                            localStorage.removeItem('signUpUser')
+                                            setNewUser(null);
+                                          }}
+                                          >
+                                          x
+                                          </span>
+                                     </div> : ''
+                        }
+                        {categories.length == 0 ? <div className="pl-3 sm:pl-6 sm:mt-5">Categories list is empty</div> :
                             <ul className="flex flex-wrap pl-2 pr-2 sm:pl-4 sm:py-3 border-y sm:my-4">
                                 {
                                     categories.map((c)=>
@@ -55,7 +83,7 @@ export default function TaskList(){
                                 }
                             </ul>
                         }
-                        {tasks.length == 0 ? <div className="pl-3 sm:pl-6 sm:mt-2">Please select any task category.</div> : 
+                        {categories.length === 0 ? '' : (tasks.length == 0 ? <div className="pl-3 sm:pl-6 sm:mt-2">Please select any task category.</div> : 
                             <ul className="pl-3 list-decimal sm:pl-[45px] sm:mt-5">
                                 {
                                     tasks.map((task)=>{
@@ -84,7 +112,7 @@ export default function TaskList(){
                                     }
                                     )
                                 }
-                            </ul>
+                            </ul>)
                         }
                     
             </>

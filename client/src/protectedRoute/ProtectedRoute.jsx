@@ -10,7 +10,7 @@ export const ProtectedRoute = () => {
         return <Navigate to='/'/>
     }
 
-    return <div>
+    return <div className="mb-auto">
             <Header/>
             <Outlet/>
            </div>

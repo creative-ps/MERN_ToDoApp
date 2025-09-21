@@ -27,6 +27,9 @@ export default function App (){
                       <Route path="/category" element={<Category/>}/>
                     </Route>
                   </Routes>
+                  <footer className="text-center font-normal text-black text-sm p-3">
+                    <span>&copy; 2025. All right reserved.</span>
+                  </footer>
                 </BrowserRouter>
               </TaskProvider>
            </>
