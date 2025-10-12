@@ -100,7 +100,6 @@ export const useFormValidation = (initialState,validateRules) => {
         }
         return isValid;
     }
-                console.log('FormError',formErrors)
 
     return {
         handleOnChange,
