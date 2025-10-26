@@ -1,15 +1,13 @@
 import React,{useState, useEffect} from "react";
 import { useContext } from "react";
-import { TaskContext } from "../context/TaskContext";
-import {toast} from 'react-toastify';
-import { useParams, Navigate } from "react-router-dom";
+import { TaskContext } from "../context/TaskContext";import { useParams, useNavigate } from "react-router-dom";
 
 export const TaskForm = ()=>{
     const [task, setTask] = useState("");
     const [selectVal, setSelectVal] = useState('')
     const {addTask, setErrors, setSuccess, categories, getCategories} = useContext(TaskContext);
     const {cat} = useParams();
-
+    const navigate = useNavigate();
 
     useEffect(()=>{
        const fetchData = async () => {
@@ -18,7 +16,7 @@ export const TaskForm = ()=>{
             try{
                 await getCategories();
                 if(categories.length === 0){
-                    return <Navigate to="/category"/>
+                    navigate("/category")
                 }
             }catch(err){
                 setErrors(err.message);
