@@ -14,6 +14,7 @@ export const TaskProvider = ({children})=>{
     const [permissions, setPermissions] = useState({});
     const [totalPages, setTotalPages] = useState(1);
     const [categories, setCategories] = useState([]);
+    const [loading, setLoading] = useState(false);
     
     useEffect(()=>{
             if(isAuthenticated){
@@ -97,30 +98,37 @@ export const TaskProvider = ({children})=>{
 
    const handleSignUp = async (formData) => {
         try{
+            setLoading(true);
             const {user, token} = await signUp(formData);
+            setLoading(true);
             localStorage.setItem('token',token);
             localStorage.setItem('signUpUser','signUpUser');
             setIsAuthenticated(true);
             setUser(user);
             setSuccess('Signed up successfully.')
         }catch(err){
+            setLoading(false);
             setErrors(err.message)
         }
    }
 
    const handleSignIn = async (formData) => {
         try{
+            setLoading(true);
             const {user, token} = await logIn(formData);
+            setLoading(false);
             localStorage.setItem('token',token);
             setIsAuthenticated(true);
             setUser(user);
             setSuccess('Logged in successfully.')
         }catch(err){
+            setLoading(false);
             setErrors(err.message)
         }
    }
 
    const handleLogout = ()=>{
+            setLoading(false);
             localStorage.removeItem('token');
             setIsAuthenticated(false);
             setUser(null);
@@ -191,7 +199,8 @@ export const TaskProvider = ({children})=>{
     // }
 
     return <TaskContext.Provider value = {{tasks,success,setSuccess, errors, setErrors, isAuthenticated, setIsAuthenticated, setTasks, 
-    addTask, removeTask, toggleTaskStatus,updateTask,handleSignIn,handleSignUp, handleLogout, user, setUser, allUsers,fetchUsers, permissions, setPermissions, permissionsAllowed,totalPages, addCategory, categories, setCategories, getCategories,loadTask}}>
+    addTask, removeTask, toggleTaskStatus,updateTask,handleSignIn,handleSignUp, handleLogout, user, setUser, allUsers,fetchUsers, permissions, 
+    setPermissions, permissionsAllowed,totalPages, addCategory, categories, setCategories, getCategories,loadTask, loading, setLoading}}>
             {children}
            </TaskContext.Provider>
 }

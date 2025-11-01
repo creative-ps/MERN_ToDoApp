@@ -7,7 +7,7 @@ import { useFormValidation } from "./useFormValidation";
 
 export const AuthForm = () => {
     const [isSignUp,setIsSignUp] = useState(false);
-    const {handleSignIn, handleSignUp, isAuthenticated} = useContext(TaskContext);
+    const {handleSignIn, handleSignUp, isAuthenticated, loading} = useContext(TaskContext);
     const navigate = useNavigate();
     
     useEffect(()=>{
@@ -34,7 +34,6 @@ export const AuthForm = () => {
     const handleSubmit = async (e)=>{
         e.preventDefault();
         let isValid = validateAllFields();
-            console.log('isValid',isValid);
 
         if(isValid){
             if(isSignUp){
@@ -49,7 +48,7 @@ export const AuthForm = () => {
 
     if(isSignUp){
         rewritePassword = <div className="my-2">
-                            <label htmlFor="rePassword" className="font-normal block text-md">* Password</label>
+                            <label htmlFor="rePassword" className="font-normal block text-md">* Reenter Password</label>
                             <input
                             type="password"
                             className="text-white block w-full p-1 px-2 border-1 border-gray-300 bg-gray-700 border-solid rounded-sm placeholder:text-gray-300 text-sm"
@@ -62,7 +61,9 @@ export const AuthForm = () => {
                             <div className="form-error text-xs text-red-500">{formErrors['rePassword']?formErrors['rePassword']:''}</div>
                          </div>;
     }
-   
+   if(loading){
+    return <div>Loading...</div>;
+   }
     return <>
                 <div className="userForm flex justify-center align-middle">
                     <form onSubmit={handleSubmit} className="w-xs">
@@ -96,7 +97,7 @@ export const AuthForm = () => {
                         {rewritePassword}
                     
                         <div className="pt-3 text-right">
-                            <Button type={'submit'} className={'border-1 rounded-md bg-blue-500 text-white text-sm px-3 py-1 :hover cursor-pointer hover:text-gray-100'} content={isSignUp?'Sign Up':'Log In'}/>
+                            <Button type={'submit'} isDisabled={loading?'disabled':''} className={'border-1 rounded-md bg-blue-500 text-white text-sm px-3 py-1 :hover cursor-pointer hover:text-gray-100'} content={isSignUp?'Sign Up':'Log In'}/>
                         </div>
                         <div className="text-right border-t-1 border-gray-400 pt-0 mt-2">
                             <span 

@@ -5,8 +5,9 @@ const mongoose = require('mongoose');
 const taskRouter = require('./routes/taskRouter');
 const authRouter = require('./routes/authRouter');
 const adminRouter = require('./routes/adminRoute');
-const categoryRouter = require('./routes/categoryRoute')
+const categoryRouter = require('./routes/categoryRoute');
 const cors = require('cors');
+const server = express();
 
 
 
@@ -23,15 +24,25 @@ async function main() {
 
 main();
 
+const allowedOrigins = process.env.NODE_ENV === 'production'
+    ? ['https://mern-to-do-app-beta.vercel.app']
+    : ['http://localhost:3000', 'https://mern-to-do-app-beta.vercel.app'];
+
 const corsOptions = {
-    origin: 'https://mern-to-do-app-beta.vercel.app', // Replace with your frontend URL
+    // origin: 'https://mern-to-do-app-beta.vercel.app', // Replace with your frontend URL
+    origin: (origin, callback)=>{
+        if(!origin || allowedOrigins.includes(origin)){
+            callback(null,true);
+        }else{
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true, // If you need to send cookies or other credentials
 };
 
-const server = express();
-server.use(cors(corsOptions))
+server.use(cors())
 server.use(express.static('public'))
 server.use(express.json());
 
