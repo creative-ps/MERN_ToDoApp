@@ -32,9 +32,9 @@ const corsOptions = {
     // origin: 'https://mern-to-do-app-beta.vercel.app', // Replace with your frontend URL
     origin: (origin, callback)=>{
         if(!origin || allowedOrigins.includes(origin)){
-            callback(null,true);
+            return callback(null,true);
         }else{
-            callback(new Error('Not allowed by CORS'));
+            return callback(new Error('Not allowed by CORS'));
         }
     },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
@@ -42,7 +42,9 @@ const corsOptions = {
     credentials: true, // If you need to send cookies or other credentials
 };
 
-server.use(cors(corsOptions))
+server.use(cors(corsOptions));
+// Handle preflight requests explicitly
+server.options('*', cors(corsOptions));
 server.use(express.static('public'))
 server.use(express.json());
 
