@@ -42,7 +42,7 @@ const corsOptions = {
     credentials: true, // If you need to send cookies or other credentials
 };
 
-server.use(cors())
+server.use(cors(corsOptions))
 server.use(express.static('public'))
 server.use(express.json());
 
