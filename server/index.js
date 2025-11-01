@@ -24,17 +24,18 @@ async function main() {
 
 main();
 
-const allowedOrigins = process.env.NODE_ENV === 'production'
-    ? ['https://mern-to-do-app-beta.vercel.app']
-    : ['http://localhost:3000', 'https://mern-to-do-app-beta.vercel.app'];
-
+const allowedOrigins = [
+  'http://localhost:3000',                     // local dev
+  'https://mern-to-do-app-beta.vercel.app'     // production
+];
 const corsOptions = {
-    // origin: 'https://mern-to-do-app-beta.vercel.app', // Replace with your frontend URL
     origin: (origin, callback)=>{
-        if(!origin || allowedOrigins.includes(origin)){
-            return callback(null,true);
-        }else{
-            return callback(new Error('Not allowed by CORS'));
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            console.log('CORS blocked origin:', origin);
+            callback(new Error('Not allowed by CORS'));
         }
     },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
