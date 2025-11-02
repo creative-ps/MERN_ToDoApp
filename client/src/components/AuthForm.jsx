@@ -61,9 +61,7 @@ export const AuthForm = () => {
                             <div className="form-error text-xs text-red-500">{formErrors['rePassword']?formErrors['rePassword']:''}</div>
                          </div>;
     }
-   if(loading){
-    return <div>Loading...</div>;
-   }
+
     return <>
                 <div className="userForm flex justify-center align-middle">
                     <form onSubmit={handleSubmit} className="w-xs">
@@ -97,7 +95,7 @@ export const AuthForm = () => {
                         {rewritePassword}
                     
                         <div className="pt-3 text-right">
-                            <Button type={'submit'} isDisabled={loading?'disabled':''} className={'border-1 rounded-md bg-blue-500 text-white text-sm px-3 py-1 :hover cursor-pointer hover:text-gray-100'} content={isSignUp?'Sign Up':'Log In'}/>
+                            <Button type={'submit'} isDisabled={loading?'disabled':''} className={'border-1 rounded-md bg-blue-500 text-white text-sm px-3 py-1 :hover cursor-pointer hover:text-gray-100 disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed'} content={loading?'Loading...':(isSignUp?'Sign Up':'Log In')}/>
                         </div>
                         <div className="text-right border-t-1 border-gray-400 pt-0 mt-2">
                             <span 

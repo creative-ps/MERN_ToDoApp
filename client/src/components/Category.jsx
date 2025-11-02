@@ -1,10 +1,11 @@
 import React,{useState, useContext, useEffect} from "react";
 import { TaskContext } from "../context/TaskContext";
 import { useNavigate } from "react-router-dom";
+import { Button } from "./Button";
 
 export const Category = ()=>{
     const [cat, setCat] = useState('');
-    const {addCategory, setErrors, setSuccess} = useContext(TaskContext);
+    const {addCategory, setErrors, setSuccess, loading} = useContext(TaskContext);
     const navigate = useNavigate();
     
     useEffect(()=>{
@@ -27,10 +28,11 @@ export const Category = ()=>{
                         }}
                         />
                         <span>
-                            <button 
+                            <Button 
                             type="button" 
-                            className="border-1 rounded-md bg-blue-500 text-white text-sm px-3 py-1 :hover cursor-pointer hover:text-gray-100"
-                            onClick={
+                            isDisabled={loading?'disabled':''}
+                            className={"border-1 ml-1.5 rounded-md bg-blue-500 text-white text-sm px-3 py-1 :hover cursor-pointer hover:text-gray-100 disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed"}
+                            handleClick={
                                 async (e)=>{
                                     if(!cat){
                                         setErrors('Enter valid category.');
@@ -40,9 +42,9 @@ export const Category = ()=>{
                                     localStorage.setItem('_cat',cat);
                                     navigate(`/create/${cat}`);
                                     }
-                            }>
-                            Submit
-                            </button>
+                            }
+                            content={loading?'Loading...':'Add Category'}
+                            />
                         </span>
                     </div>
                 </form>

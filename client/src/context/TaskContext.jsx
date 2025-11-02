@@ -174,10 +174,13 @@ export const TaskProvider = ({children})=>{
 
    const addCategory = async (category)=>{
         try{
+            setLoading(true);
            const data = await handleAddCategory(category);
+           setLoading(false);
             setSuccess('Category added successfully.')
             await getCategories();
         }catch(err){
+            setLoading(false);
             setErrors(err.message);
         }
    }
