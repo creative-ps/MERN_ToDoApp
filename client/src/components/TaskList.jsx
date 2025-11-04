@@ -1,12 +1,13 @@
-import React from "react";
+import React,{ useContext,useEffect,useState } from "react";
 import { TaskContext } from "../context/TaskContext";
-import { useContext,useEffect,useState } from "react";
 import { Button } from "./Button";
+import { Loading } from "./LoadingIcon";
 
 export default function TaskList(){
     
-    const {tasks, setErrors, setTasks, removeTask, setSuccess, toggleTaskStatus,updateTask, categories,loadTask} = useContext(TaskContext);
-    
+    const {tasks, setErrors, setTasks, removeTask, setSuccess, toggleTaskStatus,updateTask, categories,loadTask, loading, emptyTaskList, emptyCategoryList, setEmptyTaskList} = useContext(TaskContext);
+    let taskMessage;
+    let categoryMessage;
     useEffect(()=>{
         setTasks([])
         setErrors(null)
@@ -15,6 +16,7 @@ export default function TaskList(){
             setNewUser(localStorage.getItem('signUpUser'));
         }
         return () => {
+            setEmptyTaskList(false);
             setNewUser(null);
             if(localStorage.getItem('signUpUser')){
                 localStorage.removeItem('signUpUser')
@@ -22,7 +24,6 @@ export default function TaskList(){
         }
     },[])
 
-    
     const [editTaskId, setEditTaskId] = useState(null);
     const [editForm, setEditForm] = useState({title:''});
     const [activeCategoryId, setActiveCategoryId] = useState(null);
@@ -44,13 +45,31 @@ export default function TaskList(){
     }
 
     const handleFetchTask = (catId) => {
+        setTasks([]);
         loadTask(catId);
+    }
+    
+    taskMessage = 'Please select any category to display tasks.';
+    if(loading){
+        taskMessage ='';
+        categoryMessage ='';
+    }
+    if(emptyTaskList && loading === false){
+        taskMessage ='task list is empty';
+    }else if(tasks.length > 0  && loading === false){
+        taskMessage = '';
+    }
+    
+
+    if(emptyCategoryList && loading === false){
+        categoryMessage = 'category list is empty';
     }
 
     
     
-
-    return <>           {
+    return <>           {<Loading _loading={loading}/>}
+    
+                        {
                          (newUser) ?   <div className="ml-auto sm:absolute sm:right-0 sm:bottom-[100px] sm:w-sm bg-blue-200 border-1 border-blue-600 p-2 rounded-md">
                                          <span> You have been added as a new user. 
                                           You can create task, edit task and update task status.
@@ -67,10 +86,11 @@ export default function TaskList(){
                                           </span>
                                      </div> : ''
                         }
-                        {categories.length == 0 ? <div className="pl-3 sm:pl-6 sm:mt-5">Categories list is empty</div> :
-                            <ul className="flex flex-wrap pl-2 pr-2 sm:pl-4 sm:py-3 border-y sm:my-4">
+                        
+                        {(categories.length > 0) ?
+                           <ul className="flex flex-wrap pl-2 pr-2 sm:pl-4 sm:py-3 border-y sm:my-4">
                                 {
-                                    categories.map((c)=>
+                                        categories.map((c)=>
                                         <li 
                                         className={`px-3 py-1 hover:cursor-pointer hover:font-medium ${activeCategoryId === c._id ? 'font-medium bg-blue-100' : ''}`} key={c._id} 
                                         onClick={()=>{
@@ -80,19 +100,22 @@ export default function TaskList(){
                                         {c.name}
                                         </li>
                                     )
+                                    
                                 }
-                            </ul>
+                            </ul> : <div className="ml-6 mt-4">{categoryMessage}</div>
+                            
                         }
-                        {categories.length === 0 ? '' : (tasks.length == 0 ? <div className="pl-3 sm:pl-6 sm:mt-2">Please select any task category.</div> : 
-                            <ul className="pl-3 list-decimal sm:pl-[45px] sm:mt-5">
+                        
+                        <div className="ml-6 mt-4">{taskMessage}</div>
+                        <ul className="pl-3 list-decimal sm:pl-[45px] sm:mt-5">
                                 {
-                                    tasks.map((task)=>{
+                                    tasks.length>0 && tasks.map((task)=>{
                                             return <li 
                                             key={task.title}>
                                             {editTaskId === task.id?(
                                                 <div>
                                                     <input type="text" className="text-white mr-2 p-1 px-2 border-1 border-gray-300 bg-gray-700 border-solid rounded-sm placeholder:text-gray-300 text-sm" value={editForm.title} onChange={(e)=>{setEditForm({...editForm, title:e.target.value})}}/>
-                                                    <button type="button" className="border-1 rounded-md bg-green-600 text-white text-sm px-3 py-1 :hover cursor-pointer hover:text-gray-100" onClick={()=>handleSave(task.catId)}>Save</button>
+                                                    <button type="button" className="border-1 rounded-md bg-green-600 text-white text-sm px-3 py-1 :hover cursor-pointer hover:text-gray-100 disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed" onClick={()=>handleSave(task.catId)}>Save</button>
                                                     <button type="button" className="border-1 rounded-md bg-gray-500 text-white text-sm px-3 py-1 :hover cursor-pointer hover:text-gray-100" onClick={handleCancle}>cancle</button>
                                                 </div>    
                                             ) : (
@@ -100,8 +123,8 @@ export default function TaskList(){
                                                 <div className="flex">
                                                     <div className="title mr-2 sm:mr-4 sm:max-w-[100%]] sm:w-[400px]">{task.title}</div>  
                                                     <div>
-                                                        <Button type="button" className={"deleteBtn border-1 rounded-md bg-red-500 text-white text-sm px-3 py-1 :hover cursor-pointer hover:text-gray-100"} handleClick={()=>{removeTask(task.id, task.catId)}} content="Delete"/>
-                                                        <Button type="button" className={"toggleBtn border-1 rounded-md bg-green-600 text-white text-sm px-3 py-1 :hover cursor-pointer hover:text-gray-100"} handleClick={()=>{toggleTaskStatus(task.id,task.completed,task.catId)}} content={task.completed?'Completed':'Pending'}/>
+                                                        <Button type="button" className={"deleteBtn border-1 rounded-md bg-red-500 text-white text-sm px-3 py-1 :hover cursor-pointer hover:text-gray-100 disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed"} handleClick={()=>{removeTask(task.id, task.catId)}} content={'Delete'}/>
+                                                        <Button type="button" className={"toggleBtn border-1 rounded-md bg-green-600 text-white text-sm px-3 py-1 :hover cursor-pointer hover:text-gray-100 disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed"} handleClick={()=>{toggleTaskStatus(task.id,task.completed,task.catId)}} content={task.completed?'Completed':'Pending'}/>
                                                         <Button type="button" className={"updateButton border-1 rounded-md bg-yellow-700 text-white text-sm px-3 py-1 :hover cursor-pointer hover:text-gray-100"} handleClick={()=>{handleTaskDetails(task)}}  content="Edit"/>
                                                     </div>
                                                 </div>        
@@ -112,8 +135,8 @@ export default function TaskList(){
                                     }
                                     )
                                 }
-                            </ul>)
-                        }
+                            </ul>
+                        
                     
             </>
 

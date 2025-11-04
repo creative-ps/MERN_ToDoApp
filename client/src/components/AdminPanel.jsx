@@ -3,7 +3,7 @@ import { TaskContext } from '../context/TaskContext';
 
 
 export const AdminPanel = ()=>{
-    const {user, allUsers, fetchUsers, permissions, setPermissions, permissionsAllowed, totalPages, setErrors, setSuccess, errors} = useContext(TaskContext);
+    const {user, allUsers, fetchUsers, permissions, setPermissions, permissionsAllowed, totalPages, setErrors, setSuccess} = useContext(TaskContext);
     const [page,setPage] = useState(1);
 
     
@@ -79,13 +79,13 @@ export const AdminPanel = ()=>{
                     <button onClick={()=>{
                         setPage((prev)=>Math.min(prev+1,totalPages));
                     }}
-                    className='border-1 rounded-md bg-green-500 text-white text-sm px-3 py-1 :hover cursor-pointer hover:text-gray-100'
+                    className='border-1 rounded-md bg-green-500 text-white text-sm px-3 py-1 :hover cursor-pointer hover:text-gray-100 disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed'
                     disabled={page === totalPages}
                     >Next</button>
                     <button 
                         onClick={()=>{
                         setPage((prev)=>Math.max(prev-1,1));}}
-                        className='border-1 rounded-md bg-green-500 text-white text-sm px-3 py-1 :hover cursor-pointer hover:text-gray-100'
+                        className='border-1 rounded-md bg-green-500 text-white text-sm px-3 py-1 :hover cursor-pointer hover:text-gray-100 disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed'
                         disabled={page === 1}
                     >
                     Previous</button>

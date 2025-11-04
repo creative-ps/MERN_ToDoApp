@@ -15,7 +15,11 @@ export const TaskProvider = ({children})=>{
     const [totalPages, setTotalPages] = useState(1);
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [emptyTaskList, setEmptyTaskList] = useState(false);
+    const [emptyCategoryList, setEmptyCategoryList] = useState(false);
+
     
+
     useEffect(()=>{
             if(isAuthenticated){
                 const loadData = async ()=>{
@@ -43,22 +47,30 @@ export const TaskProvider = ({children})=>{
     const loadTask = async (catId)=>{
         setErrors(null);
         try{
+            setLoading(true);
             const data = await fetchTasks(catId);
+            setLoading(false);
             if(data.length === 0){
+                setEmptyTaskList(true);
                 setErrors('No tasks in this category.')
+            }else{
+                setEmptyTaskList(false);
+                setTasks(data);
             }
-            setTasks(data)
         }catch(err){
+            setLoading(false);
             setErrors(err.message)
         }
     }
 
     const addTask = async (selectVal, task, catId)=>{
         try{
+            setLoading(true);
              const newTasks = await createTask(selectVal, task, catId);
-            //  loadTask(catId);
+            setLoading(false);
              setSuccess('Task created successfully.')
         }catch(err){
+            setLoading(false);
              setErrors(err.message)
         }
 
@@ -66,32 +78,38 @@ export const TaskProvider = ({children})=>{
 
     const removeTask = async (taskId,catId)=>{
         try{
+            setLoading(true);
             const data = await deleteTask(taskId);
             const deletedTaskId = data.data.catId;
             setSuccess(data.message);
             await loadTask(catId);
         }catch(err){
+            setLoading(false);
             setErrors(err.message);
         }
     }
 
    const toggleTaskStatus = async (taskId, completed, catId)=>{
         try{
+            setLoading(true);
             const data = await updateTaskStatus(taskId, !completed);
             await loadTask(catId);
             setSuccess('Task status updated successfully.')
         }catch(err){
+            setLoading(false);
             setErrors(err.message);
         }
    }
 
    const updateTask = async (taskId, updatedContent, catId)=>{
         try{
+            setLoading(true);
             const data = await updateTaskContent(taskId, updatedContent);
             const updatedTask = data.data;
             await loadTask(catId);
             setSuccess(data.message)
         }catch(err){
+            setLoading(false);
             setErrors(err.message);
         }
    }
@@ -187,9 +205,18 @@ export const TaskProvider = ({children})=>{
 
    const getCategories = async () => {
         try{
+            setLoading(true);
             const data = await getAllCategories();
-            setCategories(data);
+            if(data.length === 0){
+                setEmptyCategoryList(true);
+                setErrors('No tasks in this category.')
+            }else{
+                setEmptyCategoryList(false);
+                setCategories(data);
+            }
+            setLoading(false);
         }catch(err){
+            setLoading(false);
             setErrors(err.message);
         }
    }
@@ -203,7 +230,8 @@ export const TaskProvider = ({children})=>{
 
     return <TaskContext.Provider value = {{tasks,success,setSuccess, errors, setErrors, isAuthenticated, setIsAuthenticated, setTasks, 
     addTask, removeTask, toggleTaskStatus,updateTask,handleSignIn,handleSignUp, handleLogout, user, setUser, allUsers,fetchUsers, permissions, 
-    setPermissions, permissionsAllowed,totalPages, addCategory, categories, setCategories, getCategories,loadTask, loading, setLoading}}>
+    setPermissions, permissionsAllowed,totalPages, addCategory, categories, setCategories, getCategories,loadTask, loading, setLoading,
+    emptyTaskList,emptyCategoryList,setEmptyTaskList}}>
             {children}
            </TaskContext.Provider>
 }

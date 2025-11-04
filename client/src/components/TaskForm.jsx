@@ -2,11 +2,12 @@ import React,{useState, useEffect} from "react";
 import { useContext } from "react";
 import { TaskContext } from "../context/TaskContext";
 import { useParams, useNavigate } from "react-router-dom";
+import { Button } from "./Button";
 
 export const TaskForm = ()=>{
     const [task, setTask] = useState("");
     const [selectVal, setSelectVal] = useState('')
-    const {addTask, setErrors, setSuccess, categories, getCategories} = useContext(TaskContext);
+    const {addTask, setErrors, setSuccess, categories, getCategories, loading} = useContext(TaskContext);
     const {cat} = useParams();
     const navigate = useNavigate();
 
@@ -61,8 +62,6 @@ export const TaskForm = ()=>{
         }
     }
 
-
-
     return <>
                 <form onSubmit={handleSubmit} className="sm:mt-[25px] mt-[15px] pl-3 sm:w-[455px] sm:max-w-[100%] sm:pl-[55px]">
                     <h3 className="font-medium border-b-1 border-gray-500 text-lg pb-1 mb-3 sm:w-[675px] sm:max-w-[100%]">Create Task.</h3>
@@ -89,7 +88,8 @@ export const TaskForm = ()=>{
                     placeholder="Enter Task"
                     />
                     <div className="text-right">
-                        <button type="submit" className="mt-3 border-1 rounded-md bg-green-600 text-white text-sm px-3 py-1 :hover cursor-pointer hover:text-gray-100">Add Task</button>
+                        <Button type="submit" isDisabled={loading?'disabled':''} className={"mt-3 border-1 rounded-md bg-blue-500 text-white text-sm px-3 py-1 :hover cursor-pointer hover:text-gray-100 disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed"} content={loading?'Loading...':'Add Task'}
+                            />
                     </div>
                 </form>
           </>
