@@ -2,7 +2,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const User = require('./model/userModel');
 
-async function main() {
+async function connect() {
     try{
         await mongoose.connect(process.env.MONGO_URL);
         console.log('Connected to MongoDb ')
@@ -15,19 +15,31 @@ async function main() {
 
 
 
-// const addAdmin = ()=>{
-//     const user = new User({
-//         email:'crativity.im@gmail.com',
-//         password:'admin@123#',
-//         role:'admin',
-//         permissions:['create','edit','delete','update']
-//     })
-//     user.save();
-// }
+const addAdmin = async ()=>{
+    const admin = new User({
+        email:'crativity.im@gmail.com',
+        password:'admin@123#',
+        role:'admin',
+        permissions:['create','edit','delete','update']
+    });
+    try{
+
+        const existingEmail = await User.findOne({email:admin.email});
+        if(existingEmail){
+            console.log('admin user already exist, skipping.');
+            return;
+        }
+
+        await admin.save();
+        console.log('Admin seeded');
+    }catch(error){
+        console.log(`Error seeding admin. ${error}`)
+    }
+}
 
 const addUsers = async ()=>{
     let totalUsers = [];
-    for(let i = 4;i<1001;i++){
+    for(let i = 0;i<100;i++){
         totalUsers.push({
             email:`user${i}@gmail.com`,
             password:'1234567',
@@ -48,8 +60,12 @@ const addUsers = async ()=>{
             return;
         }
 
-        await User.insertMany(totalUsers,{ordered:false});
-        console.log(`${totalUsers.length} users seeded successfully.`);
+        // await User.insertMany(totalUsers,{ordered:false}); //This line of code skip password hashing.
+        await Promise.all(
+        totalUsers.map(user => new User(user).save())
+        )
+        // .then((val)=>{console.log(val)});
+        // console.log(`${totalUsers.length} users seeded successfully.`);
     }catch(error){
         console.error('Error seeding users',error);
     }finally{
@@ -59,8 +75,14 @@ const addUsers = async ()=>{
     }
 }
 
-main().then(addUsers).catch((error)=>{
-    console.error('Script failed',error);
-    process.exit(1);
-});
+(async ()=>{
+    await connect();
+    await addAdmin();
+    await addUsers();
+})();
+
+// main().then(addAdmin).catch((error)=>{
+//     console.error('Script failed',error);
+//     process.exit(1);
+// });
 // addAdmin();
