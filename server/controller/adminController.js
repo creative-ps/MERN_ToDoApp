@@ -45,6 +45,17 @@ class adminController {
         await user.save();
     }
 
+    async deleteUser(req, res){
+        const {userId} = req.params;
+        console.log(userId,'userId');
+        const user = await User.findByIdAndDelete(userId);
+        if(!user){
+            const err = new Error('no user found.')
+            err.statusCode = 404;
+            throw err;
+        }
+    }
+
 }
 
 module.exports = new adminController()

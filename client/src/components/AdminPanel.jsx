@@ -1,10 +1,14 @@
 import React,{ useContext, useEffect, useState } from 'react';
 import { TaskContext } from '../context/TaskContext';
+import { Loading } from './LoadingIcon';
+import { Checkbox } from './CheckBox';
 
 
 export const AdminPanel = ()=>{
-    const {user, allUsers, fetchUsers, permissions, setPermissions, permissionsAllowed, totalPages, setErrors, setSuccess} = useContext(TaskContext);
+    const {allUsers, fetchUsers, permissions, setPermissions, permissionsAllowed, 
+        totalPages, setErrors, setSuccess, loading, handleDeleteUser} = useContext(TaskContext);
     const [page,setPage] = useState(1);
+    const [isCheckAllCheckBox, setIsCheckAllCheckBox] = useState(false);
 
     
 
@@ -26,9 +30,21 @@ export const AdminPanel = ()=>{
             }
         });
     }
-        
+
+    const handle_Delete_User = (item)=>{
+        handleDeleteUser(item);
+    }
+
+
     return  <div className='mt-[15px] pl-[15px] sm:pl-[55px] sm:mt-[25px]'>
-                <h3 className='font-medium border-b-1 border-gray-500 text-lg pb-1 mb-3 sm:w-[675px] sm:max-w-[100%]'>Admin panel</h3>
+                <Loading _loading={loading}/>
+                <div className='flex justify-between sm:w-[850px] sm:max-w-[100%] border-b-1 border-gray-500'>
+                    <h3 className='font-medium text-lg pb-1 mb-3'>Admin panel</h3>
+                    {isCheckAllCheckBox && <button className='border-1 rounded-md bg-red-500 text-white text-sm px-3 py-1 :hover cursor-pointer hover:text-gray-100 
+                    disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed'>
+                        Delete All
+                    </button>}
+                </div>    
                 <table>
                     <thead>
                         <tr className='text-left'>
@@ -36,14 +52,27 @@ export const AdminPanel = ()=>{
                             <th className='w-[200px]'>User</th>
                             <th className='w-[70px]'>Role</th>
                             <th className='w-[300px]'>Permissions</th>
-                            <th>Action</th>
+                            <th className='text-center'>Action</th>
+                            <th className='w-[120px]'>
+                                <div className='flex justify-end mr-0.5'>
+                                    <input 
+                                        type='checkbox' 
+                                        onChange={(e)=>{
+                                                setIsCheckAllCheckBox(!isCheckAllCheckBox);
+                                            }}
+                                        checked={isCheckAllCheckBox}
+                                    />
+                                    <span className='mr-1.5 ml-1.5 inline-block text-nowrap'>Select All</span>   
+                                </div>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
                     {
-                      allUsers.map((user,index)=>
+                      allUsers.map((user,index)=> {
+                        return (user.role !== 'admin')&&
                         <tr key={user._id}>
-                            <td>{index+1}</td>
+                            <td>{index}</td>
                             <td>{user.email}</td>
                             <td>{user.role}</td>
                             <td>
@@ -60,15 +89,37 @@ export const AdminPanel = ()=>{
                                 }
                             </td>
                             <td>{
-                                <button 
-                                    onClick={()=>{permissionsAllowed(user._id,permissions[user._id])}}
-                                    className='border-1 rounded-md bg-blue-500 text-white text-sm px-3 py-1 :hover cursor-pointer hover:text-gray-100'
-                                >
-                                    Save
-                                </button>}
+                                <>
+                                    <button 
+                                        onClick={()=>{
+                                            permissionsAllowed(user._id,permissions[user._id]);
+                                            }
+                                        }
+                                        className='border-1 rounded-md bg-blue-500 text-white text-sm px-3 py-1 :hover cursor-pointer hover:text-gray-100 
+                                        disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed'
+                                    >
+                                        Save
+                                    </button>
+                                    <button 
+                                        onClick={(user)=>{
+                                            handle_Delete_User(user);
+                                        }}
+                                        className='border-1 rounded-md bg-red-500 text-white text-sm px-3 py-1 :hover cursor-pointer hover:text-gray-100 
+                                        disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed'>
+                                        Delete
+                                    </button>
+                                </>
+                                }
+                            </td>
+                             <td>
+                                <div className='pl-6'>
+                                    <span className='inline-block'>
+                                        <Checkbox isCheckAllCheckBox={isCheckAllCheckBox} />
+                                    </span>
+                                </div>
                             </td>
                         </tr>
-                      )  
+                        })  
                     }
                     </tbody>
                 </table>

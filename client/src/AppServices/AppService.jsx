@@ -200,6 +200,21 @@
             return data;
     }
 
+    export const deleteUser = async (user)=>{
+        const response = await fetch(`${API_URL}/admin/deleteuser/${user._id}`,{
+            method:'Delete',
+            headers:{
+                ...getAuthHeader(),
+                'Content-Type':'application/json'
+            }
+        })
+
+        const data = await response.json();
+        if(!response.ok){
+            throw new Error(data.message || 'failed to delete user.')
+        }
+    }
+
     export const validPermissions = (allPermissions, getPermissions)=>{
         return allPermissions.filter((p)=>getPermissions[p]);
     }

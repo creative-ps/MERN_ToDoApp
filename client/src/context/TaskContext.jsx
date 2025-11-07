@@ -1,5 +1,6 @@
 import React,{createContext, useState, useEffect} from "react";
-import { fetchTasks,createTask,deleteTask,updateTaskStatus, updateTaskContent, logIn, signUp, fetchUser, fetchAllUsers, handleAddCategory, getAllCategories} from "../AppServices/AppService";
+import { fetchTasks,createTask,deleteTask,updateTaskStatus, updateTaskContent, logIn, signUp, 
+    fetchUser, fetchAllUsers, handleAddCategory, getAllCategories, deleteUser} from "../AppServices/AppService";
 export const TaskContext = createContext();
 import { handleSavePermissions } from '../AppServices/AppService';
 
@@ -161,7 +162,9 @@ export const TaskProvider = ({children})=>{
 
    const fetchUsers = async (page,limit)=>{
         try{
+            setLoading(true);
             const data = await fetchAllUsers(page,limit);
+            setLoading(false);
             const allUsers = data.allUsers;
             const initialPermissions = {};
             allUsers.forEach((user)=>{
@@ -176,16 +179,31 @@ export const TaskProvider = ({children})=>{
             setTotalPages(data.totalPages)
             setPermissions(initialPermissions);
         }catch(err){
+            setLoading(false);
             setErrors(err.message);
+        }
+   }
+
+   const handleDeleteUser = async (item)=>{
+        try{
+            // setLoading(true);
+            const delete_user = await deleteUser(item);
+            setLoading(false);
+        }catch(error){
+            setErrors(false);
+            setErrors(error.message);
         }
    }
 
    const permissionsAllowed = async (userId,permissions)=>{
         try{
+            setLoading(true);
             const data = await handleSavePermissions(userId,permissions);
+            setLoading(false);
             // await fetchUsers();
             setSuccess(data.message || 'Permission updated successfully.');
         }catch(err){
+            setLoading(false);
             setErrors(err.message);
         }
    }
@@ -209,7 +227,7 @@ export const TaskProvider = ({children})=>{
             const data = await getAllCategories();
             if(data.length === 0){
                 setEmptyCategoryList(true);
-                setErrors('No tasks in this category.')
+                // setErrors('Category list is empty.')
             }else{
                 setEmptyCategoryList(false);
                 setCategories(data);
@@ -231,7 +249,7 @@ export const TaskProvider = ({children})=>{
     return <TaskContext.Provider value = {{tasks,success,setSuccess, errors, setErrors, isAuthenticated, setIsAuthenticated, setTasks, 
     addTask, removeTask, toggleTaskStatus,updateTask,handleSignIn,handleSignUp, handleLogout, user, setUser, allUsers,fetchUsers, permissions, 
     setPermissions, permissionsAllowed,totalPages, addCategory, categories, setCategories, getCategories,loadTask, loading, setLoading,
-    emptyTaskList,emptyCategoryList,setEmptyTaskList}}>
+    emptyTaskList,emptyCategoryList,setEmptyTaskList,handleDeleteUser}}>
             {children}
            </TaskContext.Provider>
 }
