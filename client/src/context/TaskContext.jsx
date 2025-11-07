@@ -18,6 +18,7 @@ export const TaskProvider = ({children})=>{
     const [loading, setLoading] = useState(false);
     const [emptyTaskList, setEmptyTaskList] = useState(false);
     const [emptyCategoryList, setEmptyCategoryList] = useState(false);
+    
 
     
 

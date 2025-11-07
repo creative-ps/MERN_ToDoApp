@@ -9,15 +9,20 @@ export const AdminPanel = ()=>{
         totalPages, setErrors, setSuccess, loading, handleDeleteUser} = useContext(TaskContext);
     const [page,setPage] = useState(1);
     const [isCheckAllCheckBox, setIsCheckAllCheckBox] = useState(false);
-    const [userFetch, setUserFetch] = useState(1);
+    const [userFetch, setUserFetch] = useState(false);
 
     
 
     useEffect(()=>{
-        setErrors('')
-        setSuccess('')
         fetchUsers(page,15);
     },[page,userFetch]);
+
+    useEffect(()=>{
+        return ()=>{
+            setErrors('')
+            setSuccess('')
+        }
+    },[])
 
 
     const handlePermissionsChange = (checked, userId, perm)=>{
@@ -32,12 +37,11 @@ export const AdminPanel = ()=>{
         });
     }
 
-    const handle_Delete_User = (item)=>{
-        handleDeleteUser(item);
-        setUserFetch(userFetch+1);
+    const handle_Delete_User = async (item)=>{
+        await handleDeleteUser(item);
+        setUserFetch(!userFetch);
     }
 
-    console.log(userFetch,'userFetch');
     return  <div className='mt-[15px] pl-[15px] sm:pl-[55px] sm:mt-[25px]'>
                 <Loading _loading={loading}/>
                 <div className='flex justify-between sm:w-[850px] sm:max-w-[100%] border-b-1 border-gray-500'>
