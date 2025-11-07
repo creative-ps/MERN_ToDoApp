@@ -57,6 +57,23 @@ class adminController {
         await User.deleteOne({_id:userId});
     }
 
+    async deleteUsers(req, res){
+        const ids = req.body;
+        if(ids){
+           const result = await User.deleteMany({_id:{$in:ids}});
+            if(!result){
+             const err = new Error('no documents exist to delete.');
+             err.statusCode = 404;
+             throw err;   
+            }
+            return `${result.deletedCount} documents has been deleted.`;
+        }else{
+            const err =  new Error('please send valid Ids in Array type format.');
+            err.statusCode = 400;
+            throw err;
+        }
+    }
+
 }
 
 module.exports = new adminController()

@@ -36,7 +36,7 @@ export const AdminPanel = ()=>{
             }
         });
     }
-console.log(allUsers,'allUsers...');
+
     const handle_Delete_User = async (item)=>{
         const userConfirmation = window.confirm(`Are you sure you want to delete this user : ${item.email}`);
         if(userConfirmation){
