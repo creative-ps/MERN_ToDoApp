@@ -9,7 +9,7 @@ export const AdminPanel = ()=>{
         totalPages, setErrors, setSuccess, loading, handleDeleteUser} = useContext(TaskContext);
     const [page,setPage] = useState(1);
     const [isCheckAllCheckBox, setIsCheckAllCheckBox] = useState(false);
-    const [userFetch, setUserFetch] = useState(false);
+    const [userFetch, setUserFetch] = useState(1);
 
     
 
@@ -34,10 +34,10 @@ export const AdminPanel = ()=>{
 
     const handle_Delete_User = (item)=>{
         handleDeleteUser(item);
-        setUserFetch(!userFetch);
+        setUserFetch(userFetch+1);
     }
 
-
+    console.log(userFetch,'userFetch');
     return  <div className='mt-[15px] pl-[15px] sm:pl-[55px] sm:mt-[25px]'>
                 <Loading _loading={loading}/>
                 <div className='flex justify-between sm:w-[850px] sm:max-w-[100%] border-b-1 border-gray-500'>

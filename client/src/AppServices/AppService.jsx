@@ -213,6 +213,7 @@
         if(!response.ok){
             throw new Error(data.message || 'failed to delete user.')
         }
+        return data;
     }
 
     export const validPermissions = (allPermissions, getPermissions)=>{
