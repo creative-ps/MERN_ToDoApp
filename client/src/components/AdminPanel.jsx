@@ -101,7 +101,7 @@ export const AdminPanel = ()=>{
                                         Save
                                     </button>
                                     <button 
-                                        onClick={(user)=>{
+                                        onClick={()=>{
                                             handle_Delete_User(user);
                                         }}
                                         className='border-1 rounded-md bg-red-500 text-white text-sm px-3 py-1 :hover cursor-pointer hover:text-gray-100 
