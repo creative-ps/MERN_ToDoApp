@@ -47,13 +47,13 @@ class adminController {
 
     async deleteUser(req, res){
         const {userId} = req.params;
-        const userToDelete = await User.exists({_id:'690a14b153ed3020172cbe0d'});
+        const userToDelete = await User.exists({_id:userId});
         if(!userToDelete){
             const err = new Error('no user found.')
             err.statusCode = 404;
             throw err;
         }
-        await User.deleteOne({_id:'690a14b153ed3020172cbe0d'});
+        await User.deleteOne({_id:userId});
     }
 
 }
