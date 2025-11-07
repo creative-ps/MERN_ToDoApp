@@ -26,7 +26,7 @@ router.patch('/:userId/permissions', async (req, res)=>{
 
 router.delete('/deleteuser/:userId', async (req, res)=>{
     try{
-        const success = await adminController.deleteUser(req, res);
+        await adminController.deleteUser(req, res);
         res.status(200).json({message:'user deleted successfully.'});
     }catch(error){
         res.status(error.statusCode || 500).json({message:'error in deleting user'});

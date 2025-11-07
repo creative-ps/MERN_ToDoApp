@@ -186,7 +186,7 @@ export const TaskProvider = ({children})=>{
 
    const handleDeleteUser = async (item)=>{
         try{
-            // setLoading(true);
+            setLoading(true);
             const delete_user = await deleteUser(item);
             setLoading(false);
         }catch(error){
