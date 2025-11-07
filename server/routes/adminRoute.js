@@ -29,7 +29,7 @@ router.delete('/deleteuser/:userId', async (req, res)=>{
         await adminController.deleteUser(req, res);
         res.status(200).json({message:'user deleted successfully.'});
     }catch(error){
-        res.status(error.statusCode || 500).json({message:'error in deleting user'});
+        res.status(error.statusCode || 500).json({message:error.message||'error in deleting user'});
     }
 })
 
