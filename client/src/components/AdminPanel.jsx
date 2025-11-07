@@ -9,6 +9,7 @@ export const AdminPanel = ()=>{
         totalPages, setErrors, setSuccess, loading, handleDeleteUser} = useContext(TaskContext);
     const [page,setPage] = useState(1);
     const [isCheckAllCheckBox, setIsCheckAllCheckBox] = useState(false);
+    const [userFetch, setUserFetch] = useState(false);
 
     
 
@@ -16,7 +17,7 @@ export const AdminPanel = ()=>{
         setErrors('')
         setSuccess('')
         fetchUsers(page,15);
-    },[page]);
+    },[page,userFetch]);
 
 
     const handlePermissionsChange = (checked, userId, perm)=>{
@@ -33,6 +34,7 @@ export const AdminPanel = ()=>{
 
     const handle_Delete_User = (item)=>{
         handleDeleteUser(item);
+        setUserFetch(!userFetch);
     }
 
 
