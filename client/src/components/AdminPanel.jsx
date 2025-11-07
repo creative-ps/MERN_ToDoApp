@@ -36,7 +36,7 @@ export const AdminPanel = ()=>{
             }
         });
     }
-
+console.log(allUsers,'allUsers');
     const handle_Delete_User = async (item)=>{
         const userConfirmation = window.confirm(`Are you sure you want to delete this user : ${item.email}`);
         if(userConfirmation){
@@ -50,7 +50,13 @@ export const AdminPanel = ()=>{
                 <div className='flex justify-between sm:w-[850px] sm:max-w-[100%] border-b-1 border-gray-500'>
                     <h3 className='font-medium text-lg pb-1 mb-3'>Admin panel</h3>
                     {isCheckAllCheckBox && <button className='border-1 rounded-md bg-red-500 text-white text-sm px-3 py-1 :hover cursor-pointer hover:text-gray-100 
-                    disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed'>
+                    disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed' 
+                    onClick={()=>{
+                        const confirmAction = window.confirm(`Are you sure you want to delete all ${allUsers.length} users.`);
+                        if(confirmAction){
+
+                        }
+                    }}>
                         Delete All
                     </button>}
                 </div>    
