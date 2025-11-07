@@ -38,8 +38,11 @@ export const AdminPanel = ()=>{
     }
 
     const handle_Delete_User = async (item)=>{
-        await handleDeleteUser(item);
-        setUserFetch(!userFetch);
+        const userConfirmation = window.confirm(`Are you sure you want to delete this user : ${item.email}`);
+        if(userConfirmation){
+            await handleDeleteUser(item);
+            setUserFetch(!userFetch);
+        }
     }
 
     return  <div className='mt-[15px] pl-[15px] sm:pl-[55px] sm:mt-[25px]'>
