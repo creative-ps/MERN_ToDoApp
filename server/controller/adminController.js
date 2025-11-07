@@ -5,10 +5,7 @@ class adminController {
         const page = req.query.page;
         const limit = req.query.limit;
         const gap = (page-1)*limit;
-        let queryFilter = {role: { 
-                    $not: { $regex: /^admin$/i } 
-                }
-            };
+        let queryFilter = { role: { $ne: 'admin' } };
         try{
             const allUsers = await User.find(queryFilter).limit(limit).skip(gap).select('-password').lean();
             const totalDocuments = await User.countDocuments(queryFilter);
