@@ -10,7 +10,8 @@ export const AdminPanel = ()=>{
     const [page,setPage] = useState(1);
     const [isCheckAllCheckBox, setIsCheckAllCheckBox] = useState(false);
     const [userFetch, setUserFetch] = useState(false);
-    const [userId, setUserId] = useState({});
+    const [deleteItems, setDeleteItems] = useState({});
+    const [filterDelItems, setFilterDelItems] = useState([]);
 
     
 
@@ -24,8 +25,11 @@ export const AdminPanel = ()=>{
             setSuccess('')
         }
     },[])
+    console.log(allUsers,'allUsers');
+    console.log(deleteItems,'deleteItems');
+    console.log(isCheckAllCheckBox,'isCheckAllCheckBox');
+    console.log('rendered...');
 
-    console.log(userId,'userId');
     const handlePermissionsChange = (checked, userId, perm)=>{
         setPermissions((prev)=>{
             return {
@@ -46,6 +50,15 @@ export const AdminPanel = ()=>{
         }
     }
 
+    const handleDeleteManyUsers = ()=>{
+       if(Object.keys(deleteItems).length !== 0){
+            const filterItems = allUsers.filter((u)=> {
+                return deleteItems[u._id];
+            })
+            return filterItems;
+       }
+    }
+
     return  <div className='mt-[15px] pl-[15px] sm:pl-[55px] sm:mt-[25px]'>
                 <Loading _loading={loading}/>
                 <div className='flex justify-between sm:w-[850px] sm:max-w-[100%] border-b-1 border-gray-500'>
@@ -55,7 +68,7 @@ export const AdminPanel = ()=>{
                     onClick={()=>{
                         const confirmAction = window.confirm(`Are you sure you want to delete all ${allUsers.length} users.`);
                         if(confirmAction){
-
+                           let itemsToBeDeleted = handleDeleteManyUsers();
                         }
                     }}>
                         Delete All
@@ -74,7 +87,11 @@ export const AdminPanel = ()=>{
                                     <input 
                                         type='checkbox' 
                                         onChange={(e)=>{
-                                                setIsCheckAllCheckBox(!isCheckAllCheckBox);
+                                                const checked = e.target.checked;
+                                                setIsCheckAllCheckBox(checked);
+                                                checked ? setDeleteItems(
+                                                   Object.fromEntries(allUsers.map(u=>[u._id,checked]))
+                                                ) :  setDeleteItems({});
                                             }}
                                         checked={isCheckAllCheckBox}
                                     />
@@ -130,7 +147,7 @@ export const AdminPanel = ()=>{
                              <td>
                                 <div className='pl-6'>
                                     <span className='inline-block'>
-                                        <Checkbox isCheckAllCheckBox={isCheckAllCheckBox} userId={userId} setUserId={setUserId} user={user} />
+                                        <Checkbox isCheckAllCheckBox={isCheckAllCheckBox} deleteItems={deleteItems} setDeleteItems={setDeleteItems} user={user} />
                                     </span>
                                 </div>
                             </td>
