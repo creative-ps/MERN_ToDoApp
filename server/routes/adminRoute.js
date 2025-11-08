@@ -38,7 +38,7 @@ router.delete('/deleteusers', async (req, res)=>{
         const result = await adminController.deleteUsers(req, res);
         res.status(200).json({message: result});
     }catch(error){
-        res.status(error.statusCode || 500).json({message:error.message || 'error in deleting errors.'})
+        res.status(error.statusCode || 500).json({message:error.message || 'error in deleting documents.'})
     }
 })
 

@@ -10,6 +10,7 @@ export const AdminPanel = ()=>{
     const [page,setPage] = useState(1);
     const [isCheckAllCheckBox, setIsCheckAllCheckBox] = useState(false);
     const [userFetch, setUserFetch] = useState(false);
+    const [userId, setUserId] = useState({});
 
     
 
@@ -24,7 +25,7 @@ export const AdminPanel = ()=>{
         }
     },[])
 
-
+    console.log(userId,'userId');
     const handlePermissionsChange = (checked, userId, perm)=>{
         setPermissions((prev)=>{
             return {
@@ -129,7 +130,7 @@ export const AdminPanel = ()=>{
                              <td>
                                 <div className='pl-6'>
                                     <span className='inline-block'>
-                                        <Checkbox isCheckAllCheckBox={isCheckAllCheckBox} />
+                                        <Checkbox isCheckAllCheckBox={isCheckAllCheckBox} userId={userId} setUserId={setUserId} user={user} />
                                     </span>
                                 </div>
                             </td>
