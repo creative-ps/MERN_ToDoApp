@@ -11,6 +11,7 @@ export const AdminPanel = ()=>{
     const [isCheckAllCheckBox, setIsCheckAllCheckBox] = useState(false);
     const [userFetch, setUserFetch] = useState(false);
     const [deleteItems, setDeleteItems] = useState({});
+    const [isCheckCheckbox, setIsCheckCheckbox] = useState(false);
     const [filterDelItems, setFilterDelItems] = useState([]);
 
     
@@ -28,6 +29,7 @@ export const AdminPanel = ()=>{
     console.log(allUsers,'allUsers');
     console.log(deleteItems,'deleteItems');
     console.log(isCheckAllCheckBox,'isCheckAllCheckBox');
+    console.log(isCheckCheckbox,'isCheckCheckbox');
     console.log('rendered...');
 
     const handlePermissionsChange = (checked, userId, perm)=>{
@@ -50,7 +52,7 @@ export const AdminPanel = ()=>{
         }
     }
 
-    const handleDeleteManyUsers = ()=>{
+    const _handleDeleteManyUsers = ()=>{
        if(Object.keys(deleteItems).length !== 0){
             const filterItems = allUsers.filter((u)=> {
                 return deleteItems[u._id];
@@ -63,12 +65,13 @@ export const AdminPanel = ()=>{
                 <Loading _loading={loading}/>
                 <div className='flex justify-between sm:w-[850px] sm:max-w-[100%] border-b-1 border-gray-500'>
                     <h3 className='font-medium text-lg pb-1 mb-3'>Admin panel</h3>
-                    {isCheckAllCheckBox && <button className='border-1 rounded-md bg-red-500 text-white text-sm px-3 py-1 :hover cursor-pointer hover:text-gray-100 
+                    {(isCheckAllCheckBox || isCheckCheckbox) && <button className='border-1 rounded-md bg-red-500 text-white text-sm px-3 py-1 :hover cursor-pointer hover:text-gray-100 
                     disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed' 
                     onClick={()=>{
                         const confirmAction = window.confirm(`Are you sure you want to delete all ${allUsers.length} users.`);
                         if(confirmAction){
-                           let itemsToBeDeleted = handleDeleteManyUsers();
+                           let itemsToBeDeleted = _handleDeleteManyUsers();
+                           console.log(itemsToBeDeleted,'itemsToBeDeleted')
                         }
                     }}>
                         Delete All
@@ -89,9 +92,9 @@ export const AdminPanel = ()=>{
                                         onChange={(e)=>{
                                                 const checked = e.target.checked;
                                                 setIsCheckAllCheckBox(checked);
-                                                checked ? setDeleteItems(
+                                                setDeleteItems(
                                                    Object.fromEntries(allUsers.map(u=>[u._id,checked]))
-                                                ) :  setDeleteItems({});
+                                                );
                                             }}
                                         checked={isCheckAllCheckBox}
                                     />
@@ -147,7 +150,7 @@ export const AdminPanel = ()=>{
                              <td>
                                 <div className='pl-6'>
                                     <span className='inline-block'>
-                                        <Checkbox isCheckAllCheckBox={isCheckAllCheckBox} deleteItems={deleteItems} setDeleteItems={setDeleteItems} user={user} />
+                                        <Checkbox isCheckAllCheckBox={isCheckAllCheckBox} setIsCheckAllCheckBox={setIsCheckAllCheckBox} deleteItems={deleteItems} isCheckCheckbox={isCheckCheckbox} setIsCheckCheckbox={setIsCheckCheckbox} setDeleteItems={setDeleteItems} user={user} />
                                     </span>
                                 </div>
                             </td>
