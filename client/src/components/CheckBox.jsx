@@ -21,7 +21,6 @@ export const Checkbox = ({isCheckAllCheckBox, setIsCheckAllCheckBox, deleteItems
                     }
                     if(Object.keys(allDeletedItem).length>0){
                         const allItems = Object.entries(allDeletedItem);
-                        console.log(allItems,'allItems');
                         const result = allItems.some(([,value])=> value)
                         if(result){
                             setIsCheckCheckbox(true)

@@ -52,11 +52,18 @@ export const AdminPanel = ()=>{
         }
     }
 
-    const handleDeleteManyUsers = ()=>{
-            const filterItems = Object.keys(deleteItems).filter((id)=> {
+    const handleDeleteManyUsers = async ()=>{
+            const confirmAction = window.confirm(`Are you sure you want to delete all ${allUsers.length} users.`);
+            if(confirmAction){
+                const filterItems = Object.keys(deleteItems).filter((id)=> {
                 return deleteItems[id];
             })
-            return filterItems;
+                await handleDeleteUsers(filterItems);
+                setUserFetch(!userFetch);
+                setIsCheckCheckbox(!isCheckCheckbox)
+            }
+            
+            // return filterItems;
 
             // const filterItems = Object.entries(deleteItems).filter(([id,val])=>val).
             // map(([id])=>id);
@@ -70,11 +77,8 @@ export const AdminPanel = ()=>{
                     {(isCheckAllCheckBox || isCheckCheckbox) && <button className='border-1 rounded-md bg-red-500 text-white text-sm px-3 py-1 :hover cursor-pointer hover:text-gray-100 
                     disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed' 
                     onClick={()=>{
-                        const confirmAction = window.confirm(`Are you sure you want to delete all ${allUsers.length} users.`);
-                        if(confirmAction){
-                           let itemsToBeDeleted = handleDeleteManyUsers();
-                           handleDeleteUsers(itemsToBeDeleted)
-                        }
+                        handleDeleteManyUsers();
+                        
                     }}>
                         Delete All
                     </button>}

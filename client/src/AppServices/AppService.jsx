@@ -229,6 +229,7 @@
         if(!response.ok){
             throw new Error(data.message || 'unable to delete users.')
         }
+        return data;
     }
 
     export const validPermissions = (allPermissions, getPermissions)=>{
