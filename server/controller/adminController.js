@@ -66,7 +66,7 @@ class adminController {
              err.statusCode = 404;
              throw err;   
             }
-            return `${result.deletedCount} documents has been deleted.`;
+            return `${result.deletedCount} documents have been deleted.`;
         }else{
             const err =  new Error('please send valid Ids in Array type format.');
             err.statusCode = 400;

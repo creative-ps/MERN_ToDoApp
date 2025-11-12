@@ -2,14 +2,12 @@ import React, {useState, useEffect} from "react"
 
 export const Checkbox = ({isCheckAllCheckBox, setIsCheckAllCheckBox, deleteItems, setDeleteItems, user, isCheckCheckbox, setIsCheckCheckbox})=>{
     const [isCheck, setIsCheck] = useState(false);
-    // let allItems;
     useEffect(()=>{
         if(isCheckAllCheckBox){
             setIsCheck(true);
         }else{
             setIsCheck(false)
         }
-        // console.log(allItems,'allItems');
     },[isCheckAllCheckBox]);
 
     return <input type="checkbox" 
@@ -27,12 +25,9 @@ export const Checkbox = ({isCheckAllCheckBox, setIsCheckAllCheckBox, deleteItems
                         const result = allItems.some(([,value])=> value)
                         if(result){
                             setIsCheckCheckbox(true)
-                            console.log('result is true')
                         }else{
                             setIsCheckCheckbox(false)
                             setIsCheckAllCheckBox(false);
-                            console.log('result is false')
-
                         };
                     }
                     return allDeletedItem;

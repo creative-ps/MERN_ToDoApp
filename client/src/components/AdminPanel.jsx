@@ -6,7 +6,7 @@ import { Checkbox } from './CheckBox';
 
 export const AdminPanel = ()=>{
     const {allUsers, fetchUsers, permissions, setPermissions, permissionsAllowed, 
-        totalPages, setErrors, setSuccess, loading, handleDeleteUser} = useContext(TaskContext);
+        totalPages, setErrors, setSuccess, loading, handleDeleteUser, handleDeleteUsers} = useContext(TaskContext);
     const [page,setPage] = useState(1);
     const [isCheckAllCheckBox, setIsCheckAllCheckBox] = useState(false);
     const [userFetch, setUserFetch] = useState(false);
@@ -52,13 +52,15 @@ export const AdminPanel = ()=>{
         }
     }
 
-    const _handleDeleteManyUsers = ()=>{
-       if(Object.keys(deleteItems).length !== 0){
-            const filterItems = allUsers.filter((u)=> {
-                return deleteItems[u._id];
+    const handleDeleteManyUsers = ()=>{
+            const filterItems = Object.keys(deleteItems).filter((id)=> {
+                return deleteItems[id];
             })
             return filterItems;
-       }
+
+            // const filterItems = Object.entries(deleteItems).filter(([id,val])=>val).
+            // map(([id])=>id);
+            // return filterItems;
     }
 
     return  <div className='mt-[15px] pl-[15px] sm:pl-[55px] sm:mt-[25px]'>
@@ -70,8 +72,8 @@ export const AdminPanel = ()=>{
                     onClick={()=>{
                         const confirmAction = window.confirm(`Are you sure you want to delete all ${allUsers.length} users.`);
                         if(confirmAction){
-                           let itemsToBeDeleted = _handleDeleteManyUsers();
-                           console.log(itemsToBeDeleted,'itemsToBeDeleted')
+                           let itemsToBeDeleted = handleDeleteManyUsers();
+                           handleDeleteUsers(itemsToBeDeleted)
                         }
                     }}>
                         Delete All
@@ -92,6 +94,7 @@ export const AdminPanel = ()=>{
                                         onChange={(e)=>{
                                                 const checked = e.target.checked;
                                                 setIsCheckAllCheckBox(checked);
+                                                setIsCheckCheckbox(checked);
                                                 setDeleteItems(
                                                    Object.fromEntries(allUsers.map(u=>[u._id,checked]))
                                                 );

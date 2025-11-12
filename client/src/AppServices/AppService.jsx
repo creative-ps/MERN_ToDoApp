@@ -200,8 +200,8 @@
             return data;
     }
 
-    export const deleteUser = async (user)=>{
-        const response = await fetch(`${API_URL}/admin/deleteuser/${user._id}`,{
+    export const deleteUser = async (deluser)=>{
+        const response = await fetch(`${API_URL}/admin/deleteuser/${deluser._id}`,{
             method:'Delete',
             headers:{
                 ...getAuthHeader(),
@@ -211,9 +211,24 @@
 
         const data = await response.json();
         if(!response.ok){
-            throw new Error(data.message || 'failed to delete user.')
+            throw new Error(data.message || 'unable to delete user.')
         }
         return data;
+    }
+
+    export const deleteUsers = async (delUsers)=>{
+        const response = await fetch(`${API_URL}/admin/deleteUsers`,{
+            method:'Delete',
+            headers:{
+                'Content-Type' : 'application/json',
+                ...getAuthHeader()
+            },
+            body:JSON.stringify(delUsers)
+        })
+        const data = await response.json();
+        if(!response.ok){
+            throw new Error(data.message || 'unable to delete users.')
+        }
     }
 
     export const validPermissions = (allPermissions, getPermissions)=>{

@@ -1,6 +1,6 @@
 import React,{createContext, useState, useEffect} from "react";
 import { fetchTasks,createTask,deleteTask,updateTaskStatus, updateTaskContent, logIn, signUp, 
-    fetchUser, fetchAllUsers, handleAddCategory, getAllCategories, deleteUser} from "../AppServices/AppService";
+    fetchUser, fetchAllUsers, handleAddCategory, getAllCategories, deleteUser, deleteUsers} from "../AppServices/AppService";
 export const TaskContext = createContext();
 import { handleSavePermissions } from '../AppServices/AppService';
 
@@ -185,14 +185,26 @@ export const TaskProvider = ({children})=>{
         }
    }
 
-   const handleDeleteUser = async (item)=>{
+   const handleDeleteUser = async (delUser)=>{
         try{
             setLoading(true);
-            const delete_user = await deleteUser(item);
+            const delete_user = await deleteUser(delUser);
             setSuccess(delete_user.message);
             setLoading(false);
         }catch(error){
-            setErrors(false);
+            setLoading(false);
+            setErrors(error.message);
+        }
+   }
+
+   const handleDeleteUsers = async (delUsers)=>{
+        try{
+            setLoading(true);
+            const delete_users = await deleteUsers(delUsers);
+            setSuccess(delete_users.message)
+            setLoading(false)
+        }catch(error){
+            setLoading(false);
             setErrors(error.message);
         }
    }
@@ -251,7 +263,7 @@ export const TaskProvider = ({children})=>{
     return <TaskContext.Provider value = {{tasks,success,setSuccess, errors, setErrors, isAuthenticated, setIsAuthenticated, setTasks, 
     addTask, removeTask, toggleTaskStatus,updateTask,handleSignIn,handleSignUp, handleLogout, user, setUser, allUsers,fetchUsers, permissions, 
     setPermissions, permissionsAllowed,totalPages, addCategory, categories, setCategories, getCategories,loadTask, loading, setLoading,
-    emptyTaskList,emptyCategoryList,setEmptyTaskList,handleDeleteUser}}>
+    emptyTaskList,emptyCategoryList,setEmptyTaskList,handleDeleteUser,handleDeleteUsers}}>
             {children}
            </TaskContext.Provider>
 }
