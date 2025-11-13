@@ -6,7 +6,6 @@ const bcrypt = require('bcrypt');
 class AuthController {
     async signUp(req,res){
         const {email,password,rePassword} = req.body;
-        console.log(password, rePassword);
         if(password !== rePassword){
             const error = new Error('password and reenter password should be same.');
             error.statusCode = 400;
@@ -73,6 +72,26 @@ class AuthController {
             throw error;
         }
         return user;
+    }
+
+    async updatePassword(req, res){
+        const {email, password, rePassword} = req.body;
+        if(!email || !password || !rePassword){
+            const error = new Error('Provide required data in request body,');
+            error.statusCode = 400;
+            throw error;
+        }
+        if(password !== rePassword){
+            const error = new Error('Password and Re enter password do not match.');
+            error.statusCode = 400;
+            throw error;
+        }
+        const updatedUser = await User.findOneAndUpdate(
+            {email:email},
+            {$set:{password:password}},
+            {new: true}
+        );
+        return updatedUser;
     }
 }
 

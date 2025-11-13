@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const AuthController = require('../controller/authController');
 const authMiddleware = require('../middleware/authMiddleware');
+const CodePresenter = require('../presenters/codePresenter');
 
 router.post('/signup', async (req,res)=>{
     try{
@@ -29,6 +30,16 @@ router.get('/',authMiddleware, async (req,res)=>{
         res.status(200).json(user);
     }catch(error){
         res.status(error.statusCode || 500).json({message:error.message || 'Failed to get user.'})
+    }
+})
+
+router.patch('/updatepassword', async (req, res)=>{
+    try{
+        const updatedUser = await AuthController.updatePassword(req, res);
+        const formatedUser = CodePresenter.formatUser(updatedUser);
+        res.status(200).json(CodePresenter.success(formatedUser, 'Password updated successfully'));
+    }catch(error){
+        res.status(error.statusCode || 400).json(CodePresenter.error(error.message || 'error in updating password.'))
     }
 })
 
