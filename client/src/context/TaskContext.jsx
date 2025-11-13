@@ -27,7 +27,7 @@ export const TaskProvider = ({children})=>{
                 const loadData = async ()=>{
                     try{  
                         const user = await fetchUser();
-                        setUser(user);
+                        setUser(user.data);
                     }catch(error){ 
                         setErrors(error.message);
                         handleLogout()
