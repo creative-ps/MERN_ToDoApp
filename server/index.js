@@ -25,6 +25,7 @@ async function main() {
 }
 
 main();
+app.use(morgan('combined'));
 
 const allowedOrigins = [
   'http://localhost:3000',                     // local dev
@@ -45,8 +46,6 @@ const corsOptions = {
     credentials: true, // If you need to send cookies or other credentials
 };
 
-
-app.use(morgan('combined'));
 
 server.use(cors(corsOptions));
 // Handle preflight requests explicitly
