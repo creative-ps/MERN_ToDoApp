@@ -1,12 +1,14 @@
 require('dotenv').config();
 const express = require("express")
-const fs = require("fs")
 const mongoose = require('mongoose');
 const taskRouter = require('./routes/taskRouter');
 const authRouter = require('./routes/authRouter');
 const adminRouter = require('./routes/adminRoute');
 const categoryRouter = require('./routes/categoryRoute');
 const cors = require('cors');
+const morgan = require('morgan');
+
+
 const server = express();
 
 
@@ -42,6 +44,9 @@ const corsOptions = {
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true, // If you need to send cookies or other credentials
 };
+
+
+app.use(morgan('combined'));
 
 server.use(cors(corsOptions));
 // Handle preflight requests explicitly
