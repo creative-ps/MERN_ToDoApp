@@ -52,7 +52,7 @@ export const ResetPassword = ()=>{
                         value={formData.password}/>
                         <div className="form-error text-xs text-red-500">{formErrors['password']?formErrors['password']:''}</div>
 
-                        <label htmlFor="rePassword" className="font-normal block text-md sm:mt-3">* Enter reenter new password</label>
+                        <label htmlFor="rePassword" className="font-normal block text-md sm:mt-3">* Reenter new password</label>
                         <input 
                         type="password" 
                         name="rePassword"
