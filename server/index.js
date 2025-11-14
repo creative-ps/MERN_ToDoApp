@@ -10,9 +10,6 @@ const morgan = require('morgan');
 
 
 const server = express();
-
-
-
 async function main() {
     try{
         await mongoose.connect(process.env.MONGO_URL);
@@ -25,7 +22,7 @@ async function main() {
 }
 
 main();
-app.use(morgan('combined'));
+server.use(morgan('combined'));
 
 const allowedOrigins = [
   'http://localhost:3000',                     // local dev
