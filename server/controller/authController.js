@@ -1,7 +1,6 @@
 const User = require('../model/userModel');
 const jwt = require('jsonwebtoken');
 const {Types} = require('mongoose');
-const bcrypt = require('bcrypt');
 
 class AuthController {
     async signUp(req,res){
@@ -76,6 +75,12 @@ class AuthController {
 
     async updatePassword(req, res){
         const {email, password, rePassword} = req.body;
+        const userExist = await User.findOne({email:email});
+        if(!userExist){
+            const error = new Error('User not found.')
+            error.statusCode = 404;
+            throw error;
+        }
         if(!email || !password || !rePassword){
             const error = new Error('Provide required data in request body,');
             error.statusCode = 400;
@@ -86,6 +91,7 @@ class AuthController {
             error.statusCode = 400;
             throw error;
         }
+        
         const updatedUser = await User.findOneAndUpdate(
             {email:email},
             {$set:{password:password}},

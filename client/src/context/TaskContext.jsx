@@ -1,6 +1,6 @@
 import React,{createContext, useState, useEffect} from "react";
 import { fetchTasks,createTask,deleteTask,updateTaskStatus, updateTaskContent, logIn, signUp, 
-    fetchUser, fetchAllUsers, handleAddCategory, getAllCategories, deleteUser, deleteUsers} from "../AppServices/AppService";
+    fetchUser, fetchAllUsers, handleAddCategory, getAllCategories, deleteUser, deleteUsers, UpdatePassword} from "../AppServices/AppService";
 export const TaskContext = createContext();
 import { handleSavePermissions } from '../AppServices/AppService';
 
@@ -185,6 +185,19 @@ export const TaskProvider = ({children})=>{
         }
    }
 
+   const updatePasswordCtx = async (formData)=>{
+        try{
+            setLoading(true);
+            const data = await UpdatePassword(formData);
+            console.log(data.data,'data');
+            setSuccess(data.message || 'password updated successfully.')
+            setLoading(false);
+        }catch(error){
+            setLoading(false);
+            setErrors(error.message || 'Error in updating password.')
+        }
+   }
+
    const handleDeleteUser = async (delUser)=>{
         try{
             setLoading(true);
@@ -263,7 +276,7 @@ export const TaskProvider = ({children})=>{
     return <TaskContext.Provider value = {{tasks,success,setSuccess, errors, setErrors, isAuthenticated, setIsAuthenticated, setTasks, 
     addTask, removeTask, toggleTaskStatus,updateTask,handleSignIn,handleSignUp, handleLogout, user, setUser, allUsers,fetchUsers, permissions, 
     setPermissions, permissionsAllowed,totalPages, addCategory, categories, setCategories, getCategories,loadTask, loading, setLoading,
-    emptyTaskList,emptyCategoryList,setEmptyTaskList,handleDeleteUser,handleDeleteUsers}}>
+    emptyTaskList,emptyCategoryList,setEmptyTaskList,handleDeleteUser,handleDeleteUsers, updatePasswordCtx}}>
             {children}
            </TaskContext.Provider>
 }

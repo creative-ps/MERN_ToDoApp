@@ -184,6 +184,22 @@
 
         return data;
     }
+
+    export const UpdatePassword = async (userData)=>{
+        const response = await fetch(`${API_URL}/user/updatepassword`,{
+            method:'PATCH',
+            headers:{
+                'Content-Type':'application/json',
+                ...getAuthHeader()
+            },
+            body: JSON.stringify(userData)
+        })
+        const data = await response.json();
+        if(!response.ok){
+            throw new Error(data.message || 'Error in updating password.')
+        }
+        return data;
+    }
     
     export const fetchAllUsers = async (page,limit)=>{
             const response = await fetch(`${API_URL}/admin/users?page=${page}&limit=${limit}`,{

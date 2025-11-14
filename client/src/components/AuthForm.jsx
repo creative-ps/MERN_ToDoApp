@@ -97,7 +97,15 @@ export const AuthForm = () => {
                         <div className="pt-3 text-right">
                             <Button type={'submit'} isDisabled={loading?'disabled':''} className={'border-1 rounded-md bg-blue-500 text-white text-sm px-3 py-1 :hover cursor-pointer hover:text-gray-100 disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed'} content={loading?'Loading...':(isSignUp?'Sign Up':'Log In')}/>
                         </div>
-                        <div className="text-right border-t-1 border-gray-400 pt-0 mt-2">
+                        <div className="flex justify-between border-t-1 border-gray-400 pt-0 mt-2">
+                            <div 
+                            className="text-xs inline-block hover: cursor-pointer hover:text-blue-500"
+                            onClick={()=>{
+                                navigate('/reset-password')
+                            }}
+                            >
+                                Reset password
+                            </div>
                             <span 
                             className="text-xs inline-block hover: cursor-pointer hover:text-blue-500"
                             onClick={()=>{

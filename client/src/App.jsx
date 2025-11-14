@@ -8,6 +8,7 @@ import { AppMessage } from "./GlobalMessage";
 import { AdminPanel } from "./components/AdminPanel";
 import { Category } from "./components/Category";
 import { ProtectedRoute } from "./protectedRoute/ProtectedRoute";
+import { ResetPassword } from "./components/ResetPassword";
 
 export default function App (){
     return <>
@@ -19,6 +20,7 @@ export default function App (){
                   <AppMessage/>
                   <Routes>
                     <Route path="/" element={<AuthForm/>}/>
+                    <Route path="/reset-password" element={<ResetPassword/>}></Route>
                     <Route element={<ProtectedRoute/>}>
                       <Route path="/tasklist" element={<TaskList/>}/>
                       <Route path="/create" element={<TaskForm/>}/>
