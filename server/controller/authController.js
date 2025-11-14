@@ -92,12 +92,9 @@ class AuthController {
             throw error;
         }
         
-        const updatedUser = await User.findOneAndUpdate(
-            {email:email},
-            {$set:{password:password}},
-            {new: true}
-        );
-        return updatedUser;
+        userExist.password = password;
+        await userExist.save();
+        return userExist;
     }
 }
 
