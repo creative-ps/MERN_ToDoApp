@@ -1,20 +1,13 @@
 const mongoose = require('mongoose');
 const {Types} = require('mongoose');
 const taskModel = require('../model/taskModel');
-const categoryModel = require('../model/categoryModel');
+const { request } = require('express');
 
 class TaskController{
     async createTask(req,res){
             const {selectVal, task, catId} = req.body;
             const userId = new Types.ObjectId(req.userId);
-            if(!selectVal || !task){
-                const error = new Error('category and task are required');
-                error.statusCode = 400;
-                throw error
-            }
-            // const category = await categoryModel.findOne({name:selectVal});
             const taskExist = await taskModel.findOne({title:{$regex: new RegExp(`^${task}$`,'i')},catId});
-            // const descriptionExist = await taskModel.findOne({description:{$regex: new RegExp(`^${description}$`, 'i')},userId:userId})
             if(taskExist){
                 const error = new Error("Task or Category is already exist.");
                 error.statusCode = 400;
@@ -30,6 +23,8 @@ class TaskController{
 
     async getAllTasks(req,res){
         const {id} = req.params;
+    console.log('route ', req.params)
+
         try{
             const userId = new Types.ObjectId(req.userId);
             const allTasks = await taskModel.find({catId:id});

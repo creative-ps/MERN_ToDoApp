@@ -4,8 +4,9 @@ const TaskController = require('../controller/taskController');
 const CodePresenter = require('../presenters/codePresenter');
 const authMiddleware = require('../middleware/authMiddleware');
 const permissionMiddleware = require('../middleware/permissionMiddleware');
+const appValidator = require('../validator/appValidator');
 
-router.get('/:id', authMiddleware, async (req, res) => {
+router.get('/:id', appValidator.validateId(), appValidator.appValidationMiddleware, authMiddleware, async (req, res) => {
     try{
         const allTasks = await TaskController.getAllTasks(req, res);
         const formatedTasks = CodePresenter.formatTasks(allTasks);
@@ -15,7 +16,7 @@ router.get('/:id', authMiddleware, async (req, res) => {
     }
 })
 
-router.post('/', authMiddleware, permissionMiddleware('create'), async (req, res) => {
+router.post('/', appValidator.validateCreateTask(), appValidator.appValidationMiddleware, authMiddleware, permissionMiddleware('create'), async (req, res) => {
     try{
         const task = await TaskController.createTask(req, res);
         // const formatedTask = CodePresenter.formatTask(task);
@@ -25,7 +26,7 @@ router.post('/', authMiddleware, permissionMiddleware('create'), async (req, res
     }
 })
 
-router.delete('/:id',authMiddleware, permissionMiddleware('delete'), async (req, res)=>{
+router.delete('/:id', appValidator.validateId(), appValidator.appValidationMiddleware, authMiddleware, permissionMiddleware('delete'), async (req, res)=>{
     try{
         const data = await TaskController.deleteTask(req,res);
         // const formatedTask = CodePresenter.formatTask(data);
@@ -35,7 +36,7 @@ router.delete('/:id',authMiddleware, permissionMiddleware('delete'), async (req,
     }
 })+
 
-router.patch('/:id',authMiddleware, permissionMiddleware('edit',), async (req, res)=>{
+router.patch('/:id', appValidator.validateId(), appValidator.appValidationMiddleware, authMiddleware, permissionMiddleware('edit',), async (req, res)=>{
     const {completed,title} = req.body;
     try{
         if(completed !== undefined){

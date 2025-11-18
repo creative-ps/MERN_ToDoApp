@@ -9,6 +9,7 @@ import { AdminPanel } from "./components/AdminPanel";
 import { Category } from "./components/Category";
 import { ProtectedRoute } from "./protectedRoute/ProtectedRoute";
 import { ResetPassword } from "./components/ResetPassword";
+import PageNotFound from "./404Page";
 
 export default function App (){
     return <>
@@ -28,7 +29,9 @@ export default function App (){
                       <Route path="/admin" element={<AdminPanel/>}/>
                       <Route path="/category" element={<Category/>}/>
                     </Route>
+                    <Route path="*" element={<PageNotFound/>}/>
                   </Routes>
+
                   <footer className="text-center font-normal text-black text-sm p-3">
                     <span>&copy; 2025. All right reserved.</span>
                   </footer>
