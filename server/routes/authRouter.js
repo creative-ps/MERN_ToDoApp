@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const AuthController = require('../controller/authController');
 const authMiddleware = require('../middleware/authMiddleware');
+const appValidator =  require('../validator/appValidator');
 
-router.post('/signup', async (req,res)=>{
+router.post('/signup', appValidator.validateUser(), appValidator.appValidationMiddleware, async (req,res)=>{
     try{
         const {user,token} = await AuthController.signUp(req, res);
 
@@ -14,7 +15,7 @@ router.post('/signup', async (req,res)=>{
 
 })
 
-router.post('/login', async (req,res)=>{
+router.post('/login', appValidator.validateUser(), appValidator.appValidationMiddleware, async (req,res)=>{
     try{
         const {user,token} = await AuthController.logIn(req, res);
         res.status(201).json({user, token, message:'Login Successful.'});
@@ -32,7 +33,7 @@ router.get('/',authMiddleware, async (req,res)=>{
     }
 })
 
-router.patch('/updatepassword', async (req, res)=>{
+router.patch('/updatepassword', appValidator.validateUser(), appValidator.appValidationMiddleware,  async (req, res)=>{
     try{
         const updatedUser = await AuthController.updatePassword(req, res);
         res.status(200).json({data:updatedUser, message:'Password updated successfully.'});

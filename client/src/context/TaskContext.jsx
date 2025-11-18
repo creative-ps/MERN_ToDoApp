@@ -82,7 +82,6 @@ export const TaskProvider = ({children})=>{
         try{
             setLoading(true);
             const data = await deleteTask(taskId);
-            // const deletedTaskId = data.data.catId;
             setSuccess(data.message);
             await loadTask(catId);
         }catch(err){
@@ -107,7 +106,6 @@ export const TaskProvider = ({children})=>{
         try{
             setLoading(true);
             const data = await updateTaskContent(taskId, updatedContent);
-            const updatedTask = data.data;
             await loadTask(catId);
             setSuccess(data.message)
         }catch(err){
@@ -254,7 +252,6 @@ export const TaskProvider = ({children})=>{
             const data = await getAllCategories();
             if(data.length === 0){
                 setEmptyCategoryList(true);
-                // setErrors('Category list is empty.')
             }else{
                 setEmptyCategoryList(false);
                 setCategories(data);

@@ -4,10 +4,6 @@ class CategoryController{
     async createCategory(req, res){
         const {name} = req.body;
         const userId = req.userId;
-        if(!name){
-            const error = new Error('not a valid category.');
-            throw error;
-        }
         const categoryExist = await categoryModel.findOne({name:{$regex: new RegExp(`^${name}$`,'i')}, userId:userId});
         if(categoryExist){
             const error = new Error('category already exists.');

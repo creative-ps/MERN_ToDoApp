@@ -24,24 +24,24 @@ class AuthController {
 
     async logIn(req,res){
         const {email,password} = req.body;
-        if(!email || !password){
-            const error = new Error('email or password is required.');
-            error.statusCode = 400;
-            throw error
-        }
+        // if(!email || !password){
+        //     const error = new Error('email or password is required.');
+        //     error.statusCode = 400;
+        //     throw error
+        // }
 
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            const error = new Error('Please provide a valid email address.');
-            error.statusCode = 400;
-            throw error;
-        }
+        // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        // if (!emailRegex.test(email)) {
+        //     const error = new Error('Please provide a valid email address.');
+        //     error.statusCode = 400;
+        //     throw error;
+        // }
 
-        if(password.length<6){
-            const error = new Error('Password must be at least 6 characters.');
-            error.statusCode = 400;
-            throw error;
-        }
+        // if(password.length<6){
+        //     const error = new Error('Password must be at least 6 characters.');
+        //     error.statusCode = 400;
+        //     throw error;
+        // }
 
         const user = await User.findOne({email});
         if(!user){
@@ -81,11 +81,11 @@ class AuthController {
             error.statusCode = 404;
             throw error;
         }
-        if(!email || !password || !rePassword){
-            const error = new Error('Provide required data in request body,');
-            error.statusCode = 400;
-            throw error;
-        }
+        // if(!email || !password || !rePassword){
+        //     const error = new Error('Provide required data in request body,');
+        //     error.statusCode = 400;
+        //     throw error;
+        // }
         if(password !== rePassword){
             const error = new Error('Password and Re enter password do not match.');
             error.statusCode = 400;

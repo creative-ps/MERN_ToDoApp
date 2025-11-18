@@ -79,7 +79,7 @@
 
     export const updateTaskStatus = async (taskId, completed) => {
         try{
-            const response = await fetch(`${API_URL}/tasks/${taskId}`,{
+            const response = await fetch(`${API_URL}/tasks/edittaskcompletion/${taskId}`,{
                 method:'PATCH',
                 headers:{
                     'Content-Type':'application/json',
@@ -102,7 +102,7 @@
 
     export const updateTaskContent = async (taskId, updatedContent)=>{
         try{
-            const response = await fetch(`${API_URL}/tasks/${taskId}`,{
+            const response = await fetch(`${API_URL}/tasks/edittask/${taskId}`,{
                 method:'PATCH',
                 headers:{
                     'Content-Type':'application/json',

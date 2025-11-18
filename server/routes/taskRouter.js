@@ -29,33 +29,31 @@ router.post('/', appValidator.validateCreateTask(), appValidator.appValidationMi
 router.delete('/:id', appValidator.validateId(), appValidator.appValidationMiddleware, authMiddleware, permissionMiddleware('delete'), async (req, res)=>{
     try{
         const data = await TaskController.deleteTask(req,res);
-        // const formatedTask = CodePresenter.formatTask(data);
         res.status(200).json(CodePresenter.success([],'Task deleted successfully.'));
     }catch(error){
         res.status(error.statusCode || 500).json(CodePresenter.error(error.message || 'Failed to delete task.'))
     }
 })+
 
-router.patch('/:id', appValidator.validateId(), appValidator.appValidationMiddleware, authMiddleware, permissionMiddleware('edit',), async (req, res)=>{
-    const {completed,title} = req.body;
+router.patch('/edittask/:id', appValidator.validateUpdateTaskStatus(), appValidator.appValidationMiddleware, authMiddleware, permissionMiddleware('edit',), async (req, res)=>{
+    try{
+            const data = await TaskController.updateTask(req, res);
+            res.status(200).json(CodePresenter.success([],"Task updated successfully."))    
+    }catch(error){
+            res.status(error.statusCode || 500).json(CodePresenter.error(error.message || 'Failed to update task.'))
+    }
+})
+
+router.patch('/edittaskcompletion/:id', appValidator.validateUpdateTaskBooleanStatus(), appValidator.appValidationMiddleware, authMiddleware, permissionMiddleware('edit',), async (req, res)=>{
+    const {completed} = req.body;
+    console.log('edittaskcompletion/:id');
     try{
         if(completed !== undefined){
             const data = await TaskController.updateTaskStatus(req, res);
-            // const formatedTask = CodePresenter.formatTask(data);
             res.status(200).json(CodePresenter.success([],"Task status updated successfully."))
-        }
-        else if(title){
-            const data = await TaskController.updateTask(req, res);
-            // const formatedTask = CodePresenter.formatTask(data);
-            res.status(200).json(CodePresenter.success([],"Task updated successfully."))    
-        }
+        }  
     }catch(error){
-        if(completed){
-            res.status(error.statusCode || 500).json(CodePresenter.error(error.message || 'Failed to update task status.'))
-        }
-        else if(title){
-            res.status(error.statusCode || 500).json(CodePresenter.error(error.message || 'Failed to update task.'))
-        }
+            res.status(error.statusCode || 500).json(CodePresenter.error(error.message || 'Failed to update task completion.'))
     }
 })
 
