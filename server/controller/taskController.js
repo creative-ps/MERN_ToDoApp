@@ -23,8 +23,6 @@ class TaskController{
 
     async getAllTasks(req,res){
         const {id} = req.params;
-    console.log('route ', req.params)
-
         try{
             const userId = new Types.ObjectId(req.userId);
             const allTasks = await taskModel.find({catId:id});

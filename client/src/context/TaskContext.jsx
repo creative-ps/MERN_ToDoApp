@@ -82,7 +82,7 @@ export const TaskProvider = ({children})=>{
         try{
             setLoading(true);
             const data = await deleteTask(taskId);
-            const deletedTaskId = data.data.catId;
+            // const deletedTaskId = data.data.catId;
             setSuccess(data.message);
             await loadTask(catId);
         }catch(err){

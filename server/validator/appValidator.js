@@ -19,19 +19,21 @@ const { body, param, validationResult } = require('express-validator');
     validateId() {
       return [
             param('id').notEmpty().withMessage('ID is required')
+            .isMongoId().withMessage('Invalid ID')
             ]
     }
+
 
     appValidationMiddleware(req, res, next){
 
       const errors = validationResult(req);
+        console.log(errors,'errors');
 
       if(!errors.isEmpty()){
         let err = '';
         (errors.errors).forEach(element => {
           err+=element.msg+' ';
         });
-        console.log(err,'errors');
 
         return res.status(400).json({ message: err });
       }
