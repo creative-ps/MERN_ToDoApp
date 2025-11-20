@@ -13,6 +13,14 @@ export const useFormValidation = (initialState,validateRules) => {
         comparePasswords:(value1,value2)=>(value1 !== value2)?'password and reenter password should be same':''
     }
 
+    //  const validationRules = {
+    //     required:(value)=>value.trim()?'':'this field is required.',
+    //     email:(value)=>/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value)?'':'',
+    //     noSpecialCharacter:(value)=>/[$.\0/\\*+?^]|^_/.test(value)?'':'',
+    //     password:(value)=>(value.trim().length<7 || value.trim().length>20)?'':'',
+    //     comparePasswords:(value1,value2)=>(value1 !== value2)?'':''
+    // }
+
     const validateField = (name, value, currentFormData = formData) => {
         let error = '';
         let result = '';

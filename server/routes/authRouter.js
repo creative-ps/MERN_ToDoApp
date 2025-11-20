@@ -4,7 +4,7 @@ const AuthController = require('../controller/authController');
 const authMiddleware = require('../middleware/authMiddleware');
 const appValidator =  require('../validator/appValidator');
 
-router.post('/signup', appValidator.validateUser(), appValidator.appValidationMiddleware, async (req,res)=>{
+router.post('/signup', appValidator.validateSignUpUser(), appValidator.appValidationMiddleware, async (req,res)=>{
     try{
         const {user,token} = await AuthController.signUp(req, res);
 
@@ -15,7 +15,7 @@ router.post('/signup', appValidator.validateUser(), appValidator.appValidationMi
 
 })
 
-router.post('/login', appValidator.validateUser(), appValidator.appValidationMiddleware, async (req,res)=>{
+router.post('/login', appValidator.validateLoginUser(), appValidator.appValidationMiddleware, async (req,res)=>{
     try{
         const {user,token} = await AuthController.logIn(req, res);
         res.status(201).json({user, token, message:'Login Successful.'});
@@ -24,7 +24,7 @@ router.post('/login', appValidator.validateUser(), appValidator.appValidationMid
     }
 })
 
-router.get('/',authMiddleware, async (req,res)=>{
+router.get('/', authMiddleware, async (req,res)=>{
     try{
         const user = await AuthController.getUser(req,res);
         res.status(200).json({data:user,message:'User retrieved successfully.'});
@@ -33,7 +33,7 @@ router.get('/',authMiddleware, async (req,res)=>{
     }
 })
 
-router.patch('/updatepassword', appValidator.validateUser(), appValidator.appValidationMiddleware,  async (req, res)=>{
+router.patch('/updatepassword', appValidator.validateSignUpUser(), appValidator.appValidationMiddleware,  async (req, res)=>{
     try{
         const updatedUser = await AuthController.updatePassword(req, res);
         res.status(200).json({data:updatedUser, message:'Password updated successfully.'});

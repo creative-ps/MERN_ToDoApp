@@ -46,7 +46,15 @@ const { body, param, check, validationResult } = require('express-validator');
              ]
     }
 
-    validateUser(){
+    validateLoginUser(){
+      return [
+                body('email').trim().notEmpty().isEmail().withMessage('Email field is required.'),
+                body('password').trim().notEmpty().isLength({ min: 7 }).withMessage('Password field is required.'),
+             ]
+    }
+
+
+     validateSignUpUser(){
       return [
                 body('email').trim().notEmpty().isEmail().withMessage('Email field is required.'),
                 body('password').trim().notEmpty().isLength({ min: 7 }).withMessage('Password field is required.'),
@@ -56,7 +64,6 @@ const { body, param, check, validationResult } = require('express-validator');
 
 
     appValidationMiddleware(req, res, next){
-
       const errors = validationResult(req);
       if(!errors.isEmpty()){
         let err = '';

@@ -26,11 +26,7 @@ export const AdminPanel = ()=>{
             setSuccess('')
         }
     },[])
-    console.log(allUsers,'allUsers');
-    console.log(deleteItems,'deleteItems');
-    console.log(isCheckAllCheckBox,'isCheckAllCheckBox');
-    console.log(isCheckCheckbox,'isCheckCheckbox');
-    console.log('rendered...');
+
 
     const handlePermissionsChange = (checked, userId, perm)=>{
         setPermissions((prev)=>{
@@ -62,12 +58,6 @@ export const AdminPanel = ()=>{
                 setUserFetch(!userFetch);
                 setIsCheckCheckbox(!isCheckCheckbox)
             }
-            
-            // return filterItems;
-
-            // const filterItems = Object.entries(deleteItems).filter(([id,val])=>val).
-            // map(([id])=>id);
-            // return filterItems;
     }
 
     return  <div className='mt-[15px] pl-[15px] sm:pl-[55px] sm:mt-[25px]'>
