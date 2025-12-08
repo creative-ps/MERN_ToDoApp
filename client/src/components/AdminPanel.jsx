@@ -41,7 +41,7 @@ export const AdminPanel = ()=>{
     }
 
     const handle_Delete_User = async (item)=>{
-        const userConfirmation = window.confirm(`Are you sure you want to delete this user : ${item.email}`);
+        const userConfirmation = window.confirm(`Are you sure you want to performe Delete action?`);
         if(userConfirmation){
             await handleDeleteUser(item);
             setUserFetch(!userFetch);
@@ -49,7 +49,7 @@ export const AdminPanel = ()=>{
     }
 
     const handleDeleteManyUsers = async ()=>{
-            const confirmAction = window.confirm(`Are you sure you want to delete all ${allUsers.length} users.`);
+            const confirmAction = window.confirm(`Are you sure you want to performe Delete action?`);
             if(confirmAction){
                 const filterItems = Object.keys(deleteItems).filter((id)=> {
                 return deleteItems[id];
