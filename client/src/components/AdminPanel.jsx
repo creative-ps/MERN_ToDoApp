@@ -56,10 +56,11 @@ export const AdminPanel = ()=>{
             })
                 await handleDeleteUsers(filterItems);
                 setUserFetch(!userFetch);
-                setIsCheckCheckbox(!isCheckCheckbox)
+                setIsCheckCheckbox(!isCheckCheckbox);
+                setDeleteItems({});
             }
     }
-
+    // console.log(deleteItems,'deleteItems');
     return  <div className='mt-[15px] pl-[15px] sm:pl-[55px] sm:mt-[25px]'>
                 <Loading _loading={loading}/>
                 <div className='flex justify-between sm:w-[850px] sm:max-w-[100%] border-b-1 border-gray-500'>
@@ -147,7 +148,8 @@ export const AdminPanel = ()=>{
                              <td>
                                 <div className='pl-6'>
                                     <span className='inline-block'>
-                                        <Checkbox isCheckAllCheckBox={isCheckAllCheckBox} setIsCheckAllCheckBox={setIsCheckAllCheckBox} deleteItems={deleteItems} isCheckCheckbox={isCheckCheckbox} setIsCheckCheckbox={setIsCheckCheckbox} setDeleteItems={setDeleteItems} user={user} />
+                                        <Checkbox isCheckAllCheckBox={isCheckAllCheckBox} setIsCheckAllCheckBox={setIsCheckAllCheckBox} deleteItems={deleteItems} 
+                                        isCheckCheckbox={isCheckCheckbox} setIsCheckCheckbox={setIsCheckCheckbox} setDeleteItems={setDeleteItems} user={user} />
                                     </span>
                                 </div>
                             </td>
